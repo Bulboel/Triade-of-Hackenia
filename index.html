@@ -450,7 +450,7 @@ body{overflow-x:clip;overflow-y:visible}
 <script src="assets/data/card-numbers.js"></script>
 <script src="collection-polish.js?v=20261006-finale9"></script>
 <script src="booster-presentation.js"></script>
-<script src="game-upgrades.js?v=20261010-maebril-trial"></script>
+<script src="game-upgrades.js?v=20261010-earned-backs-only"></script>
 <script src="pantheon-ai.js?v=20261010-strategy1"></script>
 <script src="duel-touch.js?v=20261006-finale9"></script>
 <script src="tutorial-duel.js"></script>
@@ -1308,6 +1308,7 @@ const closeButton=document.getElementById('backLargeClose'),choose=document.getE
 let source=null,previousFocus=null,previousOverflow='';
 function close(){if(modal.classList.contains('hidden'))return;modal.classList.add('hidden');modal.setAttribute('aria-hidden','true');document.body.style.overflow=previousOverflow;previousFocus?.focus({preventScroll:true});source=null}
 function open(button,trigger){
+ if(button.disabled||!backUnlocked(button.dataset.back))return;
  source=button;previousFocus=trigger;previousOverflow=document.body.style.overflow;
  const original=button.querySelector('.card'),background=getComputedStyle(original).backgroundImage;
  const match=background.match(/url\(["']?(.*?)["']?\)/);
@@ -1324,7 +1325,13 @@ function open(button,trigger){
  modal.classList.remove('hidden');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';closeButton.focus();
 }
 function enhance(){for(const button of holder.querySelectorAll('button.back-choice')){
- if(button.parentElement.classList.contains('back-preview-item'))continue;
+ const unavailable=button.disabled||!backUnlocked(button.dataset.back);
+ if(button.parentElement.classList.contains('back-preview-item')){
+  button.parentElement.classList.toggle('hidden',unavailable);
+  if(unavailable&&source===button)close();
+  continue;
+ }
+ if(unavailable)continue;
  const wrapper=document.createElement('div');wrapper.className='back-preview-item';button.before(wrapper);wrapper.append(button);
  const preview=document.createElement('button');preview.type='button';preview.className='back-preview-open';preview.textContent='Voir en grand';
  preview.setAttribute('aria-label','Voir en grand : '+(button.querySelector('span:not(.card)')?.textContent||'dos de carte'));preview.onclick=()=>open(button,preview);wrapper.append(preview);
@@ -1332,7 +1339,7 @@ function enhance(){for(const button of holder.querySelectorAll('button.back-choi
 closeButton.onclick=close;choose.onclick=()=>{if(source&&!source.disabled){source.click();close()}};
 modal.addEventListener('click',event=>{if(event.target===modal)close()});
 document.addEventListener('keydown',event=>{if(modal.classList.contains('hidden'))return;if(event.key==='Escape'){event.preventDefault();event.stopImmediatePropagation();close()}else if(event.key==='Tab'){const last=choose.disabled?closeButton:choose;if(event.shiftKey&&document.activeElement===closeButton){event.preventDefault();last.focus()}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();closeButton.focus()}}},true);
-enhance();new MutationObserver(enhance).observe(holder,{childList:true});
+enhance();new MutationObserver(enhance).observe(holder,{childList:true,subtree:true,attributes:true,attributeFilter:['disabled']});
 })();
 </script>
 
