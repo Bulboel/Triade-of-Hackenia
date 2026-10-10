@@ -72,12 +72,12 @@ function renderEarnedBacks(){
  if(!velcan){velcan=document.createElement('button');velcan.type='button';velcan.className='back-choice';velcan.dataset.back='velcan-manga';velcan.innerHTML='<span class="card card-back back-velcan-manga"></span><span>Velcan — Manga</span><small class="back-lock"></small>';holder.append(velcan);velcan.onclick=()=>{if(!backUnlocked('velcan-manga'))return;settings.back='velcan-manga';applySettings();renderMemory()}}
  velcan.disabled=!backUnlocked('velcan-manga');velcan.querySelector('.back-lock').textContent=velcan.disabled?'Défi : battre Velcan dans le Panthéon':'Débloqué';velcan.setAttribute('aria-pressed',String(settings.back==='velcan-manga'));
  let maebril=holder.querySelector('[data-back="maebril-pixel"]');
- if(!maebril&&backUnlocked('maebril-pixel')){
+ if(!maebril){
   maebril=document.createElement('button');maebril.type='button';maebril.className='back-choice';maebril.dataset.back='maebril-pixel';
   maebril.innerHTML='<span class="card card-back back-maebril-pixel"></span><span>Maebril pixel art</span><small class="back-lock">Débloqué</small>';
   holder.append(maebril);maebril.onclick=()=>{if(!backUnlocked('maebril-pixel'))return;settings.back='maebril-pixel';applySettings();renderMemory()};
  }
- if(maebril){maebril.disabled=!backUnlocked('maebril-pixel');maebril.setAttribute('aria-pressed',String(settings.back==='maebril-pixel'))}
+ if(maebril){maebril.disabled=!backUnlocked('maebril-pixel');maebril.querySelector('.back-lock').textContent=maebril.disabled?'Défi : battre Maebril dans le Panthéon':'Débloqué';maebril.setAttribute('aria-pressed',String(settings.back==='maebril-pixel'))}
  let jordan=holder.querySelector('[data-back="jordan-cool"]');
  if(!jordan){jordan=document.createElement('button');jordan.className='back-choice';jordan.dataset.back='jordan-cool';jordan.innerHTML='<span class="card card-back back-jordan-cool"></span><span>Jordan, l’étalon</span><small class="back-lock"></small>';holder.append(jordan);jordan.onclick=()=>{if(!backUnlocked('jordan-cool'))return;settings.back='jordan-cool';applySettings();renderMemory()}}
  jordan.disabled=!backUnlocked('jordan-cool');jordan.querySelector('.back-lock').textContent=jordan.disabled?'Défi : conquérir les 9 cases':'Débloqué';jordan.setAttribute('aria-pressed',String(settings.back==='jordan-cool'));
