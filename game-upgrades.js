@@ -87,6 +87,12 @@ function renderEarnedBacks(){
   if(!button){button=document.createElement('button');button.className='back-choice';button.dataset.back=id;button.innerHTML='<span class="card card-back back-'+id+'"></span><span>'+name+'</span><small class="back-lock"></small>';holder.append(button);button.onclick=()=>{if(!backUnlocked(id))return;settings.back=id;applySettings();renderMemory()}}
   button.disabled=!backUnlocked(id);button.querySelector('.back-lock').textContent=button.disabled?'Défi : 100 cartes':'Débloqué';button.setAttribute('aria-pressed',String(settings.back===id));
  }
+ // Unavailable rewards stay secret until their challenge is completed.
+ for(const button of holder.querySelectorAll('button.back-choice')){
+  const unavailable=!backUnlocked(button.dataset.back);
+  button.classList.toggle('hidden',unavailable);
+  if(button.parentElement.classList.contains('back-preview-item'))button.parentElement.classList.toggle('hidden',unavailable);
+ }
 }
 function renderChallenges(){
  const state=challengeState(),count=collectedSetCards();
