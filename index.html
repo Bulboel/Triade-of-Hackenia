@@ -1104,7 +1104,7 @@ function pantheonVelcanDeck(){const normalize=name=>String(name||'').normalize('
 function pantheonPachieDeck(){const rare=pool.find(c=>c.id==='p63'&&c.rarity==='rare'),alt=pool.find(c=>c.id==='p64'&&c.rarity==='alternative');return [rare,rare,rare,alt,alt]}
 function pantheonMaebrilDeck(){
  const normalize=name=>String(name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
- return ['Bosco','Kayla','Le tableau de primes','Le médaillon du colibri','Le tableau de primes'].map(name=>pool.find(c=>normalize(c.name)===normalize(name)&&!['alternative','parallel'].includes(c.rarity)));
+ return ['Bosco','Kayla','La taverne du Griffon doré','Le médaillon du colibri','Le tableau de primes'].map(name=>pool.find(c=>normalize(c.name)===normalize(name)&&!['alternative','parallel'].includes(c.rarity)));
 }
 function startPantheonMaebril(){
  if(!economy.pantheonRewards?.orven)return;
