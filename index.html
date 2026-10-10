@@ -286,6 +286,28 @@ body{overflow-x:clip;overflow-y:visible}
 #storyScreen .story-part small,
 #storyScreen .chapter-card > p{display:none!important}
 </style>
+<style id="story-menu-compact">
+#storyScreen .story-part{grid-template-rows:auto;align-items:center;gap:0 10px;padding:7px 10px;min-height:58px}
+#storyScreen .story-part strong{grid-row:1;align-self:center;margin:0;line-height:1.3}
+#storyScreen .story-part .menu-btn{grid-row:1;align-self:center;min-height:44px;height:auto;margin:0;padding:8px 10px}
+#storyScreen .story-part-list{gap:6px}
+#storyScreen .chapter-card h3{margin:3px 0 8px}
+@media(max-width:700px){
+ #storyScreen .panel-card{padding:12px}
+ #storyScreen .story-grid{margin:9px 0;gap:8px}
+ #storyScreen .chapter-card{padding:10px}
+ #storyScreen .story-part{grid-template-columns:minmax(0,1fr) 88px;padding:5px 8px;min-height:54px}
+ #storyScreen .story-part strong{font-size:12px}
+ #storyScreen .story-part .menu-btn{font-size:11px;padding:7px 5px;min-height:44px}
+ #storyScreen .chapter-card h3{font-size:20px}
+ #storyScreen .save-note{font-size:10px;padding:4px 9px}
+ #storyScreen .panel-actions{bottom:-12px;padding-top:8px;margin-top:6px}
+}
+@media(max-height:540px){
+ #storyScreen .story-part{min-height:48px;padding:2px 6px}
+ #storyScreen .story-part-list{gap:4px}
+}
+</style>
 </head>
 <body>
 <section class="startup-screen" id="startupScreen">
