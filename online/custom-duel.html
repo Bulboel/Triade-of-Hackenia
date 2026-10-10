@@ -660,6 +660,16 @@ body.duel-active #onlineMemoryPile .card.card-back.back-jordan-cool{background:#
  body.duel-active #onlineMemoryZone.awaiting-memory-choice #onlineMemoryHint{display:none!important}
 }
 </style>
+
+<style id="online-board-card-preview-style">
+#onlineBoardCardPreview{position:fixed;inset:0;z-index:1000001;display:grid;place-items:center;padding:16px;box-sizing:border-box;background:#060e18e8}
+#onlineBoardCardPreview[hidden]{display:none!important}
+.online-card-preview-dialog{position:relative;display:grid;justify-items:center;gap:12px;width:min(94vw,420px);max-height:94dvh;overflow:auto;box-sizing:border-box;padding:48px 18px 20px;border:2px solid #c7a66b;border-radius:18px;background:#153539;color:#ffedc5}
+.online-card-preview-dialog h2{margin:0;font-size:18px;text-align:center}
+#onlineBoardCardArt>.card{display:block!important;position:relative!important;width:min(76vw,310px,calc((100dvh - 180px)*.75))!important;height:auto!important;aspect-ratio:3/4!important;min-height:0!important;max-height:none!important;transform:none!important;margin:0!important;pointer-events:none;font-size:24px!important}
+#onlineBoardCardClose{position:absolute;right:10px;top:10px;width:36px;height:36px;border:0;border-radius:50%;background:#e5c789;color:#153539;font-size:24px;cursor:pointer}
+#board .cell.card-inspectable{cursor:zoom-in}
+</style>
 </head><body><header class="topbar" id="onlineOriginalHeader"><div class="brand"><img class="online-official-crest" src="../assets/icons/hackenia-home-v2-192.png" alt="Blason d’Hackénia"><div><span class="online-edition">UN NOUVEAU DÉPART</span><h1>Triade <span>d’Hackénia</span></h1><small id="onlineHeaderRule">Duel en ligne • 1 contre 1</small></div></div><div class="actions"><a class="ghost" href="../index.html">← Menu</a></div></header><main><h1>⚔ Duel en ligne</h1><p class="note lobby-intro">Crée un salon ou rejoins un ami, prépare ton deck, puis lancez le duel !</p>
 <div id="lobbySteps" class="lobby-steps" aria-label="Préparation du duel"><span class="active" id="lobbyStep1">1 · Salon</span><span id="lobbyStep2">2 · Préparation</span><span id="lobbyStep3">3 · Duel</span></div>
 <section id="roomPanel" class="lobby-card"><h2>1 · Ton salon</h2><div class="online-nickname-settings"><label for="onlineNickname">Ton pseudo</label><input id="onlineNickname" type="text" maxlength="20" minlength="2" placeholder="Ton pseudo" autocomplete="nickname"><button id="saveOnlineNickname" type="button" hidden>Modifier mon pseudo</button></div><div id="lobbyEntry" class="lobby-entry"><button id="create" class="lobby-primary">⚔ Créer mon salon</button><div class="lobby-or">ou rejoindre un ami</div><div class="lobby-join"><input id="code" maxlength="6" placeholder="Code à 6 caractères" aria-label="Code du salon"><button id="join">Rejoindre</button></div></div><div id="roomInfo"></div><div class="actions"><button id="copy" hidden>📋 Copier le code d'invitation</button></div></section>
@@ -779,7 +789,7 @@ $('gamePanel').hidden=false;$('start').hidden=true;const ended=game.winner!==nul
  }
  if(actualOnlineWinner()!=='draw')showResult(actualOnlineWinner()===role)
 }const hiddenOpponent=!(typeof room?.custom_rule==='string'&&room.custom_rule.endsWith('-open'));say(ended?(actualOnlineWinner()==='draw'?'Égalité !':(actualOnlineWinner()===role?'Victoire !':'Défaite !')):(game.turn===role?'À toi de jouer !':'Tour de ton adversaire…'));
-$('status').classList.toggle('game-result',ended);const board=$('board');const oldBoard=previousRoomId===roomId?previousBoard:null;board.replaceChildren();game.board.forEach((entry,pos)=>{const btn=document.createElement('button');btn.className='cell';btn.dataset.position=pos;btn.disabled=ended||((game.memory_reaction==='pending'&&game.memory_reveal&&['fire','rock'].includes(game.memory_reveal.id))?!memoryBoardTargetAllowed(entry,pos):(game.turn!==role||(game.memory_pending?!memoryBoardTargetAllowed(entry,pos):!!entry)));btn.setAttribute('aria-label','Case '+(pos+1));if(entry){const item=entry.played_by===role&&privateHand?privateHand[entry.hand_index]:decks[entry.played_by]?.[entry.hand_index];const snapshot=entry.card;const face=snapshot?.v&&Array.isArray(snapshot.v)?card(snapshot.name||item?.[0]||'Carte',snapshot.v,entry.owner,snapshot.meta||item?.[2]):card(item?.[0]||'Carte',item?.[1]||[1,1,1,1],entry.owner,item?.[2]);if(oldBoard&&oldBoard[pos]===null){btn.classList.add('placed')}else if(oldBoard&&oldBoard[pos]){try{const prior=JSON.parse(oldBoard[pos]);if(prior.owner!==entry.owner)btn.classList.add('captured')}catch{}}btn.append(face)}else{btn.textContent='✦'}btn.onclick=()=>onlineBoardClick(pos);board.append(btn)});
+$('status').classList.toggle('game-result',ended);const board=$('board');const oldBoard=previousRoomId===roomId?previousBoard:null;board.replaceChildren();game.board.forEach((entry,pos)=>{const btn=document.createElement('button');btn.className='cell';btn.dataset.position=pos;btn.disabled=ended||((game.memory_reaction==='pending'&&game.memory_reveal&&['fire','rock'].includes(game.memory_reveal.id))?!memoryBoardTargetAllowed(entry,pos):(game.turn!==role||(game.memory_pending?!memoryBoardTargetAllowed(entry,pos):!!entry)));if(entry){btn.disabled=false;btn.classList.add('card-inspectable')}btn.setAttribute('aria-label','Case '+(pos+1)+(entry?' — voir la carte en grand':''));if(entry){const item=entry.played_by===role&&privateHand?privateHand[entry.hand_index]:decks[entry.played_by]?.[entry.hand_index];const snapshot=entry.card;const face=snapshot?.v&&Array.isArray(snapshot.v)?card(snapshot.name||item?.[0]||'Carte',snapshot.v,entry.owner,snapshot.meta||item?.[2]):card(item?.[0]||'Carte',item?.[1]||[1,1,1,1],entry.owner,item?.[2]);if(oldBoard&&oldBoard[pos]===null){btn.classList.add('placed')}else if(oldBoard&&oldBoard[pos]){try{const prior=JSON.parse(oldBoard[pos]);if(prior.owner!==entry.owner)btn.classList.add('captured')}catch{}}btn.append(face)}else{btn.textContent='✦'}btn.onclick=()=>onlineBoardClick(pos);board.append(btn)});
 previousBoard=game.board.map(entry=>entry?JSON.stringify(entry):null);previousRoomId=roomId;
 for(const player of ['host','guest']){const hand=$(player+'Hand');hand.replaceChildren();const items=player===role&&privateHand?privateHand:decks[player];items.forEach((item,i)=>{if(!item||game.board.some(x=>x?.played_by===player&&x?.hand_index===i))return;const btn=document.createElement('button');btn.className=selected===i&&role===player?'active':'';btn.disabled=player!==role||ended||game.turn!==role||(!!game.memory_pending&&!(game.memory_reveal?.id==='reunion'&&game.memory_reveal?.owner===role&&game.memory_reaction!=='pending'));if((player!==role&&hiddenOpponent)||(player===role&&game.memory_blind?.[role])){const back=document.createElement('div');back.className='card card-back back-'+onlineCardBack()+' '+player+' concealed';back.setAttribute('aria-label',player===role?'Carte de ta main masquée par un Souvenir':'Carte adverse masquée');btn.setAttribute('aria-label',player===role?'Choisir une carte à l’aveugle':'Carte adverse');btn.append(back)}else btn.append(card(item[0],item[1],player,item[2]));btn.onclick=()=>{if(game.memory_pending&&game.memory_reveal?.id==='reunion'&&game.memory_reveal?.owner===role&&game.memory_reaction!=='pending'){onlineMemoryRpc('slay_custom_memory_reunion',{p_hand_index:i});return}selected=i;render()};if(player===role&&!btn.disabled)bindOnlineDrag(btn,i);hand.append(btn)})}paintOnlineCreatorBacks()}
 
@@ -810,7 +820,36 @@ function memoryBoardTargetAllowed(entry,pos){
  return false;
 }
 let onlineTargetSource=null;
+
+let onlineBoardCardPreviousFocus=null,onlineBoardCardOverflow='';
+function closeOnlineBoardCard(){
+ const modal=$('onlineBoardCardPreview');if(!modal||modal.hidden)return;
+ modal.hidden=true;document.body.style.overflow=onlineBoardCardOverflow;
+ if(onlineBoardCardPreviousFocus?.isConnected)onlineBoardCardPreviousFocus.focus({preventScroll:true});
+}
+function openOnlineBoardCard(pos){
+ const cell=$('board').querySelector('[data-position="'+pos+'"]'),face=cell?.querySelector('.card');
+ if(!face||!game?.board[pos])return;
+ let modal=$('onlineBoardCardPreview');
+ if(!modal){
+  modal=document.createElement('section');modal.id='onlineBoardCardPreview';modal.hidden=true;
+  modal.innerHTML='<article class="online-card-preview-dialog" role="dialog" aria-modal="true" aria-labelledby="onlineBoardCardName"><button id="onlineBoardCardClose" type="button" aria-label="Fermer l’aperçu">×</button><h2 id="onlineBoardCardName"></h2><div id="onlineBoardCardArt"></div></article>';
+  document.body.append(modal);$('onlineBoardCardClose').onclick=closeOnlineBoardCard;
+  modal.addEventListener('click',event=>{if(event.target===modal)closeOnlineBoardCard()});
+  modal.addEventListener('keydown',event=>{
+   if(event.key==='Escape'){event.preventDefault();event.stopPropagation();closeOnlineBoardCard()}
+   else if(event.key==='Tab'){event.preventDefault();$('onlineBoardCardClose').focus()}
+  });
+ }
+ onlineBoardCardPreviousFocus=document.activeElement;onlineBoardCardOverflow=document.body.style.overflow;
+ const art=face.cloneNode(true);art.removeAttribute('id');
+ $('onlineBoardCardName').textContent=face.getAttribute('aria-label')||face.title||'Carte du plateau';
+ $('onlineBoardCardArt').replaceChildren(art);modal.hidden=false;
+ document.body.style.overflow='hidden';$('onlineBoardCardClose').focus();
+}
+
 function onlineBoardClick(pos){
+ if(game?.board[pos]&&!memoryBoardTargetAllowed(game.board[pos],pos)){openOnlineBoardCard(pos);return}
  const rev=game?.memory_reveal;
  if(rev&&['fire','rock'].includes(rev.id)&&game.memory_reaction==='pending'&&game.memory_joker_choices?.[role]===undefined&&game.board[pos]?.owner===role){onlineMemoryRpc('slay_custom_memory_joker_choose_stats',{p_position:pos});return}
  if(game?.memory_pending&&rev?.owner===role&&game.memory_reaction!=='pending'){
@@ -931,7 +970,7 @@ function clearOnlineDrag(){
 }
 function onlineDragTarget(x,y){
  const el=document.elementFromPoint(x,y)?.closest('#board .cell');
- return el&&!el.disabled?el:null;
+ return el&&!el.disabled&&!game?.board[Number(el.dataset.position)]?el:null;
 }
 function bindOnlineDrag(button,handIndex){
  button.addEventListener('pointerdown',e=>{
