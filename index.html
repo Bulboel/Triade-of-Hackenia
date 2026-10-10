@@ -734,7 +734,7 @@ function maebrilExchangeIndex(cards,highest){
  const value=card=>(card.v||[]).reduce((sum,v)=>sum+combatValue(v),0);
  return cards.reduce((best,card,index)=>{
   const difference=(rank[card.rarity]??0)-(rank[cards[best].rarity]??0);
-  const comparison=difference||value(card)-value(cards[best]);
+  const comparison=value(card)-value(cards[best])||difference;
   return (highest?comparison>0:comparison<0)?index:best;
  },0);
 }
