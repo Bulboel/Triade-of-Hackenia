@@ -101,8 +101,8 @@ function renderChallenges(){
  for(const [selector,archived] of [['#challengeActive',false],['#challengeArchive',true]]){
   const holder=document.querySelector(selector);holder.replaceChildren();
   for(const challenge of challenges.filter(c=>!!state[c.id]===archived)){
-   const article=document.createElement('article');article.className='challenge-card'+(archived?' complete':'');
-   const title=document.createElement('strong');title.textContent=challenge.title;
+   const article=document.createElement('details');article.className='challenge-card challenge-accordion'+(archived?' complete':'');article.dataset.challengeId=challenge.id;article.open=!!window.__challengeOpenIds?.has(challenge.id);
+   const title=document.createElement('summary');title.textContent=challenge.title;title.setAttribute('aria-label',challenge.title+' — afficher les détails');
    const reward=document.createElement('p');reward.textContent='Récompense : '+challenge.reward;
    if(challenge.id==='grandTriadeWin'){
     const p=grandTriadeProgress(),detail=document.createElement('p');
@@ -129,7 +129,7 @@ function renderChallenges(){
     article.append(list);
    }
    const status=document.createElement('small');status.textContent=archived?'✓ Accompli • récompense reçue':challenge.progress+' / '+challenge.total;
-   article.append(title,reward,status);if(!archived){const progress=document.createElement('progress');progress.value=challenge.progress;progress.max=challenge.total;progress.setAttribute('aria-label',challenge.title);article.append(progress)}holder.append(article);
+   article.append(reward,status);article.prepend(title);article.addEventListener('toggle',()=>{window.__challengeOpenIds ||= new Set();if(article.open)window.__challengeOpenIds.add(challenge.id);else window.__challengeOpenIds.delete(challenge.id)});if(!archived){const progress=document.createElement('progress');progress.value=challenge.progress;progress.max=challenge.total;progress.setAttribute('aria-label',challenge.title);article.append(progress)}holder.append(article);
   }
   if(!holder.children.length){const p=document.createElement('p');p.textContent=archived?'Vos défis accomplis apparaîtront ici.':'Tous les défis sont accomplis !';holder.append(p)}
  }
