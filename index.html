@@ -336,9 +336,11 @@ body button.elegant-return.hidden{display:none!important}
 </style>
 <style id="catalog-return-without-banner">
 #collectionScreen .catalog-backbar,
+#optionsScreen .catalog-backbar,
 #deckScreen .catalog-backbar{position:sticky!important;top:0!important;z-index:30!important;display:flex;align-items:center;flex-wrap:wrap;gap:8px;width:fit-content;max-width:100%;padding:0!important;margin:0 0 14px!important;background:transparent!important;border:0!important;box-shadow:none!important}
 #collectionScreen .catalog-backbar::before,#collectionScreen .catalog-backbar::after,
-#deckScreen .catalog-backbar::before,#deckScreen .catalog-backbar::after{content:none!important}
+#deckScreen .catalog-backbar::before,#deckScreen .catalog-backbar::after,
+#optionsScreen .catalog-backbar::before,#optionsScreen .catalog-backbar::after{content:none!important}
 </style>
 </head>
 <body>
@@ -452,7 +454,7 @@ body button.elegant-return.hidden{display:none!important}
     <div class="panel-actions"><button class="menu-btn secondary" id="pvpModeBack" type="button">← Choisir un mode</button><button class="menu-btn" id="pvpRulesBtn">Choisir la règle</button></div></div><div class="panel-actions"><button class="menu-btn secondary" data-close-panel>Retour au menu</button></div>
   </div>
 </section>
-<section class="panel-screen hidden" id="optionsScreen"><div class="panel-card"><h2>Options</h2><div class="options-groups"><details class="options-group"><summary>Couleurs des joueurs</summary><div class="options-group-body"><div class="color-options">
+<section class="panel-screen hidden" id="optionsScreen"><div class="panel-card"><div class="catalog-backbar"><button class="menu-btn secondary" data-close-panel>Retour au menu</button></div><h2>Options</h2><div class="options-groups"><details class="options-group"><summary>Couleurs des joueurs</summary><div class="options-group-body"><div class="color-options">
       <div class="color-box"><label for="playerColor">Votre couleur</label><input type="color" id="playerColor" value="#45b85d"></div>
       <div class="color-box"><label for="opponentColor">Couleur adverse</label><input type="color" id="opponentColor" value="#d95050"></div>
     </div>
@@ -477,7 +479,7 @@ body button.elegant-return.hidden{display:none!important}
     </div></details><details class="options-group"><summary>Illustrations des Souvenirs</summary><div class="options-group-body"><p>Choisissez, parmi vos illustrations découvertes, celle qui apparaîtra lorsque chaque Souvenir est pioché.</p>
     <div class="memory-skin-options" id="memorySkinOptions"></div>
     </div></details><details class="options-group"><summary>Sauvegarde et transfert</summary><div class="options-group-body"><section class="save-transfer"><h3>Jouer sur un autre appareil</h3><p>Exportez toute votre progression, puis importez ce fichier sur votre téléphone ou votre ordinateur.</p><div class="panel-actions"><button class="menu-btn secondary" id="exportSaveBtn">Exporter</button><button class="menu-btn secondary" id="importSaveBtn">Importer</button><input class="hidden" type="file" id="importSaveFile" accept="application/json,.json"></div><div class="transfer-note" id="transferNote"></div></section>
-    </div></details></div><div class="panel-actions options-footer"><button class="menu-btn secondary" data-close-panel>Retour</button><button class="menu-btn" id="saveOptionsBtn">Enregistrer</button></div></div></section>
+    </div></details></div><div class="panel-actions options-footer"><button class="menu-btn" id="saveOptionsBtn">Enregistrer</button></div></div></section>
 <div class="app hidden" id="gameApp">
   <header class="topbar"><div class="brand"><div class="sigil">H</div><div><h1>TRIADE D'HACKÉNIA</h1><small>Prototype tactique • 1 contre 1<span id="duelRuleLabel"></span></small></div></div><div class="actions"><span class="wallet-display"><span class="gold-value">0</span> or</span><button class="ghost" id="saveGameBtn">Sauvegarder</button><button class="ghost" id="menuBtn">Menu</button><button class="ghost" id="rulesBtn">Règles</button><button class="primary" id="newBtn">Rejouer</button></div></header>
   <main>
