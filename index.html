@@ -1463,7 +1463,7 @@ enhance();new MutationObserver(enhance).observe(holder,{childList:true,subtree:t
  const restyle=()=>{
   document.querySelectorAll('button').forEach(button=>{
    const label=button.textContent.trim();
-   const isReturn=/^(?:[←‹↩]\\s*)?Retour\\b/i.test(label)||button.id==='pvpModeBack';
+   const isReturn=/^(?:[←‹↩]\s*)?Retour\b/i.test(label)||button.id==='pvpModeBack';
    button.classList.toggle('elegant-return',isReturn);
    if(isReturn&&/[←‹↩→]/.test(label))button.textContent=label.replace(/[←‹↩→]/g,'').trim();
   });
