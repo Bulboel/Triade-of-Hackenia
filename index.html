@@ -851,6 +851,15 @@ function drawMemory(owner=turn){if(owner!==turn||!memoryPending||locked||!canDra
 function finishPostTurn(){memoryPending=false;locked=true;render();if(board.every(Boolean)){setTimeout(endGame,120);return}turn=turn==='p'?'a':'p';selected=null;if(currentMode.startsWith('story'))saveStoryMatch();if(gameType==='local'){const split=$('#splitScreen').checked;passing=!split;render();setTimeout(()=>{if(!split&&$('#passScreen').checked)showTurnCover();else startPlayableTurn()},180)}else if(turn==='a'){render();msg('Tour adverse','L’adversaire choisit sa carte…');setTimeout(aiMove,520)}else startPlayableTurn()}
 function startPlayableTurn(){passing=false;locked=false;memoryPending=false;render();msg(gameType==='local'?actorLabel(turn):'À vous de jouer','Choisissez une carte, puis une case libre.')}
 function skipMemory(){if(!memoryPending||locked)return;memoryPending=false;locked=true;render();finishPostTurn()}
+document.addEventListener('keydown',event=>{
+ if(event.code!=='Space'||event.repeat||event.altKey||event.ctrlKey||event.metaKey)return;
+ if(!window.matchMedia('(hover: hover) and (pointer: fine)').matches)return;
+ const target=event.target;
+ if(target?.closest?.('input,textarea,select,button,[contenteditable="true"],[role="dialog"]'))return;
+ if(!matchInProgress||!memoryPending||locked||turn!=='p'&&gameType==='ai')return;
+ if($('#gameApp').classList.contains('hidden')||!$('#memoryReveal').classList.contains('hidden')||!$('#memoryChoice').classList.contains('hidden'))return;
+ event.preventDefault();skipMemory();
+});
 function maebrilExchangeIndex(cards,highest){
  const rank={common:0,uncommon:1,rare:2,alternative:3,parallel:4,divine:4};
  const value=card=>(card.v||[]).reduce((sum,v)=>sum+combatValue(v),0);
