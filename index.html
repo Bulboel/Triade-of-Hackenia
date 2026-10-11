@@ -387,6 +387,21 @@ body button.elegant-return.hidden{display:none!important}
 #menuScreen .menu-utility .fantasy-icon{width:21px;height:21px;flex-basis:21px;color:#e6c47e}
 #menuScreen .menu-utility{gap:8px}
 @media(max-width:600px){#menuScreen .fantasy-icon{width:29px;height:29px;flex-basis:29px}#menuScreen .menu-utility .fantasy-icon{width:19px;height:19px;flex-basis:19px}}
+</style><style id="story-card-corner">
+/* Equal visible widths, with the final card anchored to the tile corner. */
+#menuScreen #storyBtn .menu-card-fan{right:10px;bottom:7px;width:220px;height:112px;transform:none}
+#menuScreen #storyBtn .menu-card-fan i{inset:auto;bottom:0;width:76px;height:106px;box-sizing:border-box;border-radius:7px;transform:none;box-shadow:0 3px 8px #211d1c55}
+#menuScreen #storyBtn .menu-card-fan i:first-child{left:0;z-index:1;transform:rotate(-7deg);transform-origin:bottom center}
+#menuScreen #storyBtn .menu-card-fan i:nth-child(2){left:72px;z-index:2;transform:none}
+#menuScreen #storyBtn .menu-card-fan i:last-child{left:144px;z-index:3;transform:rotate(7deg);transform-origin:bottom center}
+#menuScreen #storyBtn .menu-caption{max-width:calc(100% - 230px)}
+@media(max-width:600px){
+ #menuScreen #storyBtn .menu-card-fan{right:7px;bottom:6px;width:139px;height:75px}
+ #menuScreen #storyBtn .menu-card-fan i{width:49px;height:69px}
+ #menuScreen #storyBtn .menu-card-fan i:nth-child(2){left:45px}
+ #menuScreen #storyBtn .menu-card-fan i:last-child{left:90px}
+ #menuScreen #storyBtn .menu-caption{max-width:calc(100% - 145px)}
+}
 </style></head>
 <body>
 <section class="startup-screen" id="startupScreen">
