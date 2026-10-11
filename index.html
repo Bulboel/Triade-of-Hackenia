@@ -1272,10 +1272,29 @@ function revealAllShopBoosters(){
  pendingBooster=[];delete collection.pendingPack;
  saveCollection();renderCollection();renderDeckBuilder();
  $('#boosterReveal').classList.add('hidden');
- const notable=revealed.filter(p=>['rare','alternative','parallel','divine','secret'].includes(p.card.rarity));
- const summary='Révélation totale terminée !\\n'+revealed.length+' cartes ajoutées à votre collection.\\n'+(notable.length?'Cartes remarquables :\\n'+notable.map(p=>'• '+p.card.name+(p.foil?' (foil)':'')).join('\\n'):'Aucune carte rare ou supérieure dans ce lot.');
- alert(summary);
- if(pityProgress().pending.length)showPity();else continueBoosters();
+ showTotalRevealGallery(revealed);
+}
+function showTotalRevealGallery(revealed){
+ let overlay=document.getElementById('totalRevealGallery');
+ if(overlay)overlay.remove();
+ overlay=document.createElement('section');overlay.id='totalRevealGallery';overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','Révélation totale : vos cartes');
+ overlay.style.cssText='position:fixed;inset:0;z-index:10000;background:linear-gradient(145deg,#071a22f5,#0b3438f5);overflow:auto;padding:clamp(12px,3vw,35px);box-sizing:border-box;color:#f8e6b8';
+ const panel=document.createElement('div');panel.style.cssText='max-width:1250px;margin:auto;border:1px solid #c8a05b;border-radius:18px;padding:clamp(12px,2vw,26px);background:#10282c;box-shadow:0 20px 75px #000a';
+ const heading=document.createElement('h2');heading.textContent='✦ Révélation totale ✦';heading.style.cssText='text-align:center;font:700 clamp(1.5rem,4vw,2.5rem) Georgia;color:#f9d992;margin:4px 0 10px';
+ const subtitle=document.createElement('p');subtitle.textContent=revealed.length+' cartes découvertes et ajoutées à votre collection · Touchez une carte pour l’agrandir';subtitle.style.cssText='text-align:center;margin:0 0 20px;color:#e2d3b0';
+ const grid=document.createElement('div');grid.className='total-reveal-grid';grid.style.cssText='display:grid;grid-template-columns:repeat(auto-fill,minmax(min(125px,28vw),1fr));gap:clamp(8px,1.4vw,16px);';
+ revealed.forEach((pull,i)=>{
+  const tile=document.createElement('button');tile.type='button';tile.className='total-reveal-tile';tile.setAttribute('aria-label','Agrandir '+pull.card.name);tile.style.cssText='min-width:0;display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 5px;border:1px solid #b58e53;border-radius:12px;background:#07191f;color:#f7e4b9;cursor:pointer';
+  const visual=document.createElement('div');visual.style.cssText='width:100%;max-width:145px;aspect-ratio:3/4;display:flex;justify-content:center;align-items:center;overflow:hidden';
+  visual.innerHTML=previewMarkup({...pull.card,foil:!!pull.foil});
+  const card=visual.querySelector('.card');if(card){card.style.maxWidth='100%';card.style.maxHeight='100%';card.style.pointerEvents='none'}
+  const name=document.createElement('span');name.textContent=pull.card.name;name.style.cssText='font-size:12px;text-align:center;line-height:1.25;overflow-wrap:anywhere';
+  const rarity=document.createElement('small');rarity.textContent=(rarityLabels[pull.card.rarity]||pull.card.rarity)+(pull.foil?' ✦ Foil':'');rarity.style.cssText='font-size:10px;color:#d9b971;text-align:center';
+  tile.append(visual,name,rarity);tile.onclick=()=>openCardGallery({...pull.card,foil:!!pull.foil},tile,'#totalRevealGallery .total-reveal-tile');grid.append(tile);
+ });
+ const done=document.createElement('button');done.type='button';done.className='menu-btn';done.textContent='Terminer et continuer';done.style.cssText='display:block;margin:24px auto 0;min-width:230px';
+ done.onclick=()=>{overlay.remove();if(pityProgress().pending.length)showPity();else continueBoosters()};
+ panel.append(heading,subtitle,grid,done);overlay.append(panel);document.body.append(overlay);overlay.scrollTop=0;
 }
 function openShop(feedback=''){renderBoosterProgress();renderWallet();$('#shopFeedback').textContent=feedback;openPanel('#shopScreen')}
 function buyBoosters(count,cost){if(collection.pendingPack||collection.shopQueue||pityProgress().pending.length){continueBoosters();return}if(![1,10].includes(count)||cost!==(count===1?10:90)||(!economy.unlimitedGold&&economy.gold<cost)){openShop('Vous n’avez pas assez de pièces d’or.');return}if(!economy.unlimitedGold)economy.gold-=cost;collection.shopQueue=count;saveEconomy();saveCollection();showBooster('shop')}
