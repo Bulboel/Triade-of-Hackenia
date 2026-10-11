@@ -1362,7 +1362,12 @@ if(document.modelContext?.registerTool){
   try{document.modelContext.registerTool({name:'start_new_game',title:'Commencer une nouvelle partie',description:'Réinitialise le plateau et distribue de nouvelles cartes.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute(){newGame();return{status:'started',firstPlayer:turn==='p'?'player':'ai'}}})}catch(error){console.warn('WebMCP indisponible',error)}
 }
 </script>
-<script>initCollectionUpdates();initCollectionPolish();initNavigationPolish();</script>
+<script>initCollectionUpdates();initCollectionPolish();initNavigationPolish();
+['p33','p134','p96'].forEach((id,index)=>{
+ const card=catalogById(id),holder=document.querySelectorAll('#storyBtn .menu-card-fan i')[index];
+ if(card?.image&&holder){holder.style.cssText=artStyle(card.image);holder.dataset.cardId=id;}
+});
+</script>
 <script>
 // Pont de lecture pour le futur PVP en ligne : les decks restent locaux.
 // N'autorise ni modification de collection ni envoi de cartes au serveur.
