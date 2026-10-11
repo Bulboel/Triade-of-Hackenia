@@ -12,7 +12,7 @@ const KaylaGuide=(()=>{
   "Certaines cartes de la pioche auront des effets spéciaux en partie, je te laisse découvrir cela par toi-même ! Hihi !",
   "Maintenant tu sais tout ! Choisis si tu pioches un Souvenir ou si tu passes pour continuer la partie. Bonne chance !"
  ];
- const active=()=>step>0&&currentMode==='story'&&matchInProgress&&!document.querySelector('#gameApp').classList.contains('hidden');
+ const active=()=>step>0&&(currentMode==='story'||currentMode==='tutorial')&&matchInProgress&&!document.querySelector('#gameApp').classList.contains('hidden');
  const targets=()=>step===2?['#turn','#playerHand']:step===3?['#board']:step===4||step===5?['.memory-zone']:step===6?['#pMemoryOrbs']:[];
  function ensure(){
   if(document.querySelector('#kaylaGuide'))return;
@@ -110,8 +110,8 @@ const KaylaGuide=(()=>{
  function hide(){step=0;document.querySelector('#kaylaGuide')?.classList.add('hidden')}
  function begin(){hide();finished=false;previousFocus=document.activeElement;show(1)}
  function selectedCard(){if(active()&&step===2)show(3)}
- function postPlay(owner){if(currentMode==='story'&&owner==='p'&&!finished&&step===3){show(4);return true}return false}
- function snapshot(){return currentMode==='story'?{step,finished}:null}
+ function postPlay(owner){if((currentMode==='story'||currentMode==='tutorial')&&owner==='p'&&!finished&&step===3){show(4);return true}return false}
+ function snapshot(){return (currentMode==='story'||currentMode==='tutorial')?{step,finished}:null}
  function restore(saved){
   hide();finished=!!saved?.finished;
   if(currentMode!=='story'||finished)return false;
