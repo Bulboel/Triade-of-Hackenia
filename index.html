@@ -342,6 +342,17 @@ body button.elegant-return.hidden{display:none!important}
 #deckScreen .catalog-backbar::before,#deckScreen .catalog-backbar::after,
 #optionsScreen .catalog-backbar::before,#optionsScreen .catalog-backbar::after{content:none!important}
 </style>
+<style id="visible-duel-rule">
+#gameApp .brand>#duelRuleLabel{display:inline-flex!important;align-items:center;justify-content:center;flex:0 0 auto;max-width:150px;min-height:28px;margin:0;padding:5px 10px;border:1px solid #d4b16c;border-radius:999px;background:linear-gradient(145deg,#36554b,#193c38);color:#fff0b8;font:700 12px/1.2 system-ui,sans-serif;letter-spacing:0;text-align:center;box-sizing:border-box;box-shadow:inset 0 1px 2px #fff2ce1c}
+@media(max-width:900px){
+ #gameApp .brand{gap:6px}
+ #gameApp .brand>#duelRuleLabel{max-width:112px;min-height:26px;padding:4px 7px;font-size:10px;white-space:normal}
+ #gameApp .topbar .actions{min-width:0}
+}
+@media(max-width:900px) and (orientation:portrait){
+ #gameApp .brand>#duelRuleLabel{max-width:98px;font-size:10px}
+}
+</style>
 </head>
 <body>
 <section class="startup-screen" id="startupScreen">
@@ -481,7 +492,7 @@ body button.elegant-return.hidden{display:none!important}
     </div></details><details class="options-group"><summary>Sauvegarde et transfert</summary><div class="options-group-body"><section class="save-transfer"><h3>Jouer sur un autre appareil</h3><p>Exportez toute votre progression, puis importez ce fichier sur votre téléphone ou votre ordinateur.</p><div class="panel-actions"><button class="menu-btn secondary" id="exportSaveBtn">Exporter</button><button class="menu-btn secondary" id="importSaveBtn">Importer</button><input class="hidden" type="file" id="importSaveFile" accept="application/json,.json"></div><div class="transfer-note" id="transferNote"></div></section>
     </div></details></div><div class="panel-actions options-footer"><button class="menu-btn" id="saveOptionsBtn">Enregistrer</button></div></div></section>
 <div class="app hidden" id="gameApp">
-  <header class="topbar"><div class="brand"><div class="sigil">H</div><div><h1>TRIADE D'HACKÉNIA</h1><small>Prototype tactique • 1 contre 1<span id="duelRuleLabel"></span></small></div></div><div class="actions"><span class="wallet-display"><span class="gold-value">0</span> or</span><button class="ghost" id="saveGameBtn">Sauvegarder</button><button class="ghost" id="menuBtn">Menu</button><button class="ghost" id="rulesBtn">Règles</button><button class="primary" id="newBtn">Rejouer</button></div></header>
+  <header class="topbar"><div class="brand"><div class="sigil">H</div><div><h1>TRIADE D'HACKÉNIA</h1><small>Prototype tactique • 1 contre 1</small></div><span id="duelRuleLabel" role="status" aria-label="Règle du duel"></span></div><div class="actions"><span class="wallet-display"><span class="gold-value">0</span> or</span><button class="ghost" id="saveGameBtn">Sauvegarder</button><button class="ghost" id="menuBtn">Menu</button><button class="ghost" id="rulesBtn">Règles</button><button class="primary" id="newBtn">Rejouer</button></div></header>
   <main>
     <section class="side player"><div class="player-label"><span class="dot"></span><span id="leftLabel">Votre main</span><span class="memory-orbs" id="pMemoryOrbs" aria-label="Deux pioches Souvenirs disponibles"></span></div><div class="hand" id="playerHand"></div></section>
     <section class="arena"><div class="score"><b class="you" id="pScore">0</b><span class="turn" id="turn">À vous de jouer</span><b class="cpu" id="aScore">0</b></div><div class="memory-zone"><div class="memory-title"><span>Pioche</span> <strong>souvenirs</strong></div><button class="memory-pile" id="memoryPile" aria-label="Piocher un Souvenir"><span class="memory-draw-arrow" aria-hidden="true"><svg viewBox="0 0 64 32" xmlns="http://www.w3.org/2000/svg"><path d="M7 16C16 7 26 25 40 16" fill="none" stroke="#b99b54" stroke-width="6" stroke-linecap="round"/><path d="M7 16C16 7 26 25 40 16" fill="none" stroke="#2b7652" stroke-width="3" stroke-linecap="round"/><path d="M38 7L57 16L38 25L42 16Z" fill="#327a55" stroke="#d6b96e" stroke-width="2" stroke-linejoin="round"/><path d="M4 10L8 16L4 22L0 16Z" fill="#548b5b" stroke="#c7aa64" stroke-width="1"/></svg></span><span class="card card-back back-official"></span></button><div class="memory-hint" id="memoryHint"></div><button class="memory-pass hidden" id="memoryPassBtn">Terminer le tour sans piocher</button></div><div class="board-wrap"><div class="board" id="board"></div></div><div class="message" id="message"><strong>Choisissez une carte</strong><small>Puis posez-la sur une case libre.</small></div></section>
@@ -1184,7 +1195,9 @@ function updateDuelRuleInfo(){
  const label=$('#duelRuleLabel');if(!label)return;
  const [variant,visibility]=currentRuleKey.split('-');
  const name=variant==='elements'?'éléments':variant==='same'?'identique':variant==='plus'?'addition':'classique';
- label.textContent=' • '+(visibility==='dark'?'Obscur':'Clair')+' '+name;
+ label.textContent=(visibility==='dark'?'Obscur':'Clair')+' '+name;
+ label.title='Règle du duel : '+label.textContent;
+ label.setAttribute('aria-label',label.title);
 }
 function applyRulePreset(key){const r=rulePresets[key];currentRuleKey=key;$('#openRule').checked=r.open;$('#sameRule').checked=r.same;$('#plusRule').checked=r.plus}
 function openRulePicker(mode){$('#rulesBtn').style.display='';if(mode==='deck'&&!validDeck(activeDeck())){renderDeckBuilder();openPanel('#deckScreen');$('#deckCount').textContent='Deck requis : 5 cartes, 2 rares et 1 Divine maximum et 2 exemplaires par nom.';return}pendingMode=mode;$('#modeTitle').textContent=mode==='pvp'?'Règle du duel PVP':'Choisissez une règle';$('#modeIntro').textContent=mode==='pvp'?'La variante choisie s’appliquera aux deux joueurs.':'Choisissez les conditions avant de distribuer les cartes.';openPanel('#modeScreen')}
