@@ -62,17 +62,48 @@ const KaylaGuide=(()=>{
   candidates.forEach(p=>{p.y=Math.max(12,Math.min(h-ph-12,p.y));p.x=Math.max(12,p.x)});
   candidates.sort((a,b)=>overlap(a)-overlap(b));const p=candidates[0];pane.style.left=p.x+'px';pane.style.top=p.y+'px';
   const arrows=[];
-  const point=(x,y,fromBelow=false)=>{
-   const cx=Math.max(12,Math.min(w-12,x)),cy=Math.max(12,Math.min(h-12,y));
-   const above=!fromBelow&&cy>70&&!(p.x<cx&&cx<p.x+pw&&p.y<cy&&cy<p.y+ph);
-   const from=above?Math.max(10,cy-42):Math.min(h-10,cy+42),direction=above?1:-1;
-   arrows.push(`<path d="M${cx} ${from} L${cx} ${cy} M${cx-7} ${cy-direction*9} L${cx} ${cy} L${cx+7} ${cy-direction*9}" fill="none" stroke="#ef4444" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`);
+  // A filled ruby arrow with a fine warm outline, always outside its target.
+  const arrow=(x,y,angle,length=46)=>{
+   if(length<22)return;
+   arrows.push(`<g transform="translate(${x} ${y}) rotate(${angle})" filter="url(#kaylaArrowShadow)"><path d="M0 0 L-17 -11 L-17 -4 Q-${length*.66} -6 -${length} -3 L-${length} 3 Q-${length*.66} 6 -17 4 L-17 11 Z" fill="url(#kaylaArrowRuby)" stroke="#ffd3a1" stroke-width="1.1" stroke-linejoin="round"/></g>`);
   };
-  if(step===3){document.querySelectorAll('#board .cell').forEach(cell=>{if(!cell.querySelector('.card')){const r=cell.getBoundingClientRect();point(r.left+r.width/2,r.top+24)}})}
-  else if(step===5){['#memoryPile','#memoryPassBtn'].forEach(s=>{const r=bounds(s);if(r)point(r.x+r.w/2,r.y+r.h+3,true)})}
-  else if(step===2){const hand=bounds('#playerHand');if(hand)point(hand.x+hand.w/2,hand.y);const indicator=bounds('#turn');if(indicator){const x=indicator.x+indicator.w+3,y=indicator.y+indicator.h/2;arrows.push(`<path d="M${Math.min(w-12,x+42)} ${y} L${x} ${y} M${x+9} ${y-7} L${x} ${y} L${x+9} ${y+7}" fill="none" stroke="#ef4444" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`)}}
-  else rects.forEach(r=>point(r.x+r.w/2,r.y));
-  document.getElementById('kaylaGuideArrows').innerHTML=arrows.join('');
+  const targetArrow=(r,preferred='top')=>{
+   const choices=[
+    {side:'left',x:r.x-8,y:r.y+r.h/2,angle:0,room:r.x-20},
+    {side:'right',x:r.x+r.w+8,y:r.y+r.h/2,angle:180,room:w-r.x-r.w-20},
+    {side:'top',x:r.x+r.w/2,y:r.y-8,angle:90,room:r.y-20},
+    {side:'bottom',x:r.x+r.w/2,y:r.y+r.h+8,angle:-90,room:h-r.y-r.h-20}
+   ];
+   const overlapsPane=c=>{const length=Math.min(46,c.room),rad=c.angle*Math.PI/180;
+    const x=c.x-Math.cos(rad)*length/2,y=c.y-Math.sin(rad)*length/2;
+    return x>p.x-12&&x<p.x+pw+12&&y>p.y-12&&y<p.y+ph+12};
+   const choice=choices.filter(c=>c.room>=22&&!overlapsPane(c)).sort((a,b)=>(b.side===preferred)-(a.side===preferred)||b.room-a.room)[0];
+   if(choice)arrow(choice.x,choice.y,choice.angle,Math.min(46,choice.room));
+  };
+  if(step===3){
+   const grid=document.querySelector('#board').getBoundingClientRect();
+   const left=grid.left-18,right=grid.right+18;
+   const leftRoom=left-12,rightRoom=w-right-12;
+   // Desktop: three arrows on each exterior side, aligned with the rows.
+   if(leftRoom>=30||rightRoom>=30){
+    for(let row=0;row<3;row++){const y=grid.top+grid.height*(row+.5)/3;
+     if(leftRoom>=30)arrow(left,y,0,Math.min(46,leftRoom));
+     if(rightRoom>=30)arrow(right,y,180,Math.min(46,rightRoom));
+    }
+   }else{
+    // Narrow portrait screens: use the exterior top/bottom edges instead.
+    for(let col=0;col<3;col++){const x=grid.left+grid.width*(col+.5)/3;
+     arrow(x,grid.top-12,90,Math.min(38,grid.top-24));
+     arrow(x,grid.bottom+12,-90,Math.min(38,h-grid.bottom-24));
+    }
+   }
+  }else if(step===5){
+   ['#memoryPile','#memoryPassBtn'].forEach(s=>{const r=bounds(s);if(r)targetArrow(r,'bottom')});
+  }else if(step===2){
+   const hand=bounds('#playerHand'),indicator=bounds('#turn');
+   if(hand)targetArrow(hand,'top');if(indicator)targetArrow(indicator,'right');
+  }else rects.forEach(r=>targetArrow(r,step===6?'bottom':'top'));
+  document.getElementById('kaylaGuideArrows').innerHTML='<defs><linearGradient id="kaylaArrowRuby" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff7777"/><stop offset=".45" stop-color="#ef343f"/><stop offset="1" stop-color="#a8102c"/></linearGradient><filter id="kaylaArrowShadow" x="-60%" y="-100%" width="220%" height="300%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#170407" flood-opacity=".8"/></filter></defs>'+arrows.join('');
  }
  function schedule(){if(!frame)frame=requestAnimationFrame(()=>{frame=0;layout()})}
  function advance(){if(!active())return;if(step===1)show(2);else if(step>=4&&step<8)show(step+1);else if(step===8){finished=true;hide();checkpoint();document.querySelector('#memoryPile')?.focus({preventScroll:true})}}
