@@ -62,14 +62,15 @@ const KaylaGuide=(()=>{
   candidates.forEach(p=>{p.y=Math.max(12,Math.min(h-ph-12,p.y));p.x=Math.max(12,p.x)});
   candidates.sort((a,b)=>overlap(a)-overlap(b));const p=candidates[0];pane.style.left=p.x+'px';pane.style.top=p.y+'px';
   const arrows=[];
-  const point=(x,y)=>{
+  const point=(x,y,fromBelow=false)=>{
    const cx=Math.max(12,Math.min(w-12,x)),cy=Math.max(12,Math.min(h-12,y));
-   const above=cy>70&&!(p.x<cx&&cx<p.x+pw&&p.y<cy&&cy<p.y+ph);
+   const above=!fromBelow&&cy>70&&!(p.x<cx&&cx<p.x+pw&&p.y<cy&&cy<p.y+ph);
    const from=above?Math.max(10,cy-42):Math.min(h-10,cy+42),direction=above?1:-1;
-   arrows.push(`<path d="M${cx} ${from} L${cx} ${cy-direction*9} M${cx-7} ${cy-direction*17} L${cx} ${cy-direction*9} L${cx+7} ${cy-direction*17}" fill="none" stroke="#eec768" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`);
+   arrows.push(`<path d="M${cx} ${from} L${cx} ${cy} M${cx-7} ${cy-direction*9} L${cx} ${cy} L${cx+7} ${cy-direction*9}" fill="none" stroke="#ef4444" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`);
   };
   if(step===3){document.querySelectorAll('#board .cell').forEach(cell=>{if(!cell.querySelector('.card')){const r=cell.getBoundingClientRect();point(r.left+r.width/2,r.top+24)}})}
-  else if(step===5){['#memoryPile','#memoryPassBtn'].forEach(s=>{const r=bounds(s);if(r)point(r.x+r.w/2,r.y)})}
+  else if(step===5){['#memoryPile','#memoryPassBtn'].forEach(s=>{const r=bounds(s);if(r)point(r.x+r.w/2,r.y+r.h+3,true)})}
+  else if(step===2){const hand=bounds('#playerHand');if(hand)point(hand.x+hand.w/2,hand.y);const indicator=bounds('#turn');if(indicator){const x=indicator.x+indicator.w+3,y=indicator.y+indicator.h/2;arrows.push(`<path d="M${Math.min(w-12,x+42)} ${y} L${x} ${y} M${x+9} ${y-7} L${x} ${y} L${x+9} ${y+7}" fill="none" stroke="#ef4444" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`)}}
   else rects.forEach(r=>point(r.x+r.w/2,r.y));
   document.getElementById('kaylaGuideArrows').innerHTML=arrows.join('');
  }
