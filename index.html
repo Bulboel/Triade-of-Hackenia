@@ -388,19 +388,20 @@ body button.elegant-return.hidden{display:none!important}
 #menuScreen .menu-utility{gap:8px}
 @media(max-width:600px){#menuScreen .fantasy-icon{width:29px;height:29px;flex-basis:29px}#menuScreen .menu-utility .fantasy-icon{width:19px;height:19px;flex-basis:19px}}
 </style><style id="story-card-corner">
-/* Equal visible widths, with the final card anchored to the tile corner. */
-#menuScreen #storyBtn .menu-card-fan{right:10px;bottom:7px;width:220px;height:112px;transform:none}
-#menuScreen #storyBtn .menu-card-fan i{inset:auto;bottom:0;width:76px;height:106px;box-sizing:border-box;border-radius:7px;transform:none;box-shadow:0 3px 8px #211d1c55}
-#menuScreen #storyBtn .menu-card-fan i:first-child{left:0;z-index:1;transform:rotate(-7deg);transform-origin:bottom center}
-#menuScreen #storyBtn .menu-card-fan i:nth-child(2){left:72px;z-index:2;transform:none}
-#menuScreen #storyBtn .menu-card-fan i:last-child{left:144px;z-index:3;transform:rotate(7deg);transform-origin:bottom center}
-#menuScreen #storyBtn .menu-caption{max-width:calc(100% - 230px)}
+#menuScreen #storyBtn{overflow:hidden}
+#menuScreen #storyBtn .story-arrow{display:none}
+#menuScreen #storyBtn .menu-card-fan{right:16px;bottom:-62px;width:110px;height:154px;transform:none}
+#menuScreen #storyBtn .menu-card-fan i{inset:0;width:100%;height:100%;box-sizing:border-box;border-radius:8px;box-shadow:0 5px 12px #211d1c66;transform-origin:50% 100%}
+#menuScreen #storyBtn .menu-card-fan i:first-child{left:0;bottom:auto;z-index:1;transform:translateX(-61px) rotate(-29deg)}
+#menuScreen #storyBtn .menu-card-fan i:nth-child(2){left:0;bottom:auto;z-index:2;transform:translateX(-28px) rotate(-10deg)}
+#menuScreen #storyBtn .menu-card-fan i:last-child{left:0;bottom:auto;z-index:3;transform:translateX(9px) rotate(13deg)}
+#menuScreen #storyBtn .menu-caption{max-width:calc(100% - 205px)}
 @media(max-width:600px){
- #menuScreen #storyBtn .menu-card-fan{right:7px;bottom:6px;width:139px;height:75px}
- #menuScreen #storyBtn .menu-card-fan i{width:49px;height:69px}
- #menuScreen #storyBtn .menu-card-fan i:nth-child(2){left:45px}
- #menuScreen #storyBtn .menu-card-fan i:last-child{left:90px}
- #menuScreen #storyBtn .menu-caption{max-width:calc(100% - 145px)}
+ #menuScreen #storyBtn .menu-card-fan{right:11px;bottom:-41px;width:72px;height:101px}
+ #menuScreen #storyBtn .menu-card-fan i:first-child{transform:translateX(-40px) rotate(-29deg)}
+ #menuScreen #storyBtn .menu-card-fan i:nth-child(2){transform:translateX(-18px) rotate(-10deg)}
+ #menuScreen #storyBtn .menu-card-fan i:last-child{transform:translateX(6px) rotate(13deg)}
+ #menuScreen #storyBtn .menu-caption{max-width:calc(100% - 135px)}
 }
 </style></head>
 <body>
@@ -418,7 +419,7 @@ body button.elegant-return.hidden{display:none!important}
     <h1 class="menu-title">Triade <span>d’Hackénia</span></h1>
     <p class="menu-subtitle">Cinq cartes. Quatre directions. Votre légende.</p>
     <div class="menu-actions">
-      <button class="menu-btn adventure-story" id="storyBtn"><span class="menu-eyebrow">CHAPITRE I · L’AVENTURE COMMENCE</span><strong>Mode histoire</strong><span class="menu-caption">Prenez la route avec les aventuriers.</span><span class="story-arrow" aria-hidden="true">➜</span><span class="menu-card-fan" aria-hidden="true"><i></i><i></i><i></i></span></button>
+      <button class="menu-btn adventure-story" id="storyBtn"><span class="menu-eyebrow">CHAPITRE I · L’AVENTURE COMMENCE</span><strong>Mode histoire</strong><span class="menu-caption">Prenez la route avec les aventuriers.</span><span class="menu-card-fan" aria-hidden="true"><i></i><i></i><i></i></span></button>
       <button class="menu-btn quick" id="quickBtn"><span class="menu-icon fantasy-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="m9 7 13 15M8 5l4 2-5 5-2-4Zm16 20 3 3M19 24l5-5M25 7 12 20m14-15-4 2 5 5 2-4ZM9 25l-3 3m4-9 5 5"/><path d="m16 3 1 2 2 1-2 1-1 2-1-2-2-1 2-1Z"/></svg></span><span>Partie rapide<small>Un duel, sans attendre</small></span></button>
       <button class="menu-btn" id="playBtn"><span class="menu-icon fantasy-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="9" y="5" width="17" height="24" rx="3"/><path d="M6 24 3 9a2 2 0 0 1 2-2l2-.4M12 9h11M12 25h11m-5-13 4 5-4 5-4-5Z"/><circle cx="17.5" cy="17" r="1" fill="currentColor" stroke="none"/></svg></span><span>Jouer<small>Avec votre deck</small></span></button>
       <button class="menu-btn" id="pvpBtn"><span class="menu-icon fantasy-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M3 8h11v9c0 5-5.5 8-5.5 8S3 22 3 17Zm15 0h11v9c0 5-5.5 8-5.5 8S18 22 18 17Z"/><path d="m6 13 2.5 3L11 13m10 3 2.5-3L26 16M13 4l3 3 3-3M16 25v4m-3-2h6"/></svg></span><span>Duel PVP<small>Défiez un ami</small></span></button>
