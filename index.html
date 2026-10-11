@@ -345,7 +345,13 @@ body button.elegant-return.hidden{display:none!important}
 <style id="visible-duel-rule">
 #gameApp .brand>#duelRuleLabel{display:inline-flex!important;align-items:center;justify-content:center;flex:0 0 auto;max-width:150px;min-height:28px;margin:0;padding:5px 10px;border:1px solid #d4b16c;border-radius:999px;background:linear-gradient(145deg,#36554b,#193c38);color:#fff0b8;font:700 12px/1.2 system-ui,sans-serif;letter-spacing:0;text-align:center;box-sizing:border-box;box-shadow:inset 0 1px 2px #fff2ce1c}
 @media(max-width:900px){
- #gameApp .brand{gap:6px}
+ /* The rule badge follows the title block, so last-child no longer selects it. */
+ #gameApp .brand>div:nth-child(2){display:none!important}
+ #gameApp{min-width:0;max-width:100%;grid-template-columns:minmax(0,1fr)}
+ #gameApp .topbar{box-sizing:border-box;width:100%;min-width:0}
+ #gameApp .brand{gap:6px;min-width:0;flex:0 1 auto}
+ #gameApp .topbar .actions{flex:0 1 auto;flex-wrap:wrap;justify-content:flex-end}
+ #gameApp .topbar .actions button{white-space:nowrap}
  #gameApp .brand>#duelRuleLabel{max-width:112px;min-height:26px;padding:4px 7px;font-size:10px;white-space:normal}
  #gameApp .topbar .actions{min-width:0}
 }
