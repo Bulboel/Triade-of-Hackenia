@@ -431,6 +431,10 @@ body button.elegant-return.hidden{display:none!important}
 #challengesScreen .challenges-sticky-nav::before,#challengesScreen .challenges-sticky-nav::after{content:none!important;display:none!important}
 #challengesScreen .challenges-sticky-nav>strong{display:none!important}
 #challengesScreen .challenges-sticky-nav .menu-btn{width:auto;min-width:0;margin:0;box-shadow:0 3px 12px #0003}
+</style><style id="shop-clean-sticky-back">
+#shopScreen{overflow-y:auto;align-items:start}
+#shopScreen .shop-sticky-back{position:sticky;top:0;z-index:35;display:flex;justify-content:flex-start;width:fit-content;max-width:100%;padding:8px 0;margin:0 0 12px;background:transparent!important;border:0;box-shadow:none;backdrop-filter:none}
+#shopScreen .shop-sticky-back .menu-btn{width:auto;min-width:0;margin:0;padding:9px 15px;box-shadow:0 3px 12px #0003}
 </style></head>
 <body>
 <section class="startup-screen" id="startupScreen">
@@ -467,6 +471,7 @@ body button.elegant-return.hidden{display:none!important}
 <section class="panel-screen hidden" id="challengesScreen"><div class="panel-card"><div class="challenges-sticky-nav"><button class="menu-btn" type="button" data-close-panel aria-label="Retour au menu">← Retour</button><strong>Défis</strong></div><h2>Défis</h2><p>Accomplissez chaque défi une fois pour recevoir sa récompense.</p><div id="challengeActive"></div><h3>Défis accomplis</h3><div id="challengeArchive"></div><button class="menu-btn" data-close-panel>Retour</button></div></section>
 <section class="panel-screen hidden" id="shopScreen">
   <div class="panel-card">
+    <div class="shop-sticky-back"><button class="menu-btn" type="button" data-close-panel aria-label="Retour au menu">← Retour</button></div>
     <h2>Boutique</h2>
     <p>Échangez vos pièces d’or contre des boosters pour enrichir votre collection.</p>
     <div class="wallet-display shop-wallet"><span class="gold-value">0</span> pièces d’or</div>
