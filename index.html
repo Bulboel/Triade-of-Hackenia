@@ -359,6 +359,28 @@ body button.elegant-return.hidden{display:none!important}
  #gameApp .brand>#duelRuleLabel{max-width:98px;font-size:10px}
 }
 </style>
+
+<style id="menu-colour-themes">
+#menuScreen :is(#quickBtn,#playBtn,#pvpBtn,#pantheonBtn,#collectionBtn,#challengesBtn,#decksBtn,#shopBtn){
+ background:linear-gradient(145deg,var(--tile-top),var(--tile-bottom));
+ border:2px solid var(--tile-border);border-radius:9px 3px 9px 3px;
+ box-shadow:0 3px 0 #051719,inset 0 1px 0 #ffffff18,0 0 0 1px #071a1c;
+ color:var(--tile-text,#fff0d1);
+}
+#menuScreen :is(#quickBtn,#playBtn,#pvpBtn,#pantheonBtn,#collectionBtn,#challengesBtn,#decksBtn,#shopBtn):hover{
+ background:linear-gradient(145deg,var(--tile-top),var(--tile-bottom));filter:brightness(1.13);
+}
+#menuScreen :is(#quickBtn,#playBtn,#pvpBtn,#pantheonBtn,#collectionBtn,#challengesBtn,#decksBtn,#shopBtn) small{color:var(--tile-subtitle,#e3d9c7)}
+#menuScreen :is(#quickBtn,#playBtn,#pvpBtn,#pantheonBtn,#collectionBtn,#challengesBtn,#decksBtn,#shopBtn) .menu-icon{color:var(--tile-icon,#efc874)}
+#menuScreen #quickBtn{--tile-top:#487755;--tile-bottom:#235345;--tile-border:#a6b98a}
+#menuScreen #pantheonBtn{--tile-top:#423044;--tile-bottom:#192d37;--tile-border:#ad8b62}
+#menuScreen #playBtn{--tile-top:#273957;--tile-bottom:#0d1934;--tile-border:#ac9b70;--tile-subtitle:#c5d0e6}
+#menuScreen #pvpBtn{--tile-top:#a35827;--tile-bottom:#5c2c1d;--tile-border:#e4b16e;--tile-subtitle:#ffe0b5}
+#menuScreen #collectionBtn{--tile-top:#597d30;--tile-bottom:#2b491e;--tile-border:#c3d885;--tile-subtitle:#e5f0c9}
+#menuScreen #challengesBtn{--tile-top:#792c37;--tile-bottom:#390f20;--tile-border:#c19373;--tile-subtitle:#f3cbd0}
+#menuScreen #decksBtn{--tile-top:#457d97;--tile-bottom:#244656;--tile-border:#b9d8d9;--tile-subtitle:#e0f0fa;--tile-icon:#ffe6a8}
+#menuScreen #shopBtn{--tile-top:#b58b3a;--tile-bottom:#72501f;--tile-border:#f0d58b;--tile-subtitle:#fff0c5;--tile-icon:#ffe8a4}
+</style>
 </head>
 <body>
 <section class="startup-screen" id="startupScreen">
