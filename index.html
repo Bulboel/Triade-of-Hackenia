@@ -409,6 +409,18 @@ body button.elegant-return.hidden{display:none!important}
 .deck-preview-list{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(5px,1.3vw,14px);max-width:800px;margin:auto}
 .deck-preview-tile,.deck-preview-empty{min-width:0;aspect-ratio:3/4;border:1px solid #b99956;border-radius:9px;background:#071b22;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:3px;color:#d2b374}
 .deck-preview-tile{cursor:pointer}.deck-preview-tile:hover{border-color:#ffe4a4;box-shadow:0 0 12px #e5b85b66}.deck-preview-tile .card{width:100%;height:100%;max-width:100%;pointer-events:none}.deck-preview-empty{border-style:dashed;font-size:clamp(20px,4vw,42px);opacity:.65}
+</style><style>
+.challenge-accordion{padding:0!important;overflow:hidden}
+.challenge-accordion>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px;cursor:pointer;font-weight:700;list-style:none;line-height:1.4}
+.challenge-accordion>summary::-webkit-details-marker{display:none}
+.challenge-accordion>summary::after{content:'⌄';font-size:1.3rem;color:#d5b16b;flex:none;transition:transform .2s}
+.challenge-accordion[open]>summary::after{transform:rotate(180deg)}
+.challenge-accordion>summary:hover{background:rgba(208,169,92,.09)}
+.challenge-accordion>summary:focus-visible{outline:2px solid #e4c27c;outline-offset:-3px}
+.challenge-accordion>p,.challenge-accordion>small,.challenge-accordion>progress,.challenge-accordion>ul{margin-left:18px!important;margin-right:18px!important}
+.challenge-accordion>progress{width:calc(100% - 36px)!important;margin-bottom:15px}
+.challenge-accordion>small{display:block;margin-bottom:12px}
+.challenge-accordion[open]>summary{border-bottom:1px solid rgba(213,177,107,.3);margin-bottom:12px}
 </style></head>
 <body>
 <section class="startup-screen" id="startupScreen">
@@ -577,7 +589,7 @@ body button.elegant-return.hidden{display:none!important}
 <script src="assets/data/card-numbers.js"></script>
 <script src="collection-polish.js?v=20261006-finale9"></script>
 <script src="booster-presentation.js"></script>
-<script src="game-upgrades.js?v=20261010-earned-backs-only"></script>
+<script src="game-upgrades.js?v=20261011-challenge-accordion"></script>
 <script src="pantheon-ai.js?v=20261010-strategy1"></script>
 <script src="duel-touch.js?v=20261006-finale9"></script>
 <script src="kayla-guide.js?v=20261011-guide4"></script>
