@@ -3,9 +3,12 @@
  const menu=document.querySelector('#menuScreen .menu-grid')||document.querySelector('#optionsBtn')?.parentElement;
  if(!menu||document.getElementById('bibleBtn'))return;
  const button=document.createElement('button');button.id='bibleBtn';button.className='menu-btn';
- button.innerHTML='<span aria-hidden="true">✧</span><span>La Bible<small>Le guide complet de la Triade</small></span>';menu.append(button);
+ button.innerHTML='<span class="bible-menu-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h20v24H6zM11 4v24M16 10h6M16 15h6M16 20h4"/></svg></span><span>La Bible</span>';menu.append(button);
  const style=document.createElement('style');style.textContent=`
- #menuScreen #bibleBtn{grid-column:1/-1;display:flex;gap:15px;align-items:center;justify-content:center;border:2px solid #c8b28a;border-radius:12px;background:linear-gradient(135deg,#4b405b,#20353e);color:#fff0cd;min-height:76px}
+ #menuScreen #bibleBtn{grid-column:1/-1!important;display:flex!important;gap:12px;align-items:center;justify-content:center;width:100%!important;min-height:58px!important;margin:8px 0 0!important;padding:12px 18px!important;border:2px solid #c8b28a!important;border-radius:14px!important;background:linear-gradient(135deg,#4b405b,#20353e)!important;color:#fff0c5!important;font-size:17px!important;font-weight:800!important;box-shadow:0 4px 0 #091f27,inset 0 1px 0 #fff5cb44!important}
+ #bibleBtn .bible-menu-icon{display:inline-flex;flex:none;width:28px;height:28px;color:#f0d285}
+ #bibleBtn .bible-menu-icon svg{width:100%;height:100%}
+ #menuScreen #bibleBtn::before,#menuScreen #bibleBtn::after{content:none!important}
  #bibleBtn small{display:block;font:500 13px/1.5 system-ui;color:#e0d5e7}
  #bibleScreen .panel-card{max-width:900px;width:100%;box-sizing:border-box}
  #bibleScreen .bible-back{position:sticky;top:12px;z-index:5;width:fit-content;margin-bottom:18px}
