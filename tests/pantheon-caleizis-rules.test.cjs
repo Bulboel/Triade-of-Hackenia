@@ -1,15 +1,16 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 const html=fs.readFileSync('index.html','utf8'),main=html.match(/<script>([\s\S]*?)<\/script>/)[1];
-const nodes=new Map(),$=id=>{if(!nodes.has(id))nodes.set(id,{setAttribute(){}});return nodes.get(id)};
+const nodes=new Map(),$=id=>{if(!nodes.has(id))nodes.set(id,{attributes:{},setAttribute(k,v){this.attributes[k]=v}});return nodes.get(id)};
 const ctx=vm.createContext({console,$,Math});
 const run=s=>vm.runInContext(s,ctx);
 for(const n of ['dirs','elementDominance','combatValue'])run('const '+n+'='+main.match(new RegExp('const '+n+'=([^;]+);'))[1]+';');
 run(main.slice(main.indexOf('const rulePresets='),main.indexOf("let currentRuleKey=")));
-run("let currentRuleKey='basic-open',pantheonOpponent='caleizis',board=[],hands={p:[],a:[]},blindHands={p:false};function randomLegalHand(){return []}");
+run("let currentMode='pantheon-caleizis',currentRuleKey='basic-open',pantheonOpponent='caleizis',board=[],hands={p:[],a:[]},blindHands={p:false};function randomLegalHand(){return []}");
 function load(name){const start=main.indexOf('function '+name+'('),end=main.indexOf('\nfunction ',start+1);assert(start>=0,name);const line=main.slice(start,main.indexOf('\n',start));run(line.endsWith('}')?line:main.slice(start,end<0?undefined:end))}
 for(const n of ['neighbors','contactValue','capture','applyRulePreset','pantheonDuelRule','updateDuelRuleInfo'])load(n);
 run('applyRulePreset(pantheonDuelRule());updateDuelRuleInfo()');
 assert.equal(run('currentRuleKey'),'elements-same-plus-dark');
+assert.equal($('#gameApp').attributes['data-duel-mode'],'pantheon-caleizis');
 assert.equal($('#openRule').checked,false);assert.equal($('#sameRule').checked,true);assert.equal($('#plusRule').checked,true);
 for(const id of ['#openRule','#sameRule','#plusRule'])assert.equal($(id).disabled,true);
 assert.equal($('#duelRuleLabel').textContent,'Obscur éléments + identique + addition');
@@ -41,3 +42,12 @@ run("pantheonOpponent='hilam';applyRulePreset(pantheonDuelRule());updateDuelRule
 assert.equal(run('currentRuleKey'),'elements-plus-open');assert.equal($('#duelRuleLabel').textContent,'Clair éléments + addition');
 for(const id of ['#openRule','#sameRule','#plusRule'])assert.equal($(id).disabled,false);
 console.log('Caleïzis rules: Obscur, elemental Same + Plus together, classic captures, AI simulation and rule labels verified.');
+
+// Header layout follows the active mode, including leaving the trial and Story Caleïzis.
+for(const mode of ['quick','deck','pvp','pantheon-hilam','story-caleizis','pantheon-caleizis']){
+ run(`currentMode='${mode}';updateDuelRuleInfo()`);
+ assert.equal($('#gameApp').attributes['data-duel-mode'],mode);
+}
+const headerCSS=html.slice(html.indexOf('/* Let the mobile header contain wrapped rules'),html.indexOf('</style>',html.indexOf('/* Let the mobile header contain wrapped rules')));
+for(const line of headerCSS.split('\n').filter(line=>line.includes('#gameApp')))assert(line.includes('#gameApp[data-duel-mode="pantheon-caleizis"]'));
+console.log('Mobile header adjustment is isolated to the Pantheon Caleïzis duel.');

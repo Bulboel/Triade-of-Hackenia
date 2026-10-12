@@ -362,24 +362,24 @@ body button.elegant-return.hidden{display:none!important}
 /* Let the mobile header contain wrapped rules and actions instead of centring
    taller children inside the old 38px row, which clipped them above the screen. */
 @media(max-width:900px){
- #gameApp{grid-template-rows:auto minmax(0,1fr)!important}
- #gameApp .topbar{
+ #gameApp[data-duel-mode="pantheon-caleizis"]{grid-template-rows:auto minmax(0,1fr)!important}
+ #gameApp[data-duel-mode="pantheon-caleizis"] .topbar{
   height:auto!important;min-height:44px!important;
   padding:calc(5px + env(safe-area-inset-top,0px)) max(6px,env(safe-area-inset-right,0px)) 5px max(6px,env(safe-area-inset-left,0px));
   align-items:center;gap:6px;flex-wrap:nowrap;
  }
- #gameApp .brand{flex:1 1 auto;min-width:0}
- #gameApp .brand .sigil{flex-shrink:0}
- #gameApp .brand>#duelRuleLabel{flex:0 1 auto;min-width:0;overflow-wrap:normal}
- #gameApp .topbar .actions{width:auto;flex:0 0 auto;max-width:60%;gap:4px;overflow:visible}
- #gameApp .topbar .actions button{min-height:30px;line-height:1.2;padding:6px 5px}
+ #gameApp[data-duel-mode="pantheon-caleizis"] .brand{flex:1 1 auto;min-width:0}
+ #gameApp[data-duel-mode="pantheon-caleizis"] .brand .sigil{flex-shrink:0}
+ #gameApp[data-duel-mode="pantheon-caleizis"] .brand>#duelRuleLabel{flex:0 1 auto;min-width:0;overflow-wrap:normal}
+ #gameApp[data-duel-mode="pantheon-caleizis"] .topbar .actions{width:auto;flex:0 0 auto;max-width:60%;gap:4px;overflow:visible}
+ #gameApp[data-duel-mode="pantheon-caleizis"] .topbar .actions button{min-height:30px;line-height:1.2;padding:6px 5px}
 }
 @media(max-width:480px) and (orientation:portrait){
- #gameApp .topbar .actions{
+ #gameApp[data-duel-mode="pantheon-caleizis"] .topbar .actions{
   display:grid;grid-template-columns:repeat(2,max-content);
   justify-content:end;align-items:stretch;max-width:none;
  }
- #gameApp .brand>#duelRuleLabel{max-width:112px}
+ #gameApp[data-duel-mode="pantheon-caleizis"] .brand>#duelRuleLabel{max-width:112px}
 }
 </style>
 
@@ -1454,6 +1454,7 @@ function renderDeckPreview(deck){
 function renderDeckBuilder(){const deck=activeDeck(),select=$('#deckSelect'),grid=$('#deckGrid');select.innerHTML=decks.map(d=>`<option value="${d.id}">${d.name} — ${d.cards.length}/5</option>`).join('');select.value=deck.id;$('#deckName').value=deck.name;$('#resetDeckBtn').disabled=deck.cards.length===0;renderDeckPreview(deck);grid.innerHTML='<div class="deck-limit-note">Maximum : 5 cartes, dont 2 rares et 1 Divine (variantes comprises), et 2 exemplaires du même nom. Les alternatives de communes ne comptent pas comme rares.</div>';sortedCards(pool,$('#deckSort')?.value||'number',$('#deckSearch')?.value||'').forEach(c=>{const i=pool.indexOf(c),owned=ownedCopies(c.id),amount=deck.cards.filter(index=>index===i).length,named=deckNameCount(deck,c.name),canAdd=owned>amount&&deck.cards.length<5&&named<2&&(!isRareCard(c)||deckRareCount(deck)<2)&&(!isDivineCard(c)||deckDivineCount(deck)<1),item=document.createElement('article');item.dataset.cardId=c.id;item.className=`deck-card ${amount?'chosen':''} ${owned?'':'locked'}`;item.innerHTML=owned?`${previewMarkup(c)}<div class="deck-card-controls"><button class="deck-step deck-minus" ${amount?'':'disabled'} aria-label="Retirer ${c.name}">−</button><span class="deck-quantity">${amount} / ${owned}</span><button class="deck-step deck-plus" ${canAdd?'':'disabled'} aria-label="Ajouter ${c.name}">+</button></div>`:`<span class="card card-back back-${settings.back}"></span><span class="locked-name">À découvrir</span>`;if(owned){const visual=item.querySelector('.card');visual.tabIndex=0;visual.setAttribute('role','button');visual.setAttribute('aria-label','Agrandir '+c.name);const zoom=()=>openCardGallery({...c,foil:(collection.foils?.[c.id]||0)>0},visual,'#deckGrid .deck-card:not(.locked) .card');visual.onclick=zoom;visual.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();zoom()}};item.querySelector('.deck-minus').onclick=()=>{const pos=deck.cards.lastIndexOf(i);if(pos>=0)deck.cards.splice(pos,1);saveDecks();renderDeckBuilder()};item.querySelector('.deck-plus').onclick=()=>{if(!canAdd){$('#deckCount').textContent=named>=2?`Deux exemplaires maximum de « ${c.name} »`:'Impossible d’ajouter cette carte';return}deck.cards.push(i);saveDecks();renderDeckBuilder()}}grid.append(item)});$('#deckCount').textContent=`${deck.cards.length} / 5 cartes • ${deckRareCount(deck)} / 2 rares • ${deckDivineCount(deck)} / 1 Divine${deckRareCount(deck)>2||deckDivineCount(deck)>1?' — ajustez le deck':''}`;renderPvpDecks()}
 function renderPvpDecks(){['#pvpDeck1','#pvpDeck2'].forEach((id,n)=>{const select=$(id),old=select.value;select.innerHTML='<option value="random">Main aléatoire</option>'+decks.filter(d=>validDeck(d)).map(d=>`<option value="${d.id}">${d.name}</option>`).join('');if([...select.options].some(o=>o.value===old))select.value=old;else if(n===0&&validDeck(activeDeck()))select.value=activeDeckId})}
 function updateDuelRuleInfo(){
+ $('#gameApp')?.setAttribute('data-duel-mode',currentMode);
  const label=$('#duelRuleLabel');if(!label)return;
  const preset=rulePresets[currentRuleKey],variants=[];
  if(currentRuleKey.startsWith('elements-'))variants.push('éléments');
