@@ -358,6 +358,29 @@ body button.elegant-return.hidden{display:none!important}
 @media(max-width:900px) and (orientation:portrait){
  #gameApp .brand>#duelRuleLabel{max-width:98px;font-size:10px}
 }
+
+/* Let the mobile header contain wrapped rules and actions instead of centring
+   taller children inside the old 38px row, which clipped them above the screen. */
+@media(max-width:900px){
+ #gameApp{grid-template-rows:auto minmax(0,1fr)!important}
+ #gameApp .topbar{
+  height:auto!important;min-height:44px!important;
+  padding:calc(5px + env(safe-area-inset-top,0px)) max(6px,env(safe-area-inset-right,0px)) 5px max(6px,env(safe-area-inset-left,0px));
+  align-items:center;gap:6px;flex-wrap:nowrap;
+ }
+ #gameApp .brand{flex:1 1 auto;min-width:0}
+ #gameApp .brand .sigil{flex-shrink:0}
+ #gameApp .brand>#duelRuleLabel{flex:0 1 auto;min-width:0;overflow-wrap:normal}
+ #gameApp .topbar .actions{width:auto;flex:0 0 auto;max-width:60%;gap:4px;overflow:visible}
+ #gameApp .topbar .actions button{min-height:30px;line-height:1.2;padding:6px 5px}
+}
+@media(max-width:480px) and (orientation:portrait){
+ #gameApp .topbar .actions{
+  display:grid;grid-template-columns:repeat(2,max-content);
+  justify-content:end;align-items:stretch;max-width:none;
+ }
+ #gameApp .brand>#duelRuleLabel{max-width:112px}
+}
 </style>
 
 <style id="menu-colour-themes">
