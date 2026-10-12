@@ -1,6 +1,6 @@
 const fs=require('fs'),vm=require('vm'),assert=require('node:assert/strict');
 const context=vm.createContext({document:{addEventListener(){}},Date});
-vm.runInContext('let economy={gold:0},catalog=Array.from({length:150},(_,i)=>({id:String(i)})),collection={counts:{}},saveSlotActive=true,saves=0;function ownedCopies(id){return collection.counts[id]||0}function saveEconomy(){saves++}function syncProgressSave(){saves++}',context);
+vm.runInContext('let economy={gold:0},catalog=Array.from({length:150},(_,i)=>({id:String(i),kind:'playable',setId:'un-nouveau-depart'})),collection={counts:{}},saveSlotActive=true,saves=0;function ownedCopies(id){return collection.counts[id]||0}function saveEconomy(){saves++}function syncProgressSave(){saves++}',context);
 vm.runInContext(fs.readFileSync('game-upgrades.js','utf8'),context);
 const run=s=>vm.runInContext(s,context);
 run('checkChallenges()');assert.equal(run('economy.gold'),0);assert.equal(run("!!backUnlocked('element-water')"),false);
