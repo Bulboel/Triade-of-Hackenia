@@ -2,7 +2,7 @@
 const elementalBacks={water:'Eau',wind:'Vent',fire:'Feu',earth:'Terre',ice:'Glace',lightning:'Foudre'};
 let boardChoice=null;
 function challengeState(){if(!economy.challenges||typeof economy.challenges!=='object'||Array.isArray(economy.challenges))economy.challenges={};return economy.challenges}
-function treasureCollectionProgress(){const cards=catalog.filter(card=>card.setId==='un-nouveau-depart'&&card.kind!=='memory');return {total:cards.length,owned:cards.filter(card=>ownedCopies(card.id)>0).length,foil:cards.filter(card=>(collection.foils?.[card.id]||0)>0).length}}
+function treasureCollectionProgress(){const cards=catalog.filter(card=>card.setId==='un-nouveau-depart'&&card.kind!=='memory');let owned=0,foil=0;for(const card of cards){const copies=ownedCopies(card.id),foils=Math.min(copies,Math.max(0,collection.foils?.[card.id]||0));if(copies-foils>0)owned++;if(foils>0)foil++}return {total:cards.length,owned,foil}}
 function onlineVictoryCount(){try{const ids=JSON.parse(localStorage.getItem('hackenia-online-victories-v1')||'[]');return Array.isArray(ids)?new Set(ids.filter(id=>typeof id==='string')).size:0}catch{return 0}}
 function collectedSetCards(){return catalog.filter(card=>ownedCopies(card.id)>0).length}
 function awardMaebrilVictory(){
