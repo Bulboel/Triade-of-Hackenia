@@ -630,6 +630,7 @@ body #menuScreen .menu-actions :is(.learn-kayla,#bibleBtn) :is(.learn-icon,.bibl
 <script src="collection-polish.js?v=20261006-finale9"></script>
 <script src="booster-presentation.js"></script>
 <script src="game-upgrades.js?v=20261012-finale10"></script>
+<script src="assets/soryan-tactic.js?v=20261012-art1"></script>
 <script src="pantheon-ai.js?v=20261010-strategy1"></script>
 <script src="duel-touch.js?v=20261006-finale9"></script>
 <script src="kayla-guide.js?v=20261012-arrows6"></script>
@@ -974,8 +975,8 @@ function offerSoryanTactic(owner){
  const move=chooseSoryanReposition();if(!move){offerPostPlayMemory(owner);return}
  const generation=battleResultGeneration;
  let overlay=$('#soryanTactic');
- if(!overlay){overlay=document.createElement('section');overlay.id='soryanTactic';overlay.className='hidden';overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-labelledby','soryanTacticTitle');overlay.style.cssText='position:fixed;inset:0;z-index:100010;display:flex;align-items:center;justify-content:center;padding:16px;background:#07121bef;box-sizing:border-box';overlay.innerHTML='<div style="width:min(100%,520px);max-height:92dvh;overflow:auto;padding:20px;border:2px solid #c6a56c;border-radius:20px;background:linear-gradient(145deg,#203c3d,#172c35);color:#fff0cb;text-align:center"><h2 id="soryanTacticTitle">Soryan — Grand tacticien</h2><p style="color:#fff0cb;font-size:18px">« Un bon stratège ne laisse rien au hasard… »</p><p style="color:#e8dcc0">Soryan déplace une carte de son camp et déclenche les captures à sa nouvelle position.</p><button type="button" class="menu-btn" style="border-radius:999px">Continuer →</button></div>';document.body.append(overlay)}
- overlay.classList.remove('hidden');const button=overlay.querySelector('button');button.disabled=false;
+ if(!overlay){overlay=document.createElement('section');overlay.id='soryanTactic';overlay.className='hidden';overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-labelledby','soryanTacticTitle');overlay.style.cssText='position:fixed;inset:0;z-index:100010;display:flex;align-items:center;justify-content:center;padding:16px;background:#07121bef;box-sizing:border-box';overlay.innerHTML='<div style="width:min(100%,520px);max-height:92dvh;overflow:auto;padding:20px;border:2px solid #c6a56c;border-radius:20px;background:linear-gradient(145deg,#203c3d,#172c35);color:#fff0cb;text-align:center"><h2 id="soryanTacticTitle">Soryan — Grand tacticien</h2><img class="soryan-tactic-art" alt="Soryan chibi déplace une carte : Un bon stratège ne laisse rien au hasard…" style="display:block;width:100%;max-height:64dvh;object-fit:contain;margin:10px auto;border-radius:10px"><p style="color:#e8dcc0">Soryan déplace une carte de son camp et déclenche les captures à sa nouvelle position.</p><button type="button" class="menu-btn" style="border-radius:999px">Continuer →</button></div>';document.body.append(overlay)}
+ overlay.querySelector('.soryan-tactic-art').src=window.HACKENIA_SORYAN_TACTIC_IMAGE;overlay.classList.remove('hidden');const button=overlay.querySelector('button');button.disabled=false;
  button.onclick=()=>{if(button.disabled)return;button.disabled=true;overlay.classList.add('hidden');if(generation!==battleResultGeneration||currentMode!=='pantheon-soryan'||!matchInProgress)return;
   const oldOwners=board.map(x=>x?.owner),slot=board[move.from];board[move.from]=null;board[move.to]=slot;
   playedOrder.forEach(entry=>{if(entry.pos===move.from)entry.pos=move.to});
