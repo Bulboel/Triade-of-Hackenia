@@ -732,7 +732,7 @@ const memoryCards=[
 ];
 const memoryById=id=>memoryCards.find(c=>c.id===id);
 function selectedMemoryArt(card){const selected=catalogById(settings.memorySkins?.[card.id]),owned=selected&&selected.kind==='memory'&&selected.effect===card.id&&ownedCopies(selected.id)>0;return owned?selected.image:card.image}
-function freshMemoryDeck(){return shuffle(memoryCards.filter(c=>!['master','rest'].includes(c.id)).flatMap(c=>Array(c.id==='reunion'?3:2).fill(c.id)).concat(['master'],Array(10).fill('rest')))}
+function freshMemoryDeck(){return shuffle(memoryCards.filter(c=>!['master','rest'].includes(c.id)).flatMap(c=>Array(2).fill(c.id)).concat(['master'],Array(5).fill('rest')))}
 const readSaved=(key,fallback)=>{try{const value=JSON.parse(localStorage.getItem(key));return value??fallback}catch{return fallback}};
 const CATALOG_VERSION=2;
 initializeCardStats();
