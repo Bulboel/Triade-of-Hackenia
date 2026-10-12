@@ -491,6 +491,7 @@ body #menuScreen .menu-actions :is(.learn-kayla,#bibleBtn) :is(.learn-icon,.bibl
 <style id="pvp-single-line-titles">
 #pvpScreen .pvp-mode-choice strong{white-space:nowrap;font-size:clamp(.68rem,3.4vw,1.15rem)}
 </style>
+<style>#storyScene .story-sprite.story-gnome-sprite{aspect-ratio:1/1}</style>
 </head>
 <body>
 <section class="startup-screen" id="startupScreen">
@@ -670,7 +671,7 @@ body #menuScreen .menu-actions :is(.learn-kayla,#bibleBtn) :is(.learn-icon,.bibl
 <script src="tutorial-duel.js?v=20261011-visible-button-6efcb768"></script>
 <script src="collection-updates.js?v=20261006-results1"></script>
 <script src="assets/story/twins-sprites.js?v=20261012-finale10"></script>
-<script src="story-mine.js?v=20261012-finale10-deck2"></script>
+<script src="story-mine.js?v=20261012-dede-gnome"></script>
 <script>
 const art=n=>({src:`assets/cards/s${Math.floor((n-1)/9)+1}.webp`,x:(n-1)%3,y:Math.floor(((n-1)%9)/3)});
 const newArt=n=>({src:`assets/cards/new-set/n${Math.floor((n-1)/9)+1}.webp`,x:(n-1)%3,y:Math.floor(((n-1)%9)/3)});
@@ -1208,15 +1209,16 @@ function restoreSavedGame(){
 }
 function renderStoryMenu(){const saved=readSaved('hackenia-story-match',null),part1Complete=story.part1==='complete'||story.chapter1==='complete'||story.part2!=='locked',part2Unlocked=part1Complete,part2Complete=story.part2==='complete',part3Unlocked=part2Complete,part3Complete=story.part3==='complete',part1Ongoing=(story.stage==='part1-match'||story.stage==='match')&&saved,part2Ongoing=story.stage==='part2-match'&&saved;$('#chapter1Btn').textContent=part1Ongoing?'Continuer':part1Complete?'Rejouer':'Commencer';$('#chapter1Status').textContent=part1Ongoing?'Votre duel contre Kayla est sauvegardé.':part1Complete?'Partie terminée.':'Une mission confiée par Kayla et Hilam.';$('#storyPart1').classList.toggle('complete',part1Complete);$('#storyPart2').classList.toggle('locked',!part2Unlocked);$('#storyPart2').classList.toggle('complete',part2Complete);$('#chapter1Part2Btn').disabled=!part2Unlocked;$('#chapter1Part2Btn').textContent=!part2Unlocked?'Verrouillé':part2Ongoing?'Continuer':part2Complete?'Rejouer':'Commencer';$('#chapter1Part2Status').textContent=!part2Unlocked?'Terminez la première partie pour continuer.':part2Ongoing?'Votre duel contre Grimgors est sauvegardé.':part2Complete?'Partie terminée — la cabane est accessible.':story.part2==='retry'?'Grimgors vous attend pour une revanche.':'Une halte, des baies et un duel entre amis.';$('#storyPart3').classList.toggle('locked',!part3Unlocked);$('#storyPart3').classList.toggle('complete',part3Complete);$('#chapter1Part3Btn').disabled=!part3Unlocked;$('#chapter1Part3Btn').textContent=!part3Unlocked?'Verrouillé':part3Complete?'Rejouer':story.stage==='part3-intro'?'Continuer':'Commencer';$('#chapter1Part3Status').textContent=!part3Unlocked?'Terminez le Bois Tendre pour continuer.':part3Complete?'Partie terminée — le groupe est arrivé à Berdésa.':'Une cabane, un vieux fermier et deux chemins.';$('#chapter2Card').classList.toggle('locked',!part3Complete);$('#chapter2Status').textContent=part3Complete?'Chapitre débloqué — son aventure sera ajoutée prochainement.':'Terminez la partie 3 pour débloquer ce chapitre.';$('#chapter2Btn').textContent=part3Complete?'Bientôt disponible':'Verrouillé';renderMineMenu();renderFinalMineMenu();renderRescueMenu();renderNewFacesMenu();renderCaveMenu();renderLakeMenu();renderFinaleMenu();renderReleaseMenu()}
 function showStoryMenu(){recoverStoryBoosters();saveCollection();saveStory();if(story.pendingReward){showChapterBooster();return}renderStoryMenu();openPanel('#storyScreen')}
-const storySprites={kayla:0,hilam:1,eberien:2,bolduc:3,grimgors:4,violette:5,mirahel:6,lama:7,farmer:8,kala:9,horse:10,berry:11,jhimm:12,balai:13,spider:14,wolves:15,ven:16,frolgor:17,pennedra:18,caleizis:19,twinsBound:20,twinsFree:21,twinsBubble:22};
-const spriteNames={kayla:'Kayla',hilam:'Hilam',eberien:'Ébérien',bolduc:'Bolduc',grimgors:'Grimgors',violette:'Violette',mirahel:'Mirahel',lama:'Lama',farmer:'Vieux fermier',kala:'Kala',horse:'Cheval nain',berry:'Buissons de baies',jhimm:'Jhimm',balai:'Messire Balai',spider:'Araignée noire géante',wolves:'Horde de loups affamés',ven:'Ven',frolgor:'Frolgor',pennedra:'Pennedra',caleizis:'Caleizis',twinsBound:'Les nouveaux jumeaux liés',twinsFree:'Les nouveaux jumeaux endormis',twinsBubble:'Les nouveaux jumeaux dans leur bulle'};
+const storySprites={kayla:0,hilam:1,eberien:2,bolduc:3,grimgors:4,violette:5,mirahel:6,dede:7,farmer:8,kala:9,horse:10,berry:11,jhimm:12,balai:13,spider:14,wolves:15,ven:16,frolgor:17,pennedra:18,caleizis:19,twinsBound:20,twinsFree:21,twinsBubble:22};
+const spriteNames={kayla:'Kayla',hilam:'Hilam',eberien:'Ébérien',bolduc:'Bolduc',grimgors:'Grimgors',violette:'Violette',mirahel:'Mirahel',dede:'Dédé la bricole',farmer:'Vieux fermier',kala:'Kala',horse:'Cheval nain',berry:'Buissons de baies',jhimm:'Jhimm',balai:'Messire Balai',spider:'Araignée noire géante',wolves:'Horde de loups affamés',ven:'Ven',frolgor:'Frolgor',pennedra:'Pennedra',caleizis:'Caleizis',twinsBound:'Les nouveaux jumeaux liés',twinsFree:'Les nouveaux jumeaux endormis',twinsBubble:'Les nouveaux jumeaux dans leur bulle'};
 function beatCast(beat){if(beat.cast)return beat.cast;const key=String(beat.portrait||'').split('-')[0];if(key==='berry')return [];if(key==='berdesa')return [];return key in storySprites?[key]:[]}
 // Expressions are authored per scene (or per character), not guessed from dialogue text.
-const storyEmotionSlots={kayla:0,hilam:1,eberien:2,bolduc:3,grimgors:4,violette:5,mirahel:6,lama:7,farmer:8,kala:9,jhimm:10,balai:11};
+const storyEmotionSlots={kayla:0,hilam:1,eberien:2,bolduc:3,grimgors:4,violette:5,mirahel:6,dede:7,farmer:8,kala:9,jhimm:10,balai:11};
 function storySpriteAppearance(beat,key){
  const portraitMood=String(beat.portrait||'').startsWith(key+'-')?String(beat.portrait).slice(key.length+1):'';
  const mood=beat.emotions?.[key]||beat.mood||({content:'neutral',amused:'happy',surprise:'surprised',suspicious:'surprised',embarrassed:'embarrassed'}[portraitMood])||'neutral';
  if(['twinsBound','twinsFree','twinsBubble'].includes(key))return {mood,src:window.HACKENIA_TWINS_SPRITES?.[key]};
+ if(key==='dede')return {mood,file:mood==='happy'?'dede-happy':'dede-neutral'};
  const slot=storyEmotionSlots[key];
  if(key==='caleizis')return {mood,file:mood==='crying'?'caleizis-crying-chibi':'caleizis-chibi'};
  if(['ven','frolgor','pennedra'].includes(key))return {mood,file:key+'-chibi'};
@@ -1239,6 +1241,7 @@ function renderStoryBeat(){
   if(storySprites[key]===undefined)continue;
   const appearance=storySpriteAppearance(beat,key),sprite=document.createElement('div');
   sprite.className='story-sprite'+(['twinsBound','twinsFree','twinsBubble'].includes(key)?' story-twins-sprite':['spider','wolves','caleizis'].includes(key)?' story-boss-sprite':'');
+  if(key==='dede')sprite.classList.add('story-gnome-sprite');
   sprite.setAttribute('role','img');sprite.setAttribute('aria-label',spriteNames[key]);sprite.setAttribute('data-emotion',appearance.mood);
   sprite.style.backgroundImage="url('"+(appearance.src||'assets/story/'+appearance.file+'.webp')+"')";
   if(appearance.slot===undefined){sprite.style.backgroundSize='contain';sprite.style.backgroundPosition='center bottom'}
@@ -1281,8 +1284,8 @@ function startForestPart(){if(story.part1!=='complete'&&story.chapter1!=='comple
  {speaker:'Kala',portrait:'kala-content',text:'Bonne idée. Gardons-les soigneusement, sans les goûter pour le moment.'},
  {speaker:'Voix off',text:'Soudain, toutes les couleurs disparaissent. La forêt semble figée dans une scène venue d’une autre aventure.',flashback:true},
  {speaker:'Violette',portrait:'violette-suspicious',text:'Mais pourquoi tu les as toutes bouffées ?!?',flashback:true},
- {speaker:'Voix off',cast:['violette','mirahel','lama'],emotions:{mirahel:'embarrassed',violette:'surprised',lama:'neutral'},text:'Mirahel la regarde avec de grands yeux, les joues pleines de baies. Il tente de répondre, puis renonce, manifestement gêné.',flashback:true},
- {speaker:'Lama',cast:['mirahel','lama'],emotions:{mirahel:'embarrassed',lama:'happy'},text:'Tu comptais au moins nous en laisser une ? Ha ha !',flashback:true},
+ {speaker:'Voix off',cast:['violette','mirahel','dede'],emotions:{mirahel:'embarrassed',violette:'surprised',dede:'neutral'},text:'Mirahel la regarde avec de grands yeux, les joues pleines de baies. Il tente de répondre, puis renonce, manifestement gêné.',flashback:true},
+ {speaker:'Dédé la bricole',cast:['mirahel','dede'],emotions:{mirahel:'embarrassed',dede:'happy'},text:'Tu comptais au moins nous en laisser une ? Ha ha !',flashback:true},
  {speaker:'Voix off',text:'La vision s’efface et les couleurs reviennent dans le Bois Tendre.'},
  {speaker:'Bolduc',portrait:'bolduc-amused',text:'On s’ennuie un peu pendant cette halte… Grimgors, ça te dit un duel de Triade ?'},
  {speaker:'Grimgors',portrait:'grimgors-content',text:'Avec plaisir ! Mais je ne compte pas te laisser gagner.',finalLabel:'Affronter Grimgors'}
@@ -1306,16 +1309,16 @@ function startCabinPart(){
  {speaker:'Bolduc',cast:['kala','horse','bolduc'],emotions:{bolduc:'happy',kala:'neutral'},text:'Eh bien, toi, tu es nettement moins méfiant que ton propriétaire !'},
  {speaker:'Ébérien',cast:['eberien','farmer'],mood:'neutral',text:'Nous allons passer par Berdésa. Merci de nous avoir prévenus.'},
  {speaker:'Voix off',cast:['farmer','horse'],text:'Le groupe remercie le fermier et se prépare à prendre le chemin de Berdésa. Mais, un instant, les couleurs de la scène s’effacent…'},
- {speaker:'Voix off',cast:['violette','farmer','lama'],flashback:true,text:'Une autre aventure, au même endroit. Violette s’installe tout près du vieux monsieur. Celui-ci se décale aussitôt sur son siège.'},
+ {speaker:'Voix off',cast:['violette','farmer','dede'],flashback:true,text:'Une autre aventure, au même endroit. Violette s’installe tout près du vieux monsieur. Celui-ci se décale aussitôt sur son siège.'},
  {speaker:'Vieux fermier',cast:['violette','farmer'],flashback:true,text:'Hé… vous pourriez me laisser un peu de place ?'},
  {speaker:'Violette',cast:['violette','farmer'],flashback:true,text:'Je voulais juste m’asseoir. Bon, d’accord, je me décale.'},
- {speaker:'Lama',cast:['lama','farmer','horse'],flashback:true,text:'Dites, votre cheval… vous ne voudriez pas nous le donner ? Gratuitement, je veux dire.'},
- {speaker:'Vieux fermier',cast:['lama','farmer','horse'],flashback:true,text:'Non. Il reste ici, mon cheval.'},
- {speaker:'Lama',cast:['lama','farmer','horse'],flashback:true,text:'Même si je vous promets qu’on en prendra très, très bien soin ?'},
- {speaker:'Vieux fermier',cast:['lama','farmer'],flashback:true,shake:true,text:'J’ai dit non ! Et arrêtez d’insister !'},
- {speaker:'Voix off',cast:['lama','farmer','horse'],flashback:true,shake:true,text:'Le fermier commence à trembler, excédé. Cette fois, le groupe comprend qu’il vaut mieux en rester là.'},
- {speaker:'Violette',cast:['violette','lama'],flashback:true,text:'Lama, on y va. Sans le cheval.'},
- {speaker:'Voix off',cast:['violette','mirahel','lama'],flashback:true,location:'Vers la grotte des jumeaux',text:'Ils laissent le vieux fermier et son cheval en paix, puis prennent directement la route de la grotte des jumeaux, sans détour par Berdésa.'},
+ {speaker:'Dédé la bricole',cast:['dede','farmer','horse'],flashback:true,text:'Dites, votre cheval… vous ne voudriez pas nous le donner ? Gratuitement, je veux dire.'},
+ {speaker:'Vieux fermier',cast:['dede','farmer','horse'],flashback:true,text:'Non. Il reste ici, mon cheval.'},
+ {speaker:'Dédé la bricole',cast:['dede','farmer','horse'],flashback:true,text:'Même si je vous promets qu’on en prendra très, très bien soin ?'},
+ {speaker:'Vieux fermier',cast:['dede','farmer'],flashback:true,shake:true,text:'J’ai dit non ! Et arrêtez d’insister !'},
+ {speaker:'Voix off',cast:['dede','farmer','horse'],flashback:true,shake:true,text:'Le fermier commence à trembler, excédé. Cette fois, le groupe comprend qu’il vaut mieux en rester là.'},
+ {speaker:'Violette',cast:['violette','dede'],flashback:true,text:'Dédé, on y va. Sans le cheval.'},
+ {speaker:'Voix off',cast:['violette','mirahel','dede'],flashback:true,location:'Vers la grotte des jumeaux',text:'Ils laissent le vieux fermier et son cheval en paix, puis prennent directement la route de la grotte des jumeaux, sans détour par Berdésa.'},
  {speaker:'Voix off',cast:['kala','bolduc','eberien'],location:'Berdésa',text:'Les couleurs reviennent. Ce sont bien les aventuriers actuels qui marchent maintenant vers Berdésa. Les premières maisons de bois apparaissent au bord du chemin.'},
  {speaker:'Voix off',cast:['kala','bolduc','eberien'],location:'Berdésa',text:'Le groupe entre dans le village. Que s’y passe-t-il ? La suite reste à découvrir. Partie 3 terminée — 50 pièces d’or et un booster à la première réussite.',finalLabel:'Terminer la partie 3'}
  ],finishCabinPart,resume);
