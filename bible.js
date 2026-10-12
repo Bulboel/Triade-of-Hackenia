@@ -61,6 +61,70 @@
  for(const [a,b] of Object.entries(elementDominance)){const row=document.createElement('tr');for(const text of [names[a],names[b]]){const td=document.createElement('td');td.textContent=text;row.append(td)}panel.querySelector('#bibleElements').append(row)}
  const deck=freshMemoryDeck();
  for(const card of memoryCards){const p=document.createElement('p');const strong=document.createElement('strong');strong.textContent=card.name+' — '+deck.filter(id=>id===card.id).length+' exemplaire(s)';p.append(strong,document.createElement('br'),document.createTextNode(card.text));panel.querySelector('#bibleMemories').append(p)}
- function compare(){const attack=Number(panel.querySelector('#bibleAttack').value),defense=Number(panel.querySelector('#bibleDefense').value);const grid=Array(9).fill(null);grid[4]={owner:'p',card:{v:[0,attack,0,0],element:'neutral'}};grid[5]={owner:'a',card:{v:[0,0,0,defense],element:'neutral'}};const result=capture(4,'p',grid,'basic-open');panel.querySelector('#bibleResult').textContent=attack+' contre '+defense+' : '+(result.has(5)?'capture !':attack===defense?'égalité, aucune capture.':'aucune capture.')}
- panel.querySelectorAll('.bible-example input').forEach(input=>input.addEventListener('input',compare));compare();
+
+ const visualStyle=document.createElement('style');visualStyle.textContent=`
+ #bibleScreen .bible-game{margin:16px 0;padding:12px;border:1px solid #bb9c61;border-radius:14px;background:linear-gradient(140deg,#efd99b,#d6bd80);color:#243b34!important}
+ #bibleScreen .bible-game-header{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:10px;font:800 13px/1.4 system-ui;color:#243b34}
+ #bibleScreen .bible-game-board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;width:min(100%,400px);margin:auto;padding:7px;background:#143a3b;border:2px solid #ad8f50;border-radius:12px}
+ #bibleScreen .bible-game-cell{display:flex;align-items:center;justify-content:center;min-width:0;aspect-ratio:590/917;border:2px solid #aa915e;border-radius:7px;background:linear-gradient(145deg,#365c4c,#183a36);overflow:hidden}
+ #bibleScreen .bible-game-cell.owned-p{border-color:#38c779;box-shadow:0 0 5px #2cb66b}
+ #bibleScreen .bible-game-cell.owned-a{border-color:#ed5964;box-shadow:0 0 5px #dc4152}
+ #bibleScreen .bible-game-cell.focus{outline:2px solid #fff1a8;outline-offset:1px}
+ #bibleScreen .bible-game .card{position:relative!important;inset:auto!important;transform:none!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;max-width:none!important;margin:0!important;border:0!important;border-radius:4px!important;flex:none!important;aspect-ratio:590/917!important;box-shadow:none!important}
+ #bibleScreen .bible-game-caption{margin:10px 0 0!important;font:600 13px/1.5 system-ui;color:#243b34!important}
+ #bibleScreen .bible-game-toggle{display:block;margin:10px auto 0;padding:8px 16px;border:1px solid #b89650;border-radius:999px;background:#183f3b;color:#fff0bc;font:700 13px system-ui;cursor:pointer}
+ #bibleScreen .bible-game-hand{display:flex;gap:5px;max-width:400px;margin:auto}
+ #bibleScreen .bible-game-hand .card{width:calc((100% - 20px)/5)!important;height:auto!important}
+ #bibleScreen .bible-game-pile{display:flex;gap:16px;align-items:center;justify-content:center}
+ #bibleScreen .bible-game-pile .card{width:100px!important;height:155px!important}
+ `;document.head.append(visualStyle);
+ const playableCards=pool.filter(c=>c.kind==='playable'&&c.image&&c.v&&['common','uncommon','rare'].includes(c.rarity));
+ const copyGrid=g=>g.map(x=>x?{owner:x.owner,card:cloneCard(x.card)}:null);
+ function situation(holder,title,initial,pos,rule,caption){
+  holder.className='bible-game';holder.replaceChildren();
+  const header=document.createElement('div');header.className='bible-game-header';
+  const label=document.createElement('span');label.textContent=title;const score=document.createElement('span');header.append(label,score);
+  const grid=document.createElement('div');grid.className='bible-game-board';
+  const note=document.createElement('p');note.className='bible-game-caption';note.textContent=caption;
+  const after=copyGrid(initial);const flips=pos===null?new Map():capture(pos,'p',after,rule);let done=false;
+  function paint(){const state=done?after:initial;grid.replaceChildren();let p=0,a=0;
+   state.forEach((entry,i)=>{const cell=document.createElement('div');cell.className='bible-game-cell'+(entry?' owned-'+entry.owner:'')+((i===pos||done&&flips.has(i))?' focus':'');
+    if(entry){entry.owner==='p'?p++:a++;cell.append(makeCard(cloneCard(entry.card),entry.owner,-1,false))}grid.append(cell)});
+   score.textContent='Vous '+p+' · Adversaire '+a;
+  }
+  holder.append(header,grid,note);
+  if(pos!==null){const toggle=document.createElement('button');toggle.type='button';toggle.className='bible-game-toggle';toggle.textContent='Voir la capture';toggle.onclick=()=>{done=!done;paint();toggle.textContent=done?'Revoir avant la capture':'Voir la capture'};holder.append(toggle)}
+  paint();
+ }
+ const examples=[...panel.querySelectorAll('.bible-example')];
+ const finalGrid=['p27','p04','p13','p08','p23','p29','p15','p11','p17'].map((id,i)=>({card:catalogById(id),owner:i<5?'p':'a'}));
+ situation(examples[0],'Plateau rempli · Partie terminée',finalGrid,null,'basic-open','Les cinq contours verts vous appartiennent : vous gagnez 5 à 4. Touchez une carte pour l’agrandir.');
+ function contactExample(rule){
+  for(const c of playableCards){
+   const top=playableCards.find(x=>rule==='same-open'?combatValue(x.v[2])===combatValue(c.v[0]):combatValue(c.v[0])+combatValue(x.v[2])===10);
+   const right=playableCards.find(x=>rule==='same-open'?combatValue(x.v[3])===combatValue(c.v[1]):combatValue(c.v[1])+combatValue(x.v[3])===10);
+   if(!top||!right)continue;
+   const g=Array(9).fill(null);g[4]={card:c,owner:'p'};g[1]={card:top,owner:'a'};g[5]={card:right,owner:'a'};
+   const result=capture(4,'p',copyGrid(g),rule);if([...result.values()].filter(x=>x.type===(rule==='same-open'?'same':'plus')).length===2)return {g,c,top,right};
+  }
+ }
+ let basic;
+ for(const c of playableCards){const enemy=playableCards.find(x=>combatValue(c.v[1])>combatValue(x.v[3]));if(enemy){const g=Array(9).fill(null);g[4]={card:c,owner:'p'};g[5]={card:enemy,owner:'a'};basic={g,c,enemy};break}}
+ situation(examples[1],'Une carte posée à gauche de l’adversaire',basic.g,4,'basic-open',basic.c.name+' : droite '+val(basic.c.v[1])+' contre gauche '+val(basic.enemy.v[3])+' de '+basic.enemy.name+'. Le contour rouge devient vert.');
+ situation(examples[2],'Classique · Comparaison des côtés',basic.g,4,'basic-open','Seuls les deux côtés en contact sont comparés. '+val(basic.c.v[1])+' est supérieur à '+val(basic.enemy.v[3])+'.');
+ const same=contactExample('same-open');
+ if(same)situation(examples[3],'Identique · Deux égalités',same.g,4,'same-open','En haut : '+val(same.c.v[0])+' = '+val(same.top.v[2])+'. À droite : '+val(same.c.v[1])+' = '+val(same.right.v[3])+'. Les deux voisins changent de camp.');
+ const plus=contactExample('plus-open');
+ if(plus)situation(examples[4],'Addition · Deux sommes égales',plus.g,4,'plus-open','En haut : '+val(plus.c.v[0])+' + '+val(plus.top.v[2])+' = 10. À droite : '+val(plus.c.v[1])+' + '+val(plus.right.v[3])+' = 10.');
+ let elemental;
+ for(const c of playableCards.filter(c=>c.element==='water')){const enemy=playableCards.find(x=>x.element==='fire'&&combatValue(x.v[3])===combatValue(c.v[1]));if(enemy){const g=Array(9).fill(null);g[4]={card:c,owner:'p'};g[5]={card:enemy,owner:'a'};elemental={g,c,enemy};break}}
+ if(elemental)situation(examples[5],'Éléments · Eau contre Feu',elemental.g,4,'elements-open','La droite de '+elemental.c.name+' passe de '+val(elemental.c.v[1])+' à '+(combatValue(elemental.c.v[1])+1)+' sur ce contact. Ce bonus permet la capture.');
+ const hand=document.createElement('div');hand.className='bible-game';hand.innerHTML='<div class="bible-game-header">Votre main au début du tutoriel</div><div class="bible-game-hand"></div><p class="bible-game-caption">Cinq cartes à jouer. Touchez-les pour examiner leurs valeurs.</p>';
+ for(const id of ['p27','p04','p13','p08','p23'])hand.querySelector('.bible-game-hand').append(makeCard(cloneCard(catalogById(id)),'p',-1,false));
+ panel.querySelector('[data-bible-cards]').before(hand);
+ const memoryView=document.createElement('div');memoryView.className='bible-game';memoryView.innerHTML='<div class="bible-game-header">Après votre pose · Pioche facultative</div><div class="bible-game-pile"></div><p class="bible-game-caption">Deux orbes au départ. Vous pouvez piocher ou terminer votre tour sans piocher.</p>';
+ const pile=makeCard(memoryCards[0],'p',-1,true);pile.onclick=()=>{openCardZoom(memoryCards[0])};
+ memoryView.querySelector('.bible-game-pile').append(pile);
+ const orbs=document.createElement('span');orbs.textContent='◆ ◆ · 2 pioches disponibles';memoryView.querySelector('.bible-game-pile').append(orbs);
+ panel.querySelector('#bibleMemories').before(memoryView);
 })();
