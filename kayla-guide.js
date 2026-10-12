@@ -70,12 +70,12 @@ const KaylaGuide=(()=>{
    if(length<22)return;
    arrows.push(`<g transform="translate(${x} ${y}) rotate(${angle})" filter="url(#kaylaArrowShadow)"><path d="M0 0 L-17 -11 L-17 -4 Q-${length*.66} -6 -${length} -3 L-${length} 3 Q-${length*.66} 6 -17 4 L-17 11 Z" fill="url(#kaylaArrowRuby)" stroke="#ffd3a1" stroke-width="1.1" stroke-linejoin="round"/></g>`);
   };
-  const targetArrow=(r,preferred='top')=>{
+  const targetArrow=(r,preferred='top',gap=8)=>{
    const choices=[
-    {side:'left',x:r.x-8,y:r.y+r.h/2,angle:0,room:r.x-20},
-    {side:'right',x:r.x+r.w+8,y:r.y+r.h/2,angle:180,room:w-r.x-r.w-20},
-    {side:'top',x:r.x+r.w/2,y:r.y-8,angle:90,room:r.y-20},
-    {side:'bottom',x:r.x+r.w/2,y:r.y+r.h+8,angle:-90,room:h-r.y-r.h-20}
+    {side:'left',x:r.x-gap,y:r.y+r.h/2,angle:0,room:r.x-20},
+    {side:'right',x:r.x+r.w+gap,y:r.y+r.h/2,angle:180,room:w-r.x-r.w-20},
+    {side:'top',x:r.x+r.w/2,y:r.y-gap,angle:90,room:r.y-20},
+    {side:'bottom',x:r.x+r.w/2,y:r.y+r.h+gap,angle:-90,room:h-r.y-r.h-20}
    ];
    const overlapsPane=c=>{const length=Math.min(46,c.room),rad=c.angle*Math.PI/180;
     const x=c.x-Math.cos(rad)*length/2,y=c.y-Math.sin(rad)*length/2;
@@ -101,7 +101,11 @@ const KaylaGuide=(()=>{
     }
    }
   }else if(step===5){
-   ['#memoryPile','#memoryPassBtn'].forEach(s=>{const r=bounds(s);if(r)targetArrow(r,'bottom')});
+   ['#memoryPile .card','#memoryPassBtn'].forEach(selector=>{
+    const element=document.querySelector(selector);if(!element)return;
+    const rect=element.getBoundingClientRect();if(rect.width<=0||rect.height<=0)return;
+    targetArrow({x:rect.left,y:rect.top,w:rect.width,h:rect.height},'bottom',3);
+   });
   }else if(step===2){
    const hand=bounds('#playerHand'),indicator=bounds('#turn');
    if(hand)targetArrow(hand,'top');if(indicator)targetArrow(indicator,'right');
