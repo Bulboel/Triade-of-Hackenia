@@ -1360,14 +1360,13 @@ function renderCollection(){
   // The finish is a presentation distinction, not a new card in saved decks.
   for(const finish of ['normal','foil']){
    const count=finish==='foil'?foils:normal;
-   if(finish==='foil'&&!foils)continue;
    const owned=count>0,item=document.createElement('article');
    item.dataset.cardId=card.id;item.dataset.finish=finish;
    item.className=`collection-item collection-finish-${finish} ${owned?'':'locked'}`;
    const label=finish==='foil'?'✦ Foil':'';
    item.innerHTML=owned?
     `${previewMarkup({...card,foil:finish==='foil',mastery:masteryTier(count)})}<span class="collection-ownership"><span class="collection-copy-count">×${count}</span>${label?`<span class="collection-finish-label">${label}</span>`:''}</span><span class="rarity-badge ${rarity}">${rarityLabels[rarity]}</span><span class="collection-kind">${card.name}</span>`:
-    `<span class="card card-back back-${settings.back}"></span><span class="locked-name">Carte à découvrir</span><span class="rarity-badge ${rarity}">${rarityLabels[rarity]}</span>${label?`<span class="collection-finish-label">${label}</span>`:''}`;
+    `<span class="card card-back back-${settings.back}"></span><span class="locked-name">${finish==='foil'?'Version foil à découvrir':'Version normale à découvrir'}</span><span class="rarity-badge ${rarity}">${rarityLabels[rarity]}</span>${label?`<span class="collection-finish-label">${label}</span>`:''}`;
    if(owned){item.tabIndex=0;item.setAttribute('aria-label',`${card.name}, ${label}, ${count} exemplaire(s)`);const zoom=()=>openCardGallery({...card,foil:finish==='foil',mastery:masteryTier(count)},item,'#collectionGrid .collection-item:not(.locked)');item.onclick=zoom;item.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();zoom()}}}
    grid.append(item);
   }
