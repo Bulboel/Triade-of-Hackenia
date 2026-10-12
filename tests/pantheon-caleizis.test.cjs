@@ -9,10 +9,10 @@ function loadFunction(name){const start=main.indexOf('function '+name+'('),end=m
 run(main.split('\n').find(l=>l.startsWith('const combatValue=')));
 loadFunction('cloneCard');loadFunction('pantheonCaleizisDeck');run('initializeCardStats();');
 const base=plain("catalogById('p05').v");
-assert.deepEqual(plain('pantheonCaleizisDeck().map(c=>c.id)'),['pantheon-caleizis-time-marks','pantheon-caleizis-truth','p05','p64','p64']);
+assert.deepEqual(plain('pantheonCaleizisDeck().map(c=>c.id)'),['pantheon-caleizis-time-marks','pantheon-caleizis-truth','p05','p64','p56']);
 assert.deepEqual(plain('pantheonCaleizisDeck()[0].v'),[7,8,10,8]);assert.deepEqual(plain('pantheonCaleizisDeck()[1].v'),[9,10,10,8]);
 assert.deepEqual(plain('pantheonCaleizisDeck()[2].v'),base.map(v=>v+1));
-for(const [i,id] of [[3,'p64'],[4,'p64']])assert.deepEqual(plain(`pantheonCaleizisDeck()[${i}].v`),plain(`catalogById('${id}').v`));
+for(const [i,id] of [[3,'p64'],[4,'p56']])assert.deepEqual(plain(`pantheonCaleizisDeck()[${i}].v`),plain(`catalogById('${id}').v`));
 run('pantheonCaleizisDeck()[2].v[0]=999');assert.deepEqual(plain("catalogById('p05').v"),base);assert.deepEqual(plain('pantheonCaleizisDeck()[2].v'),base.map(v=>v+1));
 assert.equal(run('pool.some(c=>c.exclusiveOpponent)'),false);
 for(const c of plain('Object.values(window.HACKENIA_PANTHEON_TEASERS)')){assert.equal(c.collectible,false);assert.equal(run(`catalogById('${c.id}')`),undefined);assert(fs.existsSync(c.image.src));}

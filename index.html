@@ -1456,7 +1456,7 @@ function pantheonPachieDeck(){const rare=pool.find(c=>c.id==='p63'&&c.rarity==='
 function pantheonCaleizisDeck(){
  const teasers=window.HACKENIA_PANTHEON_TEASERS;
  const alternative=catalogById('p05');
- return [teasers?.timeMarks,teasers?.truth,alternative?{...alternative,v:alternative.v.map(value=>combatValue(value)+1)}:null,catalogById('p64'),catalogById('p64')];
+ return [teasers?.timeMarks,teasers?.truth,alternative?{...alternative,v:alternative.v.map(value=>combatValue(value)+1)}:null,catalogById('p64'),catalogById('p56')];
 }
 function startPantheonCaleizis(){if(!economy.pantheonRewards?.hilam)return;if(pantheonCaleizisDeck().some(c=>!c)){alert('Certaines cartes du deck de Caleïzis sont indisponibles.');return}pantheonOpponent='caleizis';const overlay=$('#georgesStoryIntro');overlay.setAttribute('aria-label','Rencontre avec Caleïzis');showGeorgesStoryStep(0);overlay.classList.remove('hidden');overlay.style.display='flex'}
 function recordPantheonCaleizisVictory(){const rewards=economy.pantheonRewards||(economy.pantheonRewards={});rewards.caleizis=true;const challenges=economy.challenges||(economy.challenges={});challenges.pantheonCaleizis=true;saveEconomy();if(saveSlotActive)syncProgressSave()}
