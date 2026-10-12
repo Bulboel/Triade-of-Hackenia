@@ -1218,7 +1218,7 @@ function storySpriteAppearance(beat,key){
  const portraitMood=String(beat.portrait||'').startsWith(key+'-')?String(beat.portrait).slice(key.length+1):'';
  const mood=beat.emotions?.[key]||beat.mood||({content:'neutral',amused:'happy',surprise:'surprised',suspicious:'surprised',embarrassed:'embarrassed'}[portraitMood])||'neutral';
  if(['twinsBound','twinsFree','twinsBubble'].includes(key))return {mood,src:window.HACKENIA_TWINS_SPRITES?.[key]};
- if(key==='dede')return {mood,file:mood==='happy'?'dede-happy':'dede-neutral'};
+ if(key==='dede')return {mood,file:mood==='happy'?'dede-happy-chibi-v2':'dede-neutral-chibi-v2'};
  const slot=storyEmotionSlots[key];
  if(key==='caleizis')return {mood,file:mood==='crying'?'caleizis-crying-chibi':'caleizis-chibi'};
  if(['ven','frolgor','pennedra'].includes(key))return {mood,file:key+'-chibi'};
