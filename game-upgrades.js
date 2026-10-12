@@ -6,7 +6,7 @@ function challengePlayableCards(){return catalog.filter(card=>card.setId==='un-n
 function treasureCollectionProgress(){const cards=challengePlayableCards();let owned=0,foil=0;for(const card of cards){const copies=ownedCopies(card.id),foils=Math.min(copies,Math.max(0,collection.foils?.[card.id]||0));if(copies-foils>0)owned++;if(foils>0)foil++}return {total:cards.length,owned,foil}}
 function onlineVictoryCount(){try{const ids=JSON.parse(localStorage.getItem('hackenia-online-victories-v1')||'[]');return Array.isArray(ids)?new Set(ids.filter(id=>typeof id==='string')).size:0}catch{return 0}}
 function collectedSetCards(){return challengePlayableCards().filter(card=>ownedCopies(card.id)>0).length}
-const pantheonGoldAmounts={georges:50,velcan:50,pachie:50,orven:50,maebril:200,bosco:50,velmarys:50,soryan:50,hilam:200,caleizis:300};
+const pantheonGoldAmounts={georges:50,velcan:50,pachie:50,orven:50,maebril:200,bosco:50,velmarys:50,soryan:200,hilam:200,caleizis:300};
 function awardPantheonGold(opponent){
  const amount=pantheonGoldAmounts[opponent];if(!amount)return 0;
  const paid=economy.pantheonGoldRewards||(economy.pantheonGoldRewards={});
