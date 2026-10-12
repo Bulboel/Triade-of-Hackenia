@@ -492,6 +492,24 @@ body #menuScreen .menu-actions :is(.learn-kayla,#bibleBtn) :is(.learn-icon,.bibl
 #pvpScreen .pvp-mode-choice strong{white-space:nowrap;font-size:clamp(.68rem,3.4vw,1.15rem)}
 </style>
 <style>#storyScene .story-sprite.story-gnome-sprite{aspect-ratio:1/1}</style>
+
+<style>
+#totalRevealConfirm{width:min(440px,calc(100vw - 32px));max-height:calc(100dvh - 32px);box-sizing:border-box;overflow:auto;padding:28px 24px 24px;border:2px solid #c5a564;border-radius:23px;background:radial-gradient(ellipse at top,#254b48 0%,#142e32 65%);color:#f4e5c1;box-shadow:0 24px 80px #0009,inset 0 0 0 6px #dbb9710b;text-align:center}
+#totalRevealConfirm::backdrop{background:#031117b8;backdrop-filter:blur(6px)}
+#totalRevealConfirm .reveal-confirm-emblem{display:grid;place-items:center;width:58px;height:58px;margin:0 auto 14px;border:1px solid #c5a564;border-radius:50%;color:#ffe3a1;background:#d4ae5114;font-size:32px;box-shadow:0 0 28px #d4ae511a}
+#totalRevealConfirm h2{margin:0 0 14px;font:700 clamp(1.65rem,6vw,2rem) Georgia,serif;color:#ffe0a1}
+#totalRevealConfirm p{margin:0;line-height:1.6;font-size:1rem;color:#e6dfce}
+#totalRevealConfirm strong{color:#ffe0a1}
+#totalRevealConfirm .reveal-confirm-note{margin:14px 0 22px;font-size:.9rem;color:#b7cdc5}
+#totalRevealConfirm form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0}
+#totalRevealConfirm button{min-height:48px;margin:0;padding:12px 10px;border:1px solid #bb9e60;border-radius:999px;font:700 .95rem system-ui,sans-serif;cursor:pointer;transition:filter .15s,transform .15s}
+#totalRevealConfirm button[value=cancel]{background:#ffffff06;color:#e7d6ad}
+#totalRevealConfirm button[value=reveal]{background:linear-gradient(135deg,#f1d590,#c7a257);color:#233638;box-shadow:0 4px 16px #0003}
+#totalRevealConfirm button:hover{filter:brightness(1.1)}
+#totalRevealConfirm button:active{transform:translateY(1px)}
+#totalRevealConfirm button:focus-visible{outline:3px solid #b7e7d3;outline-offset:4px}
+@media(max-width:360px){#totalRevealConfirm{padding:23px 17px}#totalRevealConfirm form{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 <section class="startup-screen" id="startupScreen">
@@ -645,6 +663,13 @@ body #menuScreen .menu-actions :is(.learn-kayla,#bibleBtn) :is(.learn-icon,.bibl
 <section class="memory-reveal hidden" id="memoryReveal"><article class="memory-reveal-card" id="memoryRevealCard" tabindex="0" role="button" aria-label="Continuer"><span class="memory-kicker">Pioche des Souvenirs</span><span class="memory-owner" id="memoryOwner"></span><div class="memory-artwork hidden" id="memoryArtwork" role="img"></div><div class="memory-icon" id="memoryIconWrap"><span id="memoryIcon">✦</span></div><div class="memory-effect-copy"><h2 id="memoryName"></h2><p id="memoryText"></p></div><span class="memory-continue">Appuyez sur la carte pour continuer</span></article></section>
 <section class="memory-choice hidden" id="memoryChoice"><div class="memory-choice-card"><h2 id="choiceTitle"></h2><p id="choiceText"></p><div class="memory-choice-grid" id="choiceGrid"></div><div class="memory-choice-error" id="choiceError"></div><div class="memory-choice-actions" id="choiceActions"><button class="menu-btn" id="choiceConfirm">Confirmer</button></div></div></section>
 <section class="booster-reveal hidden" id="boosterReveal"><article class="booster-card"><span class="memory-kicker" id="boosterKicker">Récompense</span><h2 id="boosterTitle">Booster d’Hackénia</h2><p id="boosterText">Cinq cartes, dont une dernière carte toujours foil.</p><div class="booster-pack-stage" id="boosterPackStage"><button class="booster-pack" id="boosterPack" aria-label="Ouvrir le booster"><span class="pack-half top"></span><span class="pack-half bottom"></span><span class="pack-prompt">Appuyez pour ouvrir</span></button></div><div class="booster-cards" id="boosterCards"></div><div id="boosterSequenceControls" class="booster-sequence-controls hidden"><div class="booster-sequence-status" id="boosterSequenceStatus" aria-live="polite"></div><div class="booster-step-dots" id="boosterStepDots"></div><div class="booster-step-actions"><button class="menu-btn" id="boosterNextBtn">Carte suivante</button><button class="booster-skip-all" id="boosterSkipAll">Tout révéler</button></div><small class="booster-zoom-hint">Touchez une carte révélée pour l’agrandir.</small></div><button class="menu-btn secondary hidden" id="boosterTotalRevealBtn" type="button">✦ Révélation totale</button><button class="menu-btn hidden" id="boosterContinueBtn" disabled>Ajouter à ma collection</button></article></section>
+<dialog id="totalRevealConfirm" aria-labelledby="totalRevealConfirmTitle" aria-describedby="totalRevealConfirmText totalRevealConfirmNote">
+ <div class="reveal-confirm-emblem" aria-hidden="true">✦</div>
+ <h2 id="totalRevealConfirmTitle">Révélation totale</h2>
+ <p id="totalRevealConfirmText"></p>
+ <p id="totalRevealConfirmNote" class="reveal-confirm-note">Toutes les cartes seront ajoutées à votre collection et présentées dans une galerie.</p>
+ <form method="dialog"><button type="submit" value="cancel" autofocus>Annuler</button><button type="submit" value="reveal">Tout révéler ✦</button></form>
+</dialog>
 <section class="story-scene narration hidden" id="storyScene">
   <div class="story-caption" id="storyLocation"></div><div class="story-figures" id="storyCast"></div>
   <div class="dialogue-box"><div class="dialogue-speaker" id="storySpeaker">Voix off</div><p class="dialogue-text" id="storyText" aria-live="polite"></p><div class="story-beat-choices hidden" id="storyBeatChoices" aria-label="Choisir votre réaction"></div><div class="dialogue-actions"><span id="storyProgress" aria-label="Avancement de la scène"></span><button class="menu-btn secondary" id="storyPreviousBtn">Précédent</button><button class="menu-btn secondary" id="storyExitBtn">Menu</button><button class="menu-btn" id="storyNextBtn">Continuer</button></div></div>
@@ -1419,10 +1444,22 @@ function claimBooster(){
  saveCollection();renderCollection();renderDeckBuilder();$('#boosterReveal').classList.add('hidden');
  if(pityProgress().pending.length)showPity();else continueBoosters();
 }
-function revealAllShopBoosters(){
+function confirmTotalReveal(count){
+ const dialog=$('#totalRevealConfirm');
+ if(dialog.open)return Promise.resolve(false);
+ const previousFocus=document.activeElement;
+ $('#totalRevealConfirmText').innerHTML='Ouvrir les <strong>'+count+' boosters restants</strong> d’un coup, sans les animations ?';
+ dialog.returnValue='';
+ return new Promise(resolve=>{
+  dialog.addEventListener('close',()=>{previousFocus?.focus();resolve(dialog.returnValue==='reveal')},{once:true});
+  dialog.showModal();
+ });
+}
+async function revealAllShopBoosters(){
  if(boosterContext!=='shop'||(collection.shopQueue||0)<2||!collection.pendingPack)return;
- const count=collection.shopQueue;
- if(!confirm('Révélation totale : ouvrir les '+count+' boosters restants et ajouter toutes les cartes à la collection sans animation ?'))return;
+ const count=collection.shopQueue,pack=collection.pendingPack;
+ if(!await confirmTotalReveal(count))return;
+ if(boosterContext!=='shop'||collection.shopQueue!==count||collection.pendingPack!==pack)return;
  resetBoosterPresentation();cancelBoosterAngel();
  const revealed=[];
  for(let n=0;n<count;n++){
