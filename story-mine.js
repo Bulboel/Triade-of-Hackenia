@@ -511,7 +511,7 @@ function startReleaseGame(){
  if(activeDeck().cards.length===5&&!validDeck(activeDeck())){renderDeckBuilder();openPanel('#deckScreen');return}
  cancelBattleResult();applyRulePreset('elements-open');currentMode='story-release';gameType='ai';
  const chosen=validDeck(activeDeck())?deckCardsWithFoil(activeDeck()):['p27','p23','p04','p08','p13'].map(catalogById);
- const rivals=['ice','lightning','ice','lightning','ice'].map(element=>{const c=pool.find(c=>c.kind==='playable'&&c.element===element&&['common','uncommon'].includes(c.rarity));if(!c)throw new Error('Carte élémentaire indisponible : '+element);return cloneCard(c)});
+ const rivals=['p69','p122','p49','p40','p36'].map(id=>cloneCard(catalogById(id)));
  board=Array(9).fill(null);hands={p:chosen.map(playerCard),a:rivals};selected=null;turn=Math.random()<.5?'p':'a';locked=turn==='a';passing=false;matchRewarded=false;matchInProgress=true;resetMemories();
  story.part10='started';story.stage='part10-match';story.releaseWon=false;story.releaseStep=0;saveStory();
  $('#storyScene').classList.add('hidden');$('#menuScreen').classList.add('hidden');document.querySelectorAll('.panel-screen').forEach(x=>x.classList.add('hidden'));$('#gameApp').classList.remove('hidden');$('#leftLabel').textContent='Les aventuriers';$('#rightLabel').textContent='Les liens élémentaires';$('#rulesBtn').style.display='none';
