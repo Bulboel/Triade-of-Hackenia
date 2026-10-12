@@ -14,7 +14,7 @@ function awardMaebrilVictory(){
 function awardVelcanVictory(){const state=challengeState();if(!state.pantheonVelcan)state.pantheonVelcan={completedAt:Date.now()};const rewards=economy.pantheonRewards||(economy.pantheonRewards={});let earned=0;if(!rewards.velcan){rewards.velcan=true;economy.gold=(Number(economy.gold)||0)+50;earned=50}saveEconomy();return earned}
 function checkChallenges(quickWin=false){
  const state=challengeState();let changed=false,earned=0;
- if(typeof story!=='undefined'&&story.part3==='complete'&&!state.storyChapter1){state.storyChapter1={completedAt:Date.now()};changed=true}
+ if(typeof story!=='undefined'&&story.part10==='complete'&&!state.storyChapter1){state.storyChapter1={completedAt:Date.now()};changed=true}
  if(state.pantheonVelcan&&!economy.pantheonRewards?.velcan){awardVelcanVictory()}
  if(quickWin&&!state.quickWin){state.quickWin={completedAt:Date.now()};economy.gold+=50;earned=50;changed=true}
  if(collectedSetCards()>=100&&!state.collection100){state.collection100={completedAt:Date.now()};changed=true}
