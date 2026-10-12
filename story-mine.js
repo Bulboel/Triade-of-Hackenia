@@ -125,7 +125,7 @@ function showFinalMineVictory(){
 }
 function finishFinalMinePart(){
  if(!story.finalMineWon)return;
- queueStoryBooster('part5');story.part5='complete';story.part6=story.part6==='complete'?'complete':'new';story.chapter1=story.part9==='complete'?'complete':'started';story.stage='part5-complete';story.finalMineStep=0;story.unlocked=Math.max(2,story.unlocked);
+ queueStoryBooster('part5');story.part5='complete';story.part6=story.part6==='complete'?'complete':'new';story.chapter1=story.part10==='complete'?'complete':'started';story.stage='part5-complete';story.finalMineStep=0;story.unlocked=Math.max(2,story.unlocked);
  if(!economy.storyRewards.part5){economy.storyRewards.part5=true;awardGold(50)}saveCollection();saveStory();showStoryMenu();
 }
 
@@ -192,7 +192,7 @@ function showRescueVictory(){
 }
 function finishRescuePart(){
  if(!story.rescueWon)return;
- queueStoryBooster('part6');story.part6='complete';story.part6bis=story.part6bis==='complete'?'complete':'new';story.part7=story.part7==='complete'?'complete':'new';story.chapter1=story.part9==='complete'?'complete':'started';story.stage='part6-complete';story.rescueStep=0;story.unlocked=Math.max(2,story.unlocked);
+ queueStoryBooster('part6');story.part6='complete';story.part6bis=story.part6bis==='complete'?'complete':'new';story.part7=story.part7==='complete'?'complete':'new';story.chapter1=story.part10==='complete'?'complete':'started';story.stage='part6-complete';story.rescueStep=0;story.unlocked=Math.max(2,story.unlocked);
  if(!economy.storyRewards.part6){economy.storyRewards.part6=true;awardGold(50)}saveCollection();saveStory();showStoryMenu();
 }
 
@@ -257,7 +257,7 @@ function showCaveVictory(){
 }
 function finishCavePart(){
  if(!story.caveWon)return;
- queueStoryBooster('part7');story.part7='complete';story.part8=story.part8==='complete'?'complete':'new';story.chapter1=story.part9==='complete'?'complete':'started';story.stage='part7-complete';story.caveStep=0;story.unlocked=Math.max(2,story.unlocked);
+ queueStoryBooster('part7');story.part7='complete';story.part8=story.part8==='complete'?'complete':'new';story.chapter1=story.part10==='complete'?'complete':'started';story.stage='part7-complete';story.caveStep=0;story.unlocked=Math.max(2,story.unlocked);
  if(!economy.storyRewards.part7){economy.storyRewards.part7=true;awardGold(50)}saveCollection();saveStory();showStoryMenu();
 }
 
@@ -330,7 +330,7 @@ function showNewFacesVictory(){
 }
 function finishNewFacesPart(){
  if(!story.newFacesWon)return;
- queueStoryBooster('part6bis');story.part6bis='complete';story.part7=story.part7==='complete'?'complete':'new';story.chapter1=story.part9==='complete'?'complete':'started';story.stage='part6bis-complete';story.newFacesStep=0;
+ queueStoryBooster('part6bis');story.part6bis='complete';story.part7=story.part7==='complete'?'complete':'new';story.chapter1=story.part10==='complete'?'complete':'started';story.stage='part6bis-complete';story.newFacesStep=0;
  if(!economy.storyRewards.part6bis){economy.storyRewards.part6bis=true;awardGold(50)}saveCollection();saveStory();showStoryMenu();
 }
 
@@ -418,7 +418,7 @@ function showLakeEpilogue(){
 }
 function finishLakePart(){
  if(!story.lakeEncounterResolved||story.part7!=='complete')return;
- queueStoryBooster('part8');story.part8='complete';story.part9=story.part9==='complete'?'complete':'new';story.chapter1=story.part9==='complete'?'complete':'started';story.stage='part8-complete';story.lakeStep=0;story.unlocked=Math.max(2,story.unlocked);
+ queueStoryBooster('part8');story.part8='complete';story.part9=story.part9==='complete'?'complete':'new';story.chapter1=story.part10==='complete'?'complete':'started';story.stage='part8-complete';story.lakeStep=0;story.unlocked=Math.max(2,story.unlocked);
  if(!economy.storyRewards.part8){economy.storyRewards.part8=true;awardGold(50)}saveCollection();saveStory();showStoryMenu();
 }
 
@@ -426,7 +426,7 @@ function renderFinaleMenu(){
  const unlocked=story.part8==='complete',complete=story.part9==='complete';
  $('#storyPart9').classList.toggle('locked',!unlocked);$('#storyPart9').classList.toggle('complete',complete);
  $('#chapter1Part9Btn').disabled=!unlocked;$('#chapter1Part9Btn').textContent=!unlocked?'Verrouillé':String(story.stage).startsWith('part9')&&story.stage!=='part9-complete'?'Continuer':complete?'Rejouer':'Commencer';
- $('#chapter1Part9Status').textContent=!unlocked?'Terminez la partie 8.':complete?'Les nouveaux jumeaux sont retrouvés — chapitre terminé.':'Une veille au bord du lac… et un dernier danger.';
+ $('#chapter1Part9Status').textContent=!unlocked?'Terminez la partie 8.':complete?'Les nouveaux jumeaux sont retrouvés.':'Une veille au bord du lac… et un dernier danger.';
  $('#chapter2Card').classList.toggle('locked',!complete);$('#chapter2Status').textContent=complete?'La suite sera ajoutée prochainement.':'Terminez la partie 9 pour continuer.';$('#chapter2Btn').textContent=complete?'Bientôt disponible':'Verrouillé';
 }
 function startFinalePart(){
@@ -478,13 +478,57 @@ function showFinaleVictory(){
  {speaker:'Voix off',location:'Le lac rose',cast:['kala','eberien','jhimm'],text:'Les créatures disparaissent dans les eaux roses. Le charme se brise : Kala et Ébérien retrouvent enfin le contrôle de leurs mouvements.'},
  {speaker:'Jhimm',location:'Le lac rose',cast:['jhimm','kala','eberien'],text:'Vous êtes avec nous. Éloignons-nous du bord.'},
  {speaker:'Messire Balai',location:'Le lac rose',cast:['balai','grimgors','bolduc'],mood:'surprised',text:'Regardez… quelque chose remonte !'},
- {speaker:'Voix off',location:'Le lac rose',cast:[],artwork:'twins-bubble-chibi',artworkAlt:'Les deux nouveaux jumeaux blonds reposent dans une immense bulle irisée au-dessus du lac rose, en version chibi',text:'Une énorme bulle émerge lentement du lac. Des reflets irisés courent sur sa surface. À l’intérieur reposent les nouveaux jumeaux.'},
+ {speaker:'Voix off',location:'Le lac rose',cast:['twinsBubble'],text:'Une énorme bulle émerge lentement du lac. Des reflets irisés courent sur sa surface. À l’intérieur reposent les nouveaux jumeaux.'},
  {speaker:'Kala',location:'Le lac rose',cast:['kala','eberien'],mood:'happy',text:'Les voilà… Nous les avons enfin trouvés.'},
- {speaker:'Voix off',location:'Le lac rose',cast:[],artwork:'twins-bubble-chibi',text:'La bulle s’élève au-dessus de l’eau, les jumeaux à l’abri en son cœur. Après cette dernière épreuve, leur mission touche à sa fin. Fin du chapitre 1.',finalLabel:'Terminer le chapitre 1'}
+ {speaker:'Voix off',location:'Le lac rose',cast:['twinsBound'],text:'Au moment où les aventuriers se rapprochent des nouveaux jumeaux pour les ramener sur la terre ferme, la bulle éclate délicatement et les laisse les récupérer.',finalLabel:'Terminer la partie 9'}
  ].map(beat=>({mood:'neutral',...beat})),finishFinalePart,resume);
 }
 function finishFinalePart(){
  if(!story.finaleWon||story.part8!=='complete')return;
- queueStoryBooster('part9');story.part9='complete';story.chapter1='complete';story.stage='part9-complete';story.finaleStep=0;story.unlocked=Math.max(2,story.unlocked);
+ queueStoryBooster('part9');story.part9='complete';story.part10=story.part10==='complete'?'complete':'new';story.chapter1=story.part10==='complete'?'complete':'started';story.stage='part9-complete';story.finaleStep=0;story.unlocked=Math.max(2,story.unlocked);
  if(!economy.storyRewards.part9){economy.storyRewards.part9=true;awardGold(50)}saveCollection();saveStory();showStoryMenu();
+}
+
+const releaseIntro=[{"speaker":"Voix off","cast":["twinsBound"],"text":"Les nouveaux jumeaux sont enfin sur la terre ferme. Pourtant, des lianes magiques serrent encore leurs bras et leurs jambes."},{"speaker":"Ébérien","cast":["eberien","twinsBound"],"text":"Des cristaux de glace sur le jeune homme… et une lumière crépitante sur la jeune femme. Ces liens ne sont pas des plantes ordinaires."},{"speaker":"Bolduc","cast":["bolduc","grimgors"],"text":"Un bon coup de hache et nous pourrons repartir !"},{"speaker":"Voix off","cast":["bolduc","twinsBound"],"mood":"surprised","text":"Au contact des lianes, la hache de Bolduc est violemment repoussée. Elle lui échappe et s’envole avant de retomber plus loin sur la rive."},{"speaker":"Bolduc","cast":["bolduc","balai"],"mood":"surprised","text":"Bon… Elles n’ont pas apprécié."},{"speaker":"Voix off","cast":["grimgors","kala","twinsBound"],"mood":"surprised","text":"Grimgors et Kala tentent d’écarter une liane du jeune homme. Leurs doigts se couvrent aussitôt de givre : ils retirent leurs mains, incapables de forcer les liens."},{"speaker":"Jhimm","cast":["jhimm","eberien","kala"],"text":"Essayons avec de petites quantités d’énergie, loin de leur peau."},{"speaker":"Voix off","cast":["twinsBound","eberien"],"text":"Les premiers essais font vibrer les lianes sans les briser. Puis une étincelle de feu amollit un cristal bleu. Les aventuriers comprennent : il faut un élément opposé."},{"speaker":"Ébérien","cast":["eberien","kala"],"text":"Le feu prend l’avantage sur la glace. Et la terre devrait dissiper ces filaments de foudre !"},{"speaker":"Kala","cast":["kala","jhimm","grimgors"],"text":"Un dernier effort ensemble ! Règle Éléments, en Clair : choisissons les bons contacts pour défaire cette protection sans blesser les jumeaux.","finalLabel":"Briser les liens — Éléments · Clair"}],releaseOutro=[{"speaker":"Voix off","cast":["twinsFree"],"text":"Les cristaux se dissolvent en poussière bleutée. Les filaments dorés se dénouent et s’éteignent. Les nouveaux jumeaux sont enfin libérés… mais dorment toujours profondément."},{"speaker":"Jhimm","cast":["jhimm","twinsFree"],"text":"Leur souffle est régulier. Gardons-les au chaud."},{"speaker":"Kala","cast":["kala","grimgors"],"text":"Je préviens Kayla et Hilam immédiatement."},{"speaker":"Voix off","cast":["kala","hilam"],"text":"Sans perdre une seconde, Kala sort le miroir de communication. Sa surface s’illumine et révèle les visages de Kayla et Hilam."},{"speaker":"Kala","cast":["kala","kayla","hilam"],"text":"Nous avons les nouveaux jumeaux. Leurs liens sont brisés, mais ils ne se réveillent pas. Nous sommes au lac rose."},{"speaker":"Hilam","cast":["hilam","kayla"],"text":"Restez ensemble. Nous vous envoyons un transporteur immédiatement."},{"speaker":"Voix off","cast":["grimgors","bolduc","twinsFree"],"portal":true,"text":"Dix secondes plus tard, un portail se déploie sur la rive. Un transporteur en sort et leur fait signe d’approcher."},{"speaker":"Le transporteur","cast":["kala","jhimm"],"portal":true,"text":"Empruntez le passage, vite ! Je ne pourrai pas le maintenir longtemps… Cette magie épuise mes forces."},{"speaker":"Voix off","cast":["grimgors","jhimm","twinsFree"],"portal":true,"text":"Grimgors et Jhimm prennent les jumeaux avec précaution. Le groupe franchit le portail sans attendre ; Bolduc récupère sa hache avant de suivre ses compagnons."},{"speaker":"Bolduc","cast":["bolduc","kala","balai"],"mood":"happy","text":"Cette fois, notre mission est vraiment accomplie. Et je ne dirais pas non à un bon repas !"},{"speaker":"Voix off","cast":["kala","eberien","grimgors"],"mood":"happy","text":"Les aventuriers quittent enfin le lac rose, ravis d’avoir ramené les nouveaux jumeaux en sécurité. Ils peuvent savourer un peu de répit… Fin du chapitre 1.","finalLabel":"Terminer le chapitre 1"}];
+function renderReleaseMenu(){
+ const unlocked=story.part9==='complete',complete=story.part10==='complete';
+ $('#storyPart10').classList.toggle('locked',!unlocked);$('#storyPart10').classList.toggle('complete',complete);$('#chapter1Part10Btn').disabled=!unlocked;
+ $('#chapter1Part10Btn').textContent=!unlocked?'Verrouillé':String(story.stage).startsWith('part10')&&story.stage!=='part10-complete'?'Continuer':complete?'Rejouer':'Commencer';
+ $('#chapter2Card').classList.toggle('locked',!complete);$('#chapter2Status').textContent=complete?'La suite sera ajoutée prochainement.':'Terminez la partie 10 pour continuer.';$('#chapter2Btn').textContent=complete?'Bientôt disponible':'Verrouillé';
+}
+function startReleasePart(){
+ if(story.part9!=='complete')return;
+ const saved=readSaved('hackenia-story-match',null);
+ if(story.stage==='part10-match'&&saved?.mode==='story-release'){restoreStoryMatch(saved);return}
+ if(story.stage==='part10-victory'&&story.releaseWon){showReleaseVictory();return}
+ if(['part10-match','part10-retry'].includes(story.stage)){startReleaseGame();return}
+ const resume=story.stage==='part10-intro'?story.releaseStep:0;
+ story.part10='started';story.chapter1='started';story.stage='part10-intro';story.releaseWon=false;saveStory();
+ runStorySequence(releaseIntro.map(b=>({location:'Le lac rose',mood:'neutral',...b})),startReleaseGame,resume);
+}
+function startReleaseGame(){
+ if(story.part9!=='complete')return;
+ if(activeDeck().cards.length===5&&!validDeck(activeDeck())){renderDeckBuilder();openPanel('#deckScreen');return}
+ cancelBattleResult();applyRulePreset('elements-open');currentMode='story-release';gameType='ai';
+ const chosen=validDeck(activeDeck())?deckCardsWithFoil(activeDeck()):['p27','p23','p04','p08','p13'].map(catalogById);
+ const rivals=['ice','lightning','ice','lightning','ice'].map(element=>{const c=pool.find(c=>c.kind==='playable'&&c.element===element&&['common','uncommon'].includes(c.rarity));if(!c)throw new Error('Carte élémentaire indisponible : '+element);return cloneCard(c)});
+ board=Array(9).fill(null);hands={p:chosen.map(playerCard),a:rivals};selected=null;turn=Math.random()<.5?'p':'a';locked=turn==='a';passing=false;matchRewarded=false;matchInProgress=true;resetMemories();
+ story.part10='started';story.stage='part10-match';story.releaseWon=false;story.releaseStep=0;saveStory();
+ $('#storyScene').classList.add('hidden');$('#menuScreen').classList.add('hidden');document.querySelectorAll('.panel-screen').forEach(x=>x.classList.add('hidden'));$('#gameApp').classList.remove('hidden');$('#leftLabel').textContent='Les aventuriers';$('#rightLabel').textContent='Les liens élémentaires';$('#rulesBtn').style.display='none';
+ msg('Briser les liens — Éléments · Clair','Le Feu domine la Glace ; la Terre domine la Foudre. Remportez le duel pour libérer les jumeaux.');render();saveStoryMatch();if(turn==='a')setTimeout(aiMove,700);
+}
+function endReleaseGame(c){
+ try{localStorage.removeItem('hackenia-story-match')}catch{}
+ if(c.p>c.a){story.releaseWon=true;story.stage='part10-victory';story.releaseStep=0;saveStory();setTimeout(showReleaseVictory,1200)}
+ else{story.part10='retry';story.stage='part10-retry';story.releaseWon=false;saveStory();setTimeout(()=>runStorySequence([{speaker:'Ébérien',location:'Le lac rose',cast:['eberien','twinsBound'],text:'La protection résiste encore. Reprenons calmement avec les bons éléments.',finalLabel:'Réessayer le duel'}],startReleaseGame),1200)}
+}
+function showReleaseVictory(){
+ if(!story.releaseWon)return;
+ const resume=story.stage==='part10-victory'?story.releaseStep:0;story.stage='part10-victory';saveStory();
+ runStorySequence(releaseOutro.map(b=>({location:'Le lac rose',mood:'neutral',...b})),finishReleasePart,resume);
+}
+function finishReleasePart(){
+ if(!story.releaseWon||story.part9!=='complete')return;
+ queueStoryBooster('part10');story.part10='complete';story.chapter1='complete';story.stage='part10-complete';story.releaseStep=0;story.unlocked=Math.max(2,story.unlocked);
+ if(!economy.storyRewards.part10){economy.storyRewards.part10=true;awardGold(50)}saveCollection();saveStory();checkChallenges();showStoryMenu();
 }
