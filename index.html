@@ -137,7 +137,7 @@
     .card-zoom-visual .card{width:min(78vw,390px);margin:auto;cursor:default}.card-zoom-copy{text-align:left}.card-zoom-copy h2{margin:0 0 6px;font:800 2rem Georgia;color:#42270f}.card-zoom-copy p{line-height:1.5}.card-zoom-close{position:absolute;right:12px;top:12px;width:40px;height:40px;border:1px solid #6d461f;border-radius:50%;background:#3c2412;color:#fff2cd;font-weight:900;cursor:pointer}.zoom-stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:18px 0}.zoom-stat{padding:10px;border:1px solid #795126;border-radius:10px;background:#fff4cf8c;color:#4b2c12;font-weight:800}.zoom-lore{padding:13px;border-left:4px solid #8b6632;background:#fff7df8a;color:#644825;font-style:italic}
     .collection-item:not(.locked){cursor:zoom-in}.collection-item:not(.locked):hover{transform:translateY(-4px)}
     .memory-reveal-card.has-art .memory-effect-copy{display:block;position:absolute;left:28px;right:28px;bottom:48px;z-index:5;padding:10px 14px;border:1px solid #b8e5db;border-radius:12px;background:#061e27e8;color:#fff}.memory-reveal-card.has-art .memory-effect-copy h2{margin:0 0 4px;font-size:1.1rem}.memory-reveal-card.has-art .memory-effect-copy p{margin:0;font-size:.78rem;line-height:1.35}
-    .memory-skin-options{display:grid;gap:18px;margin:20px 0}.memory-skin-row{padding:14px;border:1px solid #805a2d;border-radius:14px;background:#fff5d06b;text-align:left}.memory-skin-row h3{margin:0 0 10px;color:#4c2c12}.memory-skin-choices{display:flex;gap:12px;overflow-x:auto;padding:4px}.memory-skin-choice{flex:0 0 105px;padding:7px;border:3px solid transparent;border-radius:13px;background:#6f4b2220;cursor:pointer}.memory-skin-choice.selected{border-color:var(--player);box-shadow:0 0 18px color-mix(in srgb,var(--player),transparent 35%)}.memory-skin-choice .card{width:86px;pointer-events:none}.memory-skin-choice small{display:block;margin-top:5px;color:#4b2c12;font-weight:800}
+    .memory-skin-options{display:grid;gap:18px;margin:20px 0}.memory-skin-row{padding:14px;border:1px solid #805a2d;border-radius:14px;background:#fff5d06b;text-align:left}.memory-skin-row h3{margin:0 0 10px;color:#4c2c12}.memory-skin-choices{display:flex;gap:12px;overflow-x:auto;padding:4px}.memory-skin-choice{flex:0 0 105px;padding:7px;border:3px solid transparent;border-radius:13px;background:#6f4b2220;cursor:pointer}.memory-skin-choice.selected{border-color:var(--player);box-shadow:0 0 18px color-mix(in srgb,var(--player),transparent 35%)}.memory-skin-choice .card{width:86px;pointer-events:none}.memory-skin-preview{display:block;width:100%;padding:0;border:0;background:transparent;cursor:zoom-in}.memory-skin-use{display:block;width:100%;margin-top:7px;padding:6px 3px;border:1px solid #765027;border-radius:8px;background:#fff4cf;color:#4b2c12;font-size:.75rem;font-weight:800;cursor:pointer}.memory-skin-use[aria-pressed=true]{background:var(--player);color:#fff}.memory-skin-preview:focus-visible,.memory-skin-use:focus-visible{outline:3px solid var(--player);outline-offset:3px}.memory-skin-choice small{display:block;margin-top:5px;color:#4b2c12;font-weight:800}
     .save-transfer{margin:26px 0;padding:18px;border:1px solid #765027;border-radius:15px;background:#fff5d06b}.save-transfer h3{margin:0 0 8px;color:#4b2c12}.save-transfer p{margin:0 0 14px}.transfer-note{min-height:20px;color:#4f713f;font-weight:800}
     .pack-half{inset:0!important;width:100%!important;height:100%!important;background-image:url('assets/booster-clean.webp')!important;background-size:100% 100%!important;background-position:center!important;border-radius:10px!important}.pack-half.top{clip-path:polygon(0 0,100% 0,100% 24%,0 26%)}.pack-half.bottom{clip-path:polygon(0 25%,100% 23%,100% 100%,0 100%)}.booster-pack:after{top:23%!important;height:4%!important}
     @media(max-width:700px){.card-zoom-dialog{grid-template-columns:1fr;padding:52px 18px 22px;gap:16px}.card-zoom-visual .card{width:min(68vw,300px)}.card-zoom-copy h2{font-size:1.55rem}.zoom-stats{grid-template-columns:1fr 1fr}.memory-reveal-card.has-art .memory-effect-copy{left:12px;right:12px;bottom:42px}.booster-pack{width:min(68vw,250px)}}
@@ -657,7 +657,7 @@ body #menuScreen .menu-actions :is(.learn-kayla,#bibleBtn) :is(.learn-icon,.bibl
   <div class="battle-result-content"><img id="battleResultArt" alt="" width="1920" height="960"><p id="battleResultLabel"></p><button id="battleResultContinue" class="menu-btn">Continuer</button></div>
 </section>
 <script src="assets/data/card-stats.js?v=20261010-bosco"></script>
-<script src="assets/cards/hq/catalog.js?v=20261012-pennedra"></script>
+<script src="assets/cards/hq/catalog.js?v=20261012-memory-zoom"></script>
 <script src="assets/data/september28-cards.js?v=20261012-pennedra"></script>
 <script src="assets/data/card-numbers.js?v=20261012-pennedra"></script>
 <script src="collection-polish.js?v=20261006-finale9"></script>
@@ -742,7 +742,7 @@ const souvenirCollectibles=[
  {id:'s19',name:'Je suis coincé',rarity:'common',image:art(19),kind:'memory',effect:'stuck'},
  {id:'s20',name:'Jet de caillou habile',rarity:'common',image:art(20),kind:'memory',effect:'rock'},
  {id:'s21',name:'Jet de caillou habile',rarity:'alternative',image:art(21),kind:'memory',effect:'rock'},
- {id:'s39',name:'Trait de feu raté',rarity:'alternative',image:art(39),kind:'memory',effect:'fire'},
+ {id:'s39',name:'Trait de feu raté',rarity:'alternative',image:{src:'assets/cards/hq/s39-corrected.webp',full:true,hq:true},kind:'memory',effect:'fire'},
  {id:'s51',name:'Trait de feu raté',rarity:'common',image:art(51),kind:'memory',effect:'fire'},
  {id:'s41',name:'Un repos mérité',rarity:'alternative',image:fullArt('assets/cards/repos-alt.webp'),kind:'memory',effect:'rest'},
  {id:'s52',name:'Un repos mérité',rarity:'common',image:art(52),kind:'memory',effect:'rest'},
@@ -1386,8 +1386,20 @@ function renderMemorySkinOptions(){
   const title=document.createElement('h3');title.textContent=base.name;row.append(title);
   const list=document.createElement('div');list.className='memory-skin-choices';row.append(list);
   const select=(id)=>{if(id)settings.memorySkins[base.id]=id;else delete settings.memorySkins[base.id];try{localStorage.setItem('hackenia-options',JSON.stringify(settings));if(saveSlotActive)syncProgressSave()}catch{}renderMemorySkinOptions()};
-  const original=document.createElement('button');original.className='memory-skin-choice '+(!choices.some(c=>c.id===settings.memorySkins[base.id])?'selected':'');original.setAttribute('aria-label',base.name+' — apparence de base');original.innerHTML=base.image?`<span class="card image-card"><span class="card-image" style="${artStyle(base.image)}"></span></span><small>Apparence de base</small>`:`<span class="memory-default-art" style="--memory-accent:${base.accent}"><span>${base.icon}</span><strong>${base.name}</strong><em>Souvenirs</em></span><small>Apparence de base</small>`;original.onclick=()=>select(null);list.append(original);
-  for(const card of choices){const button=document.createElement('button');button.className='memory-skin-choice '+(settings.memorySkins[base.id]===card.id?'selected':'');button.innerHTML=`${previewMarkup(card)}<small>${rarityLabels[card.rarity]}</small>`;button.onclick=()=>select(card.id);list.append(button)}holder.append(row);
+  const addChoice=(card,id,label,selected)=>{
+   const choice=document.createElement('div');choice.className='memory-skin-choice '+(selected?'selected':'');
+   const preview=document.createElement('button');preview.type='button';preview.className='memory-skin-preview';
+   preview.setAttribute('aria-label',(card.image?'Agrandir ':'Choisir ')+card.name+' — '+label);
+   preview.innerHTML=card.image?previewMarkup(card):`<span class="memory-default-art" style="--memory-accent:${base.accent}"><span>${base.icon}</span><strong>${base.name}</strong><em>Souvenirs</em></span>`;
+   preview.onclick=()=>{if(card.image){openCardZoom(card);if(!id){$('#cardZoomMastery').textContent='';$('#cardZoomLore').textContent=''}}else select(id)};
+   const caption=document.createElement('small');caption.textContent=label;
+   const use=document.createElement('button');use.type='button';use.className='memory-skin-use';use.textContent=selected?'Utilisée':'Utiliser';use.setAttribute('aria-pressed',String(selected));use.setAttribute('aria-label','Utiliser '+card.name+' — '+label);use.onclick=()=>select(id);
+   choice.append(preview,caption,use);list.append(choice);
+  };
+  const original=souvenirCollectibles.find(c=>c.effect===base.id&&c.rarity==='common');
+  addChoice({...base,id:original?.id||base.id,kind:'memory',effect:base.id,rarity:'common',mastery:''},null,'Apparence de base',!choices.some(c=>c.id===settings.memorySkins[base.id]));
+  for(const card of choices)addChoice(card,card.id,rarityLabels[card.rarity],settings.memorySkins[base.id]===card.id);
+  holder.append(row);
  }
 }
 const randomFrom=list=>list[Math.floor(Math.random()*list.length)];
