@@ -863,7 +863,7 @@ function onlineBoardClick(pos){
  }
  move(pos);
 }
-const ONLINE_MEMORY_ART={target:46,fire:51,rock:20,cheese:53,stuck:19,rest:52,master:'../assets/cards/maitre-du-jeu.webp'};
+const ONLINE_MEMORY_ART={target:46,fire:51,rock:20,cheese:53,stuck:19,rest:52,master:'../assets/cards/maitre-du-jeu.webp',reunion:'../assets/cards/retrouvailles.webp'};
 function onlineMemoryArtStyle(n){if(typeof n==='string')return {backgroundImage:"url('"+n+"')",backgroundSize:'contain',backgroundPosition:'center',backgroundRepeat:'no-repeat'};const index=n-1,sheet=Math.floor(index/9)+1,x=index%3,y=Math.floor((index%9)/3);return {backgroundImage:"url('../assets/cards/s"+sheet+".webp')",backgroundSize:'300% 300%',backgroundPosition:(x*50)+'% '+(y*50)+'%'};}
 const ONLINE_MEMORY_INFO={
  target:['◉','#66cbd0','Déplace une carte adverse vers une case vide.'],
