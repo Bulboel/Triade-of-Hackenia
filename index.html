@@ -447,7 +447,20 @@ box-sizing:border-box;position:static!important;inset:auto!important;transform:n
 body #menuScreen .menu-actions :is(.learn-kayla,#bibleBtn),body #startupScreen .menu-actions .learn-kayla{
 min-height:44px!important;height:auto!important;box-sizing:border-box!important;padding:7px 14px!important;margin:2px 0 0!important;border-width:1px!important;border-radius:11px!important;font-size:14px!important;line-height:1.25!important;gap:9px!important;box-shadow:0 2px 0 #091f27,inset 0 1px 0 #fff5cb22!important}
 body #menuScreen .menu-actions :is(.learn-kayla,#bibleBtn) :is(.learn-icon,.bible-menu-icon),body #startupScreen .learn-kayla .learn-icon{width:21px!important;height:21px!important;flex:0 0 21px!important}
-</style></head>
+</style><style id="story-twins-scale">
+#storyScene{box-sizing:border-box;width:100%;max-width:100%;min-width:0;overflow-x:hidden}
+#storyScene .story-figures{box-sizing:border-box;max-width:100%;min-width:0;justify-content:center}
+#storyScene .story-twins-sprite{width:min(38vw,300px);flex:0 1 300px;height:min(32vw,240px);max-height:100%;aspect-ratio:auto;min-width:0}
+#storyScene .dialogue-box{box-sizing:border-box;min-width:0;max-width:100%}
+#storyScene .dialogue-text{overflow-wrap:anywhere}
+#storyScene .dialogue-actions{min-width:0;max-width:100%;flex-wrap:wrap}
+@media(max-width:650px){
+#storyScene .story-twins-sprite{width:44vw;flex:0 1 44vw;height:36vw;max-height:100%}
+#storyScene .story-figures>.story-sprite{min-width:0}
+#storyScene .dialogue-actions #storyProgress{margin-right:auto}
+}
+</style>
+</head>
 <body>
 <section class="startup-screen" id="startupScreen">
   <div class="menu-card">
@@ -1168,7 +1181,7 @@ function renderStoryBeat(){
  for(const key of cast){
   if(storySprites[key]===undefined)continue;
   const appearance=storySpriteAppearance(beat,key),sprite=document.createElement('div');
-  sprite.className='story-sprite'+(['spider','wolves','caleizis','twinsBound','twinsFree','twinsBubble'].includes(key)?' story-boss-sprite':'');
+  sprite.className='story-sprite'+(['twinsBound','twinsFree','twinsBubble'].includes(key)?' story-twins-sprite':['spider','wolves','caleizis'].includes(key)?' story-boss-sprite':'');
   sprite.setAttribute('role','img');sprite.setAttribute('aria-label',spriteNames[key]);sprite.setAttribute('data-emotion',appearance.mood);
   sprite.style.backgroundImage="url('"+(appearance.src||'assets/story/'+appearance.file+'.webp')+"')";
   if(appearance.slot===undefined){sprite.style.backgroundSize='contain';sprite.style.backgroundPosition='center bottom'}
