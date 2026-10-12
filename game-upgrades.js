@@ -124,6 +124,7 @@ function renderChallenges(){
    const article=document.createElement('details');article.className='challenge-card challenge-accordion'+(archived?' complete':'');article.dataset.challengeId=challenge.id;article.open=!!window.__challengeOpenIds?.has(challenge.id);
    const title=document.createElement('summary');title.textContent=challenge.title;title.setAttribute('aria-label',challenge.title+' — afficher les détails');
    const reward=document.createElement('p');reward.textContent='Récompense : '+challenge.reward;
+   if(challenge.id==='treasureComplete'){const finishes=document.createElement('p');finishes.textContent='Versions normales : '+treasure.owned+' / '+treasure.total+' · Versions foil : '+treasure.foil+' / '+treasure.total+' — Souvenirs exclus';article.append(finishes)}
    if(challenge.id==='grandTriadeWin'){
     const p=grandTriadeProgress(),detail=document.createElement('p');
     detail.textContent='Progression : '+(Number(p.quick)+Number(p.story)+p.rules.length)+'/10 victoires';article.append(detail);
