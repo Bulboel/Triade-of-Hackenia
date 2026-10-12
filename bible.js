@@ -89,7 +89,7 @@
   const after=copyGrid(initial);const flips=pos===null?new Map():capture(pos,'p',after,rule);let done=false;
   function paint(){const state=done?after:initial;grid.replaceChildren();let p=0,a=0;
    state.forEach((entry,i)=>{const cell=document.createElement('div');cell.className='bible-game-cell'+(entry?' owned-'+entry.owner:'')+((i===pos||done&&flips.has(i))?' focus':'');
-    if(entry){entry.owner==='p'?p++:a++;cell.append(makeCard(cloneCard(entry.card),entry.owner,-1,false))}grid.append(cell)});
+    if(entry){entry.owner==='p'?p++:a++;const shown=cloneCard(entry.card);if(done&&rule.startsWith('elements-'))neighbors(i).forEach(n=>{if(state[n.pos])shown.v[n.side]=contactValue(entry.card,n.side,state[n.pos].card,rule,i===pos)});cell.append(makeCard(shown,entry.owner,-1,false))}grid.append(cell)});
    score.textContent='Vous '+p+' · Adversaire '+a;
   }
   holder.append(header,grid,note);
