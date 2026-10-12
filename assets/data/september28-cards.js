@@ -969,5 +969,22 @@ window.HACKENIA_NEW_CARDS = [
       "src": "assets/cards/set-finale/p150-fixed.webp",
       "full": true
     }
+  },
+  {
+    "id": "p151",
+    "name": "Pennedra",
+    "v": [
+      3,
+      3,
+      7,
+      7
+    ],
+    "element": "wind",
+    "rarity": "common",
+    "kind": "playable",
+    "image": {
+      "src": "assets/story/pennedra-card.webp",
+      "full": true
+    }
   }
 ];
