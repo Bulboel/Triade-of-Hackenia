@@ -1050,6 +1050,13 @@
       "number": "#144",
       "rarity": "Alternative",
       "lore": "\"Si j'en vois un en frapper une, il finira en gruyère\""
+    },
+    {
+      "id": "p151",
+      "name": "Pennedra",
+      "number": "#151",
+      "rarity": "Commune",
+      "lore": "Native de Port-Dames, elle connaît plutôt bien le continent d’Hackénia pour avoir beaucoup voyagé. Enfant unique d’un père alcoolique qui ne se souciait pas d’elle, elle volait les voyageurs de passage pour pouvoir manger. Son père finira par oublier complètement son existence.\n\nUn jour, alors qu’elle s’en prenait à un voyageur plus dangereux que les autres, Frolgor et Ven volèrent à son secours. Elle resta fière, mais n’en fut pas moins touchée par leur acte de bravoure.\n\nCinq ans plus tard, elle décide de tenter sa chance pour devenir apprentie de Dassom et commencer une nouvelle vie, accompagnée de ses amis."
     }
   ]
 }
