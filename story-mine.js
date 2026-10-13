@@ -667,8 +667,52 @@ function showCouncilVisitVictory(){
 }
 function finishCouncilVisitPart(){
  if(!story.councilVisitWon||story.chapter2Part1!=='complete')return;
- queueStoryBooster('chapter2Part2');story.chapter2Part2='complete';story.chapter2='started';story.stage='chapter2-part2-complete';story.councilVisitStep=0;
+ queueStoryBooster('chapter2Part2');story.chapter2Part2='complete';story.chapter2Part3=story.chapter2Part3==='complete'?'complete':'new';story.chapter2='started';story.stage='chapter2-part2-complete';story.councilVisitStep=0;
  if(!economy.storyRewards.chapter2Part2){economy.storyRewards.chapter2Part2=true;awardGold(50)}
  saveCollection();saveStory();showStoryMenu();
 }
+
+// Chapter 2, part 3: a purely narrative night, with no match or victory required.
+const nightNarrative=[
+ {speaker:'Voix off',location:'Les quartiers des aventuriers',cast:['bolduc','jhimm','kala'],text:'Les aventuriers rejoignent les quartiers qui leur ont été préparés. Les chambres sont très jolies et épurées : du bois chaleureux, des teintes vert bouteille et tout le nécessaire pour une bonne nuit de repos.'},
+ {speaker:'Voix off',location:'La chambre de Bolduc et Jhimm',cast:['bolduc','jhimm'],text:'Bolduc et Jhimm font chambre commune. Après les événements de la journée, le calme de la pièce semble enfin leur promettre un peu de repos.'},
+ {speaker:'Voix off',location:'La chambre de Grimgors et Kala',cast:['grimgors','kala'],text:'Grimgors et Kala s’installent dans une autre chambre, tout aussi agréable. Les dernières lumières s’éteignent peu à peu.'},
+ {speaker:'Voix off',location:'La chambre d’Ébérien et Messire Balai',cast:['eberien','balai'],text:'Ébérien partage la troisième chambre avec Messire Balai. Le palais s’apaise ; chacun finit par trouver sa place pour la nuit.'},
+ {speaker:'Voix off',location:'La chambre de Bolduc et Jhimm',cast:['bolduc'],text:'Bolduc s’endort. Son esprit glisse vers un rêve baigné de douceur…'},
+ {speaker:'Voix off',location:'Le rêve de Bolduc',cast:[],dream:true,artwork:'night-bolduc-blessing',artworkAlt:'Bolduc chibi reçoit la bénédiction de Shauntéa dans un jardin onirique',text:'Dans son rêve, Bolduc rencontre Shauntéa, la déesse Mère Nature. Elle lui offre sa bénédiction.'},
+ {speaker:'Voix off',location:'Le rêve de Bolduc',cast:[],dream:true,artwork:'night-bolduc-blessing',text:'Un sourire un peu bête aux lèvres, Bolduc accepte en tendant une main. Dans la chambre, sa main se lève dans le vide…'},
+ {speaker:'Voix off',location:'Le rêve de Jhimm',cast:[],dream:true,artwork:'night-jhimm-message',artworkAlt:'Jhimm chibi tente d’entendre Heaum malgré l’interférence de Caleïzis',text:'Jhimm, lui, est contacté par Heaum. La divinité tente de lui parler, mais ses paroles lui parviennent brisées, presque incompréhensibles.'},
+ {speaker:'Heaum',location:'Le rêve de Jhimm',cast:[],dream:true,artwork:'night-jhimm-message',text:'… Nord… là-bas…'},
+ {speaker:'Voix off',location:'Le rêve de Jhimm',cast:[],dream:true,artwork:'night-jhimm-message',text:'Le rire de Caleïzis traverse soudain le rêve. Jhimm comprend : c’est elle qui empêche Heaum de parler comme la divinité le souhaite. Il ne lui reste que ces bribes de mots.'},
+ {speaker:'Voix off',location:'Le rêve de Grimgors',cast:[],dream:true,artwork:'night-grimgors-light',artworkAlt:'Orcus arrache symboliquement un éclat de lumière du torse de Grimgors chibi',text:'Grimgors rencontre Orcus dans son rêve. Le démon le provoque et s’efforce de semer le doute dans les pensées du demi-orc.'},
+ {speaker:'Voix off',location:'Le rêve de Grimgors',cast:[],dream:true,artwork:'night-grimgors-light',text:'Orcus approche sa main de son torse et en arrache un éclat de lumière. Le doute s’insinue davantage dans l’esprit de Grimgors…'},
+ {speaker:'Voix off',location:'Le rêve de Kala',cast:['kala'],dream:true,flashback:true,personalMemory:true,text:'Kala revoit son passé de soldat. Autour d’elle s’étendent des terrains dévastés par la guerre. Les images de ce passé l’enferment dans un cauchemar.'},
+ {speaker:'Voix off',location:'Le rêve de Kala',cast:['kala'],dream:true,text:'Puis la vision commence à s’estomper. Une voix chaleureuse se fait entendre.'},
+ {speaker:'Une voix chaleureuse',location:'Le rêve de Kala',cast:['kala'],dream:true,text:'Stop, ça suffit.'},
+ {speaker:'Voix off',location:'Le rêve de Kala',cast:[],dream:true,artwork:'night-kala-courage',artworkAlt:'Le cauchemar de Kala se dissipe et les aventuriers chibi combattent fièrement ensemble',text:'Le cauchemar devient un rêve. Kala se voit avec les autres aventuriers : ils combattent ensemble, fièrement, unis dans le même élan.'},
+ {speaker:'Voix off',location:'Le rêve d’Ébérien',cast:[],dream:true,artwork:'night-eberien-parchment',artworkAlt:'Caleïzis rejoint Ébérien chibi dans la vision de son village abandonné',text:'Enfin, Ébérien est contacté par Caleïzis. Elle lui montre à nouveau son village abandonné : les mêmes maisons silencieuses, la même absence…'},
+ {speaker:'Voix off',location:'Le rêve d’Ébérien',cast:[],dream:true,artwork:'night-eberien-parchment',text:'À la fin de cette vision, Caleïzis glisse même une main dans sa robe de sorcier. Elle y laisse un souvenir avant que le rêve ne s’efface.'},
+ {speaker:'Voix off',location:'La chambre d’Ébérien et Messire Balai',cast:['eberien','balai'],emotions:{eberien:'surprised',balai:'neutral'},text:'Au réveil, Ébérien porte la main sous sa robe. Un parchemin magique y est apparu… Le souvenir laissé par Caleïzis ne s’est pas évanoui avec le rêve.'},
+ {speaker:'Voix off',location:'Les quartiers des aventuriers',cast:['eberien','kala','jhimm'],text:'Fin de la partie 3 du chapitre 2 : Une nuit mouvementée.',finalLabel:'Terminer la partie 3'}
+].map(beat=>({mood:'neutral',...beat}));
+function renderNightMenu(){
+ const unlocked=story.chapter2Part2==='complete',complete=story.chapter2Part3==='complete';
+ $('#storyChapter2Part3').classList.toggle('locked',!unlocked);$('#storyChapter2Part3').classList.toggle('complete',complete);$('#chapter2Part3Btn').disabled=!unlocked;
+ $('#chapter2Part3Btn').textContent=!unlocked?'Verrouillé':story.stage==='chapter2-part3-intro'?'Continuer':complete?'Rejouer':'Commencer';
+ $('#chapter2Part3Status').textContent=!unlocked?'Terminez la partie 2.':complete?'Partie terminée — une nuit troublante et un parchemin mystérieux.':'Une nuit de rêves, de cauchemars et de visites inattendues.';
+}
+function startNightPart(){
+ if(story.chapter2Part2!=='complete')return;
+ const resume=story.stage==='chapter2-part3-intro'?story.nightStep:0;
+ cancelBattleResult();matchInProgress=false;currentMode='story-night';
+ story.chapter2='started';story.chapter2Part3='started';story.stage='chapter2-part3-intro';saveStory();
+ runStorySequence(nightNarrative,finishNightPart,resume);
+}
+function finishNightPart(){
+ if(story.chapter2Part2!=='complete'||story.stage!=='chapter2-part3-intro'||story.nightStep!==nightNarrative.length-1)return;
+ queueStoryBooster('chapter2Part3');story.chapter2Part3='complete';story.chapter2='started';story.stage='chapter2-part3-complete';story.nightStep=0;
+ if(!economy.storyRewards.chapter2Part3){economy.storyRewards.chapter2Part3=true;awardGold(50)}
+ saveCollection();saveStory();showStoryMenu();
+}
+
 
