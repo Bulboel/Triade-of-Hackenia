@@ -493,7 +493,8 @@ body #menuScreen .menu-actions :is(.learn-kayla,#bibleBtn) :is(.learn-icon,.bibl
 </style>
 <style>#storyScene .story-sprite.story-gnome-sprite{aspect-ratio:1/1}</style>
 <style id="jordan-bolduc-horse-sprites">
-#storyScene .story-sprite.story-equine-sprite{width:min(34vw,300px);flex:0 1 300px;aspect-ratio:1/1;background-size:contain!important;background-position:center bottom!important;background-repeat:no-repeat!important;filter:drop-shadow(0 2px 1px #101719) drop-shadow(0 8px 8px #0005)}
+#storyScene .story-sprite.story-equine-sprite{width:min(34vw,300px);flex:0 1 300px;aspect-ratio:1/1;background:none!important;filter:drop-shadow(0 2px 1px #101719) drop-shadow(0 8px 8px #0005)}
+#storyScene .story-sprite.story-equine-sprite .story-equine-portrait{display:block;width:100%;height:100%;object-fit:contain;object-position:center bottom;background:transparent}
 @media(max-width:650px){#storyScene .story-sprite.story-equine-sprite{width:42vw;flex:0 1 42vw;aspect-ratio:1/1}}
 </style>
 
@@ -1334,9 +1335,12 @@ function renderStoryBeat(){
   if(['pixie','pixieCrying'].includes(key))sprite.classList.add('story-pixie-sprite');
   sprite.setAttribute('role','img');sprite.setAttribute('aria-label',spriteNames[key]);sprite.setAttribute('data-emotion',appearance.mood);
   sprite.style.backgroundImage="url('"+(appearance.src||'assets/story/'+appearance.file+'.webp')+"')";
+  if(['jordanHorse','bolducHorse'].includes(key)){
+   const portrait=document.createElement('img');portrait.src=appearance.src;portrait.alt=spriteNames[key];portrait.className='story-equine-portrait';sprite.append(portrait);sprite.style.backgroundImage='none';
+  }
   if(appearance.slot===undefined){sprite.style.backgroundSize='contain';sprite.style.backgroundPosition='center bottom'}
   else{sprite.style.backgroundSize='400% 300%';sprite.style.backgroundPosition=(appearance.slot%4*100/3)+'% '+(Math.floor(appearance.slot/4)*50)+'%'}
-  const speaking=spriteNames[key]===beat.speaker||(beat.speaker==='Jordan'&&key==='horse')||(beat.speaker==='Bolduc-cheval'&&key==='bolduc');sprite.classList.toggle('is-speaking',speaking);sprite.classList.toggle('is-listener',beat.speaker!=='Voix off'&&!speaking);sprite.classList.toggle('is-shaking',key==='farmer'&&!!beat.shake);$('#storyCast').append(sprite);
+  const speaking=spriteNames[key]===beat.speaker||(beat.speaker==='Jordan'&&key==='horse')||(beat.speaker==='Bolduc-cheval'&&key==='bolduc')||(beat.speaker==='Jordan'&&key==='jordanHorse')||(beat.speaker==='Bolduc-cheval'&&key==='bolducHorse');sprite.classList.toggle('is-speaking',speaking);sprite.classList.toggle('is-listener',beat.speaker!=='Voix off'&&!speaking);sprite.classList.toggle('is-shaking',key==='farmer'&&!!beat.shake);$('#storyCast').append(sprite);
  }
  const choices=$('#storyBeatChoices');choices.replaceChildren();choices.classList.toggle('hidden',!beat.choices?.length);$('#storyNextBtn').classList.toggle('hidden',!!beat.choices?.length);
  for(const choice of beat.choices||[]){const button=document.createElement('button');button.className='menu-btn '+(choice.secondary?'secondary':'');button.textContent=choice.label;button.onclick=()=>choice.onChoose();choices.append(button)}
