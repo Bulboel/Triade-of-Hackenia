@@ -369,6 +369,35 @@ function finishNewFacesPart(){
  if(!economy.storyRewards.part6bis){economy.storyRewards.part6bis=true;awardGold(50)}saveCollection();saveStory();showStoryMenu();
 }
 
+ 
+// Optional narrative interlude after part 6 bis. It never gates the main story.
+function renderJordanBonusMenu(){
+ const unlocked=story.part6bis==='complete',complete=story.part6bonus==='complete';
+ $('#storyPart6bonus').classList.toggle('locked',!unlocked);
+ $('#storyPart6bonus').classList.toggle('complete',complete);
+ $('#chapter1Part6bonusBtn').disabled=!unlocked;
+ $('#chapter1Part6bonusBtn').textContent=!unlocked?'Verrouillé':String(story.stage).startsWith('part6bonus')&&story.stage!=='part6bonus-complete'?'Continuer':complete?'Revoir':'Découvrir';
+ $('#chapter1Part6bonusStatus').textContent=!unlocked?'Disponible après la partie 6 bis.':complete?'Jordan a rejoint le groupe — bonus terminé.':'Bonus facultatif, sans duel ni récompense obligatoire.';
+}
+function startJordanBonusPart(){
+ if(story.part6bis!=='complete')return;
+ const resume=story.stage==='part6bonus-intro'?story.jordanBonusStep||0:0;
+ story.stage='part6bonus-intro';saveStory();
+ runStorySequence([
+  {speaker:'Voix off',location:'La cabane du vieux fermier',cast:['kala','bolduc','eberien'],text:'En repassant devant la cabane du vieux fermier, les aventuriers remarquent que celui-ci a disparu. Il ne reste que son petit cheval nain, qui broute tranquillement près de la barrière.'},
+  {speaker:'Voix off',location:'La cabane du vieux fermier',cast:['horse','bolduc'],text:'Bolduc a une idée. Pour parler au cheval, il décide de se transformer lui-même en équidé… avec un résultat pour le moins surprenant : un drôle de mélange entre Bolduc et un cheval !'},
+  {speaker:'Bolduc-cheval',location:'La cabane du vieux fermier',cast:['bolduc','horse'],emotions:{bolduc:'happy'},text:'Salut Blacky !'},
+  {speaker:'Jordan',location:'La cabane du vieux fermier',cast:['horse','bolduc'],text:'Hein ? Moi, c’est Jordan. T’as des carottes ?'},
+  {speaker:'Bolduc-cheval',location:'La cabane du vieux fermier',cast:['bolduc','horse'],text:'Non, mais je peux te donner des baies si tu veux. Je te trouverai des carottes plus tard.'},
+  {speaker:'Voix off',location:'La cabane du vieux fermier',cast:['horse','berry','bolduc'],text:'Jordan accepte volontiers les baies et se met à les grignoter, ravi d’avoir enfin quelque chose à manger.'},
+  {speaker:'Bolduc-cheval',location:'La cabane du vieux fermier',cast:['bolduc','horse'],text:'T’as qu’à venir avec nous ! On te ramènera à Dassom. Ton maître est peut-être là-bas.'},
+  {speaker:'Voix off',location:'La cabane du vieux fermier',cast:['horse','kala','bolduc'],text:'Jordan acquiesce et décide de suivre les aventuriers jusqu’à Dassom, avec l’espoir d’y retrouver son maître.',finalLabel:'Terminer le bonus'}
+ ],finishJordanBonusPart,resume);
+}
+function finishJordanBonusPart(){
+ story.part6bonus='complete';story.stage='part6bonus-complete';story.jordanBonusStep=0;saveStory();showStoryMenu();
+}
+
 
 function renderLakeMenu(){
  const unlocked=story.part7==='complete',complete=story.part8==='complete';
