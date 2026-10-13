@@ -867,8 +867,8 @@ function startLostCompanionsPart(){
   {speaker:'Voix off',location:'Le quartier myconide',cast:['kala','bolduc','grimgors'],text:'Les aventuriers partent aussitôt à leur rescousse, déterminés à retrouver les disparus et à découvrir la source du mal.'},
   {speaker:'Voix off',location:'Les cavernes humides',cast:['kala','jhimm','eberien'],text:'Dans les cavernes humides, chaque pas demande de la prudence. Des lianes vivantes se tendent sur leur passage ; des champignons libèrent des spores soporifiques.'},
   {speaker:'Voix off',location:'Les cavernes humides',cast:['grimgors','bolduc','kala'],text:'Le groupe repère les pièges naturels à temps. Les aventuriers enjambent les lianes et contournent les nuages de spores sans se laisser surprendre.'},
-  {speaker:'Voix off',location:'Les cavernes humides',cast:['jhimm','eberien'],text:'Plus loin, des larves étranges se tortillent entre les rochers. Elles se précipitent soudain sur les aventuriers, accompagnées de deux vers géants !'},
-  {speaker:'Voix off',location:'Les cavernes humides',cast:['grimgors','kala','bolduc'],text:'Un duel s’engage contre les créatures. Les larves jouent trois cartes Larves capricieuses et deux cartes Ver géant.',finalLabel:'Affronter les larves'}
+  {speaker:'Voix off',location:'Les cavernes humides',cast:['jhimm','eberien'],text:'Plus loin, des larves étranges se tortillent entre les rochers. Elles se précipitent soudain sur les aventuriers !'},
+  {speaker:'Voix off',location:'Les cavernes humides',cast:['grimgors','kala','bolduc'],text:'Les larves cherchent à s’accrocher aux aventuriers. Le groupe se prépare à les repousser.',finalLabel:'Affronter les larves'}
  ].map(beat=>({mood:'neutral',...beat})),startLostCompanionsGame,resume);
 }
 function startLostCompanionsGame(){
