@@ -1150,3 +1150,7 @@ h1,h2,h3,.menu-title,.panel-card h2,.chapter-card h3,.rules h2,.card-zoom-copy h
 @media(prefers-reduced-motion:reduce){#storyScene.fairy-teleport #storyCast::after{animation:none;opacity:.65}}
 
 #storyScene .story-sprite.story-pixie-sprite{background-size:auto 62%!important;background-position:center 25%!important}
+
+/* Shared natural cavern setting for chapter 2, parts 6 and 7. */
+#storyScene.humid-cavern{background:linear-gradient(180deg,#07182011,#07151d55),url('assets/story/humid-cavern-background.webp') center/cover no-repeat!important}
+#storyScene.humid-cavern:before{content:none!important}
