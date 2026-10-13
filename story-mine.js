@@ -772,8 +772,74 @@ function showDassomVisitVictory(){
 }
 function finishDassomVisitPart(){
  if(!story.visitWon||story.chapter2Part3!=='complete')return;
- queueStoryBooster('chapter2Part4');story.chapter2Part4='complete';story.chapter2='started';story.stage='chapter2-part4-complete';story.visitStep=0;
+ queueStoryBooster('chapter2Part4');story.chapter2Part4='complete';story.chapter2Part5=story.chapter2Part5==='complete'?'complete':'new';story.chapter2='started';story.stage='chapter2-part4-complete';story.visitStep=0;
  if(!economy.storyRewards.chapter2Part4){economy.storyRewards.chapter2Part4=true;awardGold(50)}
+ saveCollection();saveStory();showStoryMenu();
+}
+
+// Chapter 2, part 5: the guild's empty board and the pixies' detour.
+function renderFairyMistsMenu(){
+ const unlocked=story.chapter2Part4==='complete',complete=story.chapter2Part5==='complete';
+ $('#storyChapter2Part5').classList.toggle('locked',!unlocked);$('#storyChapter2Part5').classList.toggle('complete',complete);$('#chapter2Part5Btn').disabled=!unlocked;
+ $('#chapter2Part5Btn').textContent=!unlocked?'Verrouillé':String(story.stage).startsWith('chapter2-part5-')&&story.stage!=='chapter2-part5-complete'?'Continuer':complete?'Rejouer':'Commencer';
+ $('#chapter2Part5Status').textContent=!unlocked?'Terminez Visite de Dassom.':complete?'Partie terminée — Bolduc vous attend chez les myconides.':'Maebril, un tableau mystérieux et des pixies malicieuses.';
+}
+function startFairyMistsPart(){
+ if(story.chapter2Part4!=='complete')return;
+ const saved=readSaved('hackenia-story-match',null);
+ if(story.stage==='chapter2-part5-match'&&saved?.mode==='story-pixies'){restoreStoryMatch(saved);return}
+ if(story.stage==='chapter2-part5-victory'&&story.fairyMistsWon){showFairyMistsVictory();return}
+ if(['chapter2-part5-match','chapter2-part5-retry'].includes(story.stage)){startFairyMistsGame();return}
+ const resume=story.stage==='chapter2-part5-intro'?story.fairyMistsStep:0;
+ story.chapter2='started';story.chapter2Part5='started';story.stage='chapter2-part5-intro';story.fairyMistsWon=false;saveStory();
+ runStorySequence([
+  {speaker:'Voix off',location:'La taverne du Griffon Doré',cast:['kala','bolduc','maebril'],text:'Les aventuriers entrent dans la taverne du Griffon Doré. Ils saluent Maebril, qui leur rend chaleureusement leur bonjour.'},
+  {speaker:'Maebril',location:'La taverne du Griffon Doré',cast:['maebril','jhimm','eberien'],text:'Bonjour à vous ! Bienvenue au Griffon Doré.'},
+  {speaker:'Voix off',location:'La taverne du Griffon Doré',cast:['grimgors','kala','balai'],text:'Le groupe observe le tableau des primes. Pas une quête, pas une annonce… Il leur paraît bien vide.'},
+  {speaker:'Maebril',location:'La taverne du Griffon Doré',cast:['maebril','kala'],text:'Il faut le mériter pour pouvoir lire le tableau.'},
+  {speaker:'Voix off',location:'La taverne du Griffon Doré',cast:['maebril','jhimm'],text:'Le tableau de primes n’affiche les quêtes qu’aux membres de la guilde. Pour les aventuriers, sa surface reste entièrement vierge.'},
+  {speaker:'Maebril',location:'La taverne du Griffon Doré',cast:['maebril','eberien','bolduc'],text:'Avant de vous donner des quêtes, pouvez-vous vous rendre au quartier des myconides ? Ils auraient un petit souci… Vous pouvez vous y rendre par le quartier des brumes ou le quartier noble.'},
+  {speaker:'Voix off',location:'Le quartier des brumes féeriques',cast:['kala','jhimm','bolduc'],text:'Les aventuriers choisissent de passer par le quartier des brumes féeriques. Une douce brume colorée enveloppe les rues à leur arrivée.'},
+  {speaker:'Voix off',location:'Le quartier des brumes féeriques',cast:['pixie','pixieCrying','bolduc'],text:'À peine sont-ils entrés que des pixies leur jettent des charmes. Des lueurs virevoltent autour d’eux… et Bolduc disparaît !'},
+  {speaker:'Voix off',location:'Le quartier des brumes féeriques',cast:[],artwork:'kala-catches-pixie',artworkAlt:'Kala chibi attrape une petite pixie en pleurs dans les brumes féeriques',text:'Excédée, Kala parvient de justesse à attraper une petite pixie avant qu’elle ne lui échappe.'},
+  {speaker:'Kala',location:'Le quartier des brumes féeriques',cast:[],artwork:'kala-catches-pixie',text:'Qu’est-ce que t’as fait de mon ami ! Il est où ?!'},
+  {speaker:'La petite pixie',location:'Le quartier des brumes féeriques',cast:[],artwork:'kala-catches-pixie',text:'C’était juste pour s’amuser…',mood:'crying'},
+  {speaker:'Kala',location:'Le quartier des brumes féeriques',cast:[],artwork:'kala-catches-pixie',text:'Envoie-nous aussi avec lui.'},
+  {speaker:'Une autre pixie',location:'Le quartier des brumes féeriques',cast:['pixie','kala'],text:'D’accord, mais on peut jouer un peu avant ? Je te promets que ton ami va bien.'},
+  {speaker:'Voix off',location:'Le quartier des brumes féeriques',cast:['kala','pixie','eberien'],text:'Irritée, Kala accepte le duel pour retrouver Bolduc.'},
+  {speaker:'Voix off',location:'Le quartier des brumes féeriques',cast:['pixie','kala'],text:'La pixie joue en Clair, avec toutes les règles : Addition, Identique et Éléments actifs. Sa main est visible, et les bonus élémentaires s’appliquent aux contacts avant les captures.',finalLabel:'Défier la pixie — Clair · Addition · Identique · Éléments'}
+ ].map(beat=>({mood:'neutral',...beat})),startFairyMistsGame,resume);
+}
+function startFairyMistsGame(){
+ if(story.chapter2Part4!=='complete')return;
+ if(activeDeck().cards.length===5&&!validDeck(activeDeck())){renderDeckBuilder();openPanel('#deckScreen');return}
+ cancelBattleResult();applyRulePreset('elements-same-plus-open');currentMode='story-pixies';gameType='ai';
+ const chosen=validDeck(activeDeck())?deckCardsWithFoil(activeDeck()):['p27','p23','p04','p08','p13'].map(catalogById);
+ const opponent=['p76','p76','p66','p63','p145'].map(id=>cloneCard(catalogById(id)));
+ board=Array(9).fill(null);hands={p:chosen.map(playerCard),a:opponent};selected=null;turn=Math.random()<.5?'p':'a';locked=turn==='a';passing=false;matchRewarded=false;matchInProgress=true;resetMemories();
+ story.chapter2='started';story.chapter2Part5='started';story.stage='chapter2-part5-match';story.fairyMistsWon=false;story.fairyMistsStep=0;saveStory();
+ $('#storyScene').classList.add('hidden');$('#menuScreen').classList.add('hidden');document.querySelectorAll('.panel-screen').forEach(x=>x.classList.add('hidden'));$('#gameApp').classList.remove('hidden');$('#leftLabel').textContent='Kala • votre main';$('#rightLabel').textContent='La pixie';$('#rulesBtn').style.display='none';
+ msg('La pixie — Clair · Addition · Identique · Éléments','Sa main est visible. Remportez le duel pour rejoindre Bolduc.');render();saveStoryMatch();if(turn==='a')setTimeout(aiMove,700);
+}
+function endFairyMistsGame(counts){
+ try{localStorage.removeItem('hackenia-story-match')}catch{}
+ if(counts.p>counts.a){story.fairyMistsWon=true;story.stage='chapter2-part5-victory';story.fairyMistsStep=0;saveStory();setTimeout(showFairyMistsVictory,1200)}
+ else{story.chapter2Part5='retry';story.stage='chapter2-part5-retry';story.fairyMistsWon=false;saveStory();setTimeout(()=>runStorySequence([{speaker:'Une autre pixie',location:'Le quartier des brumes féeriques',cast:['pixie','kala'],text:'Encore une partie ? Ton ami va bien, promis !',finalLabel:'Réessayer le duel'}],startFairyMistsGame),1200)}
+}
+function showFairyMistsVictory(){
+ if(!story.fairyMistsWon)return;
+ const resume=story.stage==='chapter2-part5-victory'?story.fairyMistsStep:0;story.stage='chapter2-part5-victory';saveStory();
+ runStorySequence([
+  {speaker:'Voix off',location:'Le quartier des brumes féeriques',cast:['kala','pixie','eberien'],fairyTeleport:true,text:'Une seconde après le duel, un élan de paillettes arc-en-ciel emporte les aventuriers.'},
+  {speaker:'Voix off',location:'Le quartier myconide',cast:['kala','jhimm','grimgors'],text:'Ils se retrouvent dans le quartier des myconides : un endroit végétal sous terre, couvert de verdure et de maisons champignons blanches.'},
+  {speaker:'Voix off',location:'Le quartier myconide',cast:[],artwork:'bolduc-myconide-reunion',artworkAlt:'Bolduc chibi attend calmement près d’un myconide silencieux, devant les maisons champignons blanches du quartier souterrain',text:'Bolduc est bien là. Il attend tranquillement en compagnie d’un myconide silencieux.'},
+  {speaker:'Voix off',location:'Le quartier myconide',cast:[],artwork:'bolduc-myconide-reunion',text:'Fin de la partie 5 du chapitre 2 : Maebril et le quartier des brumes féeriques.',finalLabel:'Terminer la partie 5'}
+ ].map(beat=>({mood:'neutral',...beat})),finishFairyMistsPart,resume);
+}
+function finishFairyMistsPart(){
+ if(!story.fairyMistsWon||story.chapter2Part4!=='complete')return;
+ queueStoryBooster('chapter2Part5');story.chapter2Part5='complete';story.chapter2='started';story.stage='chapter2-part5-complete';story.fairyMistsStep=0;
+ if(!economy.storyRewards.chapter2Part5){economy.storyRewards.chapter2Part5=true;awardGold(50)}
  saveCollection();saveStory();showStoryMenu();
 }
 
