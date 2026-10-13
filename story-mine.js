@@ -385,13 +385,13 @@ function startJordanBonusPart(){
  story.stage='part6bonus-intro';saveStory();
  runStorySequence([
   {speaker:'Voix off',location:'La cabane du vieux fermier',cast:['kala','bolduc','eberien'],text:'En repassant devant la cabane du vieux fermier, les aventuriers remarquent que celui-ci a disparu. Il ne reste que son petit cheval nain, qui broute tranquillement près de la barrière.'},
-  {speaker:'Voix off',location:'La cabane du vieux fermier',cast:['horse','bolduc'],text:'Bolduc a une idée. Pour parler au cheval, il décide de se transformer lui-même en équidé… avec un résultat pour le moins surprenant : un drôle de mélange entre Bolduc et un cheval !'},
-  {speaker:'Bolduc-cheval',location:'La cabane du vieux fermier',cast:['bolduc','horse'],emotions:{bolduc:'happy'},text:'Salut Blacky !'},
-  {speaker:'Jordan',location:'La cabane du vieux fermier',cast:['horse','bolduc'],text:'Hein ? Moi, c’est Jordan. T’as des carottes ?'},
-  {speaker:'Bolduc-cheval',location:'La cabane du vieux fermier',cast:['bolduc','horse'],text:'Non, mais je peux te donner des baies si tu veux. Je te trouverai des carottes plus tard.'},
-  {speaker:'Voix off',location:'La cabane du vieux fermier',cast:['horse','berry','bolduc'],text:'Jordan accepte volontiers les baies et se met à les grignoter, ravi d’avoir enfin quelque chose à manger.'},
-  {speaker:'Bolduc-cheval',location:'La cabane du vieux fermier',cast:['bolduc','horse'],text:'T’as qu’à venir avec nous ! On te ramènera à Dassom. Ton maître est peut-être là-bas.'},
-  {speaker:'Voix off',location:'La cabane du vieux fermier',cast:['horse','kala','bolduc'],text:'Jordan acquiesce et décide de suivre les aventuriers jusqu’à Dassom, avec l’espoir d’y retrouver son maître.',finalLabel:'Terminer le bonus'}
+  {speaker:'Voix off',location:'La cabane du vieux fermier',cast:['jordanHorse','bolducHorse'],text:'Bolduc a une idée. Pour parler au cheval, il décide de se transformer lui-même en cheval. Même sous cette forme, impossible de ne pas reconnaître sa crinière rousse et ses longues tresses de barbe !'},
+  {speaker:'Bolduc-cheval',location:'La cabane du vieux fermier',cast:['bolducHorse','jordanHorse'],emotions:{bolduc:'happy'},text:'Salut Blacky !'},
+  {speaker:'Jordan',location:'La cabane du vieux fermier',cast:['jordanHorse','bolducHorse'],text:'Hein ? Moi, c’est Jordan. T’as des carottes ?'},
+  {speaker:'Bolduc-cheval',location:'La cabane du vieux fermier',cast:['bolducHorse','jordanHorse'],text:'Non, mais je peux te donner des baies si tu veux. Je te trouverai des carottes plus tard.'},
+  {speaker:'Voix off',location:'La cabane du vieux fermier',cast:['jordanHorse','berry','bolducHorse'],text:'Jordan accepte volontiers les baies et se met à les grignoter, ravi d’avoir enfin quelque chose à manger.'},
+  {speaker:'Bolduc-cheval',location:'La cabane du vieux fermier',cast:['bolducHorse','jordanHorse'],text:'T’as qu’à venir avec nous ! On te ramènera à Dassom. Ton maître est peut-être là-bas.'},
+  {speaker:'Voix off',location:'La cabane du vieux fermier',cast:['jordanHorse','kala','bolducHorse'],text:'Jordan acquiesce et décide de suivre les aventuriers jusqu’à Dassom, avec l’espoir d’y retrouver son maître.',finalLabel:'Terminer le bonus'}
  ],finishJordanBonusPart,resume);
 }
 function finishJordanBonusPart(){
