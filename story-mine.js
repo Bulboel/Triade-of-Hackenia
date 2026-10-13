@@ -532,3 +532,68 @@ function finishReleasePart(){
  queueStoryBooster('part10');story.part10='complete';story.chapter1='complete';story.stage='part10-complete';story.releaseStep=0;story.unlocked=Math.max(2,story.unlocked);
  if(!economy.storyRewards.part10){economy.storyRewards.part10=true;awardGold(50)}saveCollection();saveStory();checkChallenges();showStoryMenu();
 }
+
+// Chapter 2, part 1: the council asks a Nahakin to judge the adventurers.
+function renderTrialMenu(){
+ const unlocked=story.part10==='complete',complete=story.chapter2Part1==='complete';
+ $('#chapter2Card').classList.toggle('locked',!unlocked);
+ $('#storyChapter2Part1').classList.toggle('locked',!unlocked);
+ $('#storyChapter2Part1').classList.toggle('complete',complete);
+ $('#chapter2Btn').disabled=!unlocked;
+ $('#chapter2Btn').textContent=!unlocked?'Verrouillé':String(story.stage).startsWith('chapter2-part1-')&&story.stage!=='chapter2-part1-complete'?'Continuer':complete?'Rejouer':'Commencer';
+ $('#chapter2Status').textContent=!unlocked?'Terminez le chapitre 1.':complete?'Partie terminée — les Nahakins vous jugent dignes.':'Le conseil de Dassom attend les aventuriers.';
+}
+function startTrialPart(){
+ if(story.part10!=='complete')return;
+ const saved=readSaved('hackenia-story-match',null);
+ if(story.stage==='chapter2-part1-match'&&saved?.mode==='story-nahakin'){restoreStoryMatch(saved);return}
+ if(story.stage==='chapter2-part1-victory'&&story.trialWon){showTrialVictory();return}
+ if(['chapter2-part1-match','chapter2-part1-retry'].includes(story.stage)){startTrialGame();return}
+ const resume=story.stage==='chapter2-part1-intro'?story.trialStep:0;
+ story.chapter2='started';story.chapter2Part1='started';story.stage='chapter2-part1-intro';story.trialWon=false;saveStory();
+ runStorySequence([
+  {speaker:'Voix off',location:'Le grand hall de Dassom',cast:['grimgors','jhimm','twinsFree'],text:'Les aventuriers franchissent le portail et se retrouvent dans le grand hall du palais de Dassom. Les nouveaux jumeaux dorment toujours profondément.'},
+  {speaker:'Voix off',location:'Le grand hall de Dassom',cast:['kayla','hilam','kala'],emotions:{kayla:'blasé',hilam:'neutral',kala:'neutral'},text:'Kayla les attend auprès d’Hilam. Son visage est fermé ; malgré leur retour, quelque chose semble la préoccuper.'},
+  {speaker:'Voix off',location:'Le grand hall de Dassom',cast:['myconides','twinsFree','jhimm'],text:'Des soigneurs myconides recueillent les jumeaux endormis avec précaution et les emmènent pour prendre soin d’eux.'},
+  {speaker:'Kayla',location:'Le grand hall de Dassom',cast:['kayla','hilam','kala'],mood:'neutral',text:'Venez avec nous. Le conseil nous attend dans la salle de réunion.'},
+  {speaker:'Voix off',location:'La salle du conseil',cast:[],text:'Ils pénètrent dans une immense pièce magnifique. Un conseil y siège déjà autour d’une grande table. À leur arrivée, les conversations s’interrompent, puis des murmures parcourent l’assemblée.'},
+  {speaker:'Soryan',location:'La salle du conseil',cast:['soryan','kayla','hilam'],text:'Faire confiance à des inconnus pour un voyage aussi important et dangereux, c’est une hérésie !'},
+  {speaker:'Kayla',location:'La salle du conseil',cast:['kayla','hilam','soryan'],text:'Ces aventuriers, nous les avons choisis nous-mêmes. Ils ont toute notre confiance. Ils ont accompli la mission et ramené les jumeaux en sécurité.'},
+  {speaker:'Hilam',location:'La salle du conseil',cast:['hilam','kayla','soryan'],text:'Nous répondons de notre choix. Leur courage et leurs actes parlent pour eux. Ils méritent notre confiance.'},
+  {speaker:'Soryan',location:'La salle du conseil',cast:['soryan','hilam','kayla'],text:'Cette décision n’était pas uniquement la vôtre, et ne pas nous prévenir était risqué…'},
+  {speaker:'Voix off',location:'La salle du conseil',cast:['nahakin','kala','eberien'],text:'Les Nahakins s’approchent du groupe. Ces hommes-chats prophètes observent les aventuriers en silence. L’un d’eux finit par prendre la parole.'},
+  {speaker:'Le Nahakin',location:'La salle du conseil',cast:['nahakin','kala','eberien'],text:'Hum… Je ne vois pas d’intention néfaste envers Dassom ou son peuple… Un petit duel m’aiderait à y voir plus clair…'},
+  {speaker:'Le Nahakin',location:'La salle du conseil',cast:['nahakin'],text:'Nous jouerons en Clair, avec Addition et Identique réunies. Deux sommes égales peuvent déclencher Addition ; deux valeurs égales en contact peuvent déclencher Identique. Montrez-moi votre manière de jouer.',finalLabel:'Accepter le duel — Clair · Addition + Identique'}
+ ],startTrialGame,resume);
+}
+function startTrialGame(){
+ if(story.part10!=='complete')return;
+ if(activeDeck().cards.length===5&&!validDeck(activeDeck())){renderDeckBuilder();openPanel('#deckScreen');return}
+ cancelBattleResult();applyRulePreset('same-plus-open');currentMode='story-nahakin';gameType='ai';
+ const chosen=validDeck(activeDeck())?deckCardsWithFoil(activeDeck()):['p27','p23','p04','p08','p13'].map(catalogById);
+ const opponent=['p58','p67','p29','p09','p147'].map(id=>cloneCard(catalogById(id)));
+ board=Array(9).fill(null);hands={p:chosen.map(playerCard),a:opponent};selected=null;turn=Math.random()<.5?'p':'a';locked=turn==='a';passing=false;matchRewarded=false;matchInProgress=true;resetMemories();
+ story.chapter2='started';story.chapter2Part1='started';story.stage='chapter2-part1-match';story.trialWon=false;story.trialStep=0;saveStory();
+ $('#storyScene').classList.add('hidden');$('#menuScreen').classList.add('hidden');document.querySelectorAll('.panel-screen').forEach(x=>x.classList.add('hidden'));$('#gameApp').classList.remove('hidden');$('#leftLabel').textContent='Les aventuriers';$('#rightLabel').textContent='Le Nahakin';$('#rulesBtn').style.display='none';
+ msg('Le procès — Clair · Addition + Identique','Les deux règles sont actives ensemble. Remportez le duel pour obtenir le jugement du prophète.');render();saveStoryMatch();if(turn==='a')setTimeout(aiMove,700);
+}
+function endTrialGame(counts){
+ try{localStorage.removeItem('hackenia-story-match')}catch{}
+ if(counts.p>counts.a){story.trialWon=true;story.stage='chapter2-part1-victory';story.trialStep=0;saveStory();setTimeout(showTrialVictory,1200)}
+ else{story.chapter2Part1='retry';story.stage='chapter2-part1-retry';story.trialWon=false;saveStory();setTimeout(()=>runStorySequence([{speaker:'Le Nahakin',location:'La salle du conseil',cast:['nahakin'],text:'Hum… Une autre partie m’aiderait à y voir plus clair.',finalLabel:'Réessayer le duel'}],startTrialGame),1200)}
+}
+function showTrialVictory(){
+ if(!story.trialWon)return;
+ const resume=story.stage==='chapter2-part1-victory'?story.trialStep:0;story.stage='chapter2-part1-victory';saveStory();
+ runStorySequence([
+  {speaker:'Voix off',location:'La salle du conseil',cast:['nahakin'],mood:'happy',text:'Le duel remporté, le Nahakin observe une dernière fois les aventuriers, puis sourit doucement.'},
+  {speaker:'Le Nahakin',location:'La salle du conseil',cast:['nahakin'],mood:'happy',text:'Ils m’ont l’air dignes…'},
+  {speaker:'Voix off',location:'La salle du conseil',cast:['kayla','hilam','nahakin'],mood:'neutral',text:'Fin de la partie 1 du chapitre 2 : Le procès.',finalLabel:'Terminer la partie 1'}
+ ],finishTrialPart,resume);
+}
+function finishTrialPart(){
+ if(!story.trialWon||story.part10!=='complete')return;
+ queueStoryBooster('chapter2Part1');story.chapter2Part1='complete';story.chapter2='started';story.stage='chapter2-part1-complete';story.trialStep=0;
+ if(!economy.storyRewards.chapter2Part1){economy.storyRewards.chapter2Part1=true;awardGold(50)}
+ saveCollection();saveStory();showStoryMenu();
+}
