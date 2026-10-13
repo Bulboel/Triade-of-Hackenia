@@ -838,10 +838,73 @@ function showFairyMistsVictory(){
 }
 function finishFairyMistsPart(){
  if(!story.fairyMistsWon||story.chapter2Part4!=='complete')return;
- queueStoryBooster('chapter2Part5');story.chapter2Part5='complete';story.chapter2='started';story.stage='chapter2-part5-complete';story.fairyMistsStep=0;
+ queueStoryBooster('chapter2Part5');story.chapter2Part5='complete';story.chapter2Part6=story.chapter2Part6==='complete'?'complete':'new';story.chapter2='started';story.stage='chapter2-part5-complete';story.fairyMistsStep=0;
  if(!economy.storyRewards.chapter2Part5){economy.storyRewards.chapter2Part5=true;awardGold(50)}
  saveCollection();saveStory();showStoryMenu();
 }
 
 
 
+// Chapter 2, part 6: the missing myconides and the cavern parasites.
+function renderLostCompanionsMenu(){
+ const unlocked=story.chapter2Part5==='complete',complete=story.chapter2Part6==='complete';
+ $('#storyChapter2Part6').classList.toggle('locked',!unlocked);$('#storyChapter2Part6').classList.toggle('complete',complete);$('#chapter2Part6Btn').disabled=!unlocked;
+ $('#chapter2Part6Btn').textContent=!unlocked?'Verrouillé':String(story.stage).startsWith('chapter2-part6-')&&story.stage!=='chapter2-part6-complete'?'Continuer':complete?'Rejouer':'Commencer';
+ $('#chapter2Part6Status').textContent=!unlocked?'Terminez la partie 5.':complete?'Partie terminée — la recherche des disparus continue.':'Les myconides ont perdu le contact avec leurs compagnons.';
+}
+function startLostCompanionsPart(){
+ if(story.chapter2Part5!=='complete')return;
+ const saved=readSaved('hackenia-story-match',null);
+ if(story.stage==='chapter2-part6-match'&&saved?.mode==='story-larvae'){restoreStoryMatch(saved);return}
+ if(story.stage==='chapter2-part6-victory'&&story.lostCompanionsWon){showLostCompanionsVictory();return}
+ if(['chapter2-part6-match','chapter2-part6-retry'].includes(story.stage)){startLostCompanionsGame();return}
+ const resume=story.stage==='chapter2-part6-intro'?story.lostCompanionsStep:0;
+ story.chapter2='started';story.chapter2Part6='started';story.stage='chapter2-part6-intro';story.lostCompanionsWon=false;saveStory();
+ runStorySequence([
+  {speaker:'Voix off',location:'Le quartier myconide',cast:['myconides','bolduc','kala'],text:'Les aventuriers retrouvent Bolduc auprès des myconides. Sans qu’aucune bouche ne s’ouvre, une voix résonne dans leurs esprits : les habitants communiquent par télépathie.'},
+  {speaker:'Les myconides',location:'Le quartier myconide',cast:['myconides','jhimm'],text:'Plusieurs des nôtres se sont aventurés dans les cavernes environnantes. Nous avons perdu le contact avec eux…'},
+  {speaker:'Les myconides',location:'Le quartier myconide',cast:['myconides','grimgors','eberien'],text:'D’autres aventuriers sont déjà partis les chercher. Eux non plus ne sont pas revenus.'},
+  {speaker:'Voix off',location:'Le quartier myconide',cast:['kala','bolduc','grimgors'],text:'Les aventuriers partent aussitôt à leur rescousse, déterminés à retrouver les disparus et à découvrir la source du mal.'},
+  {speaker:'Voix off',location:'Les cavernes humides',cast:['kala','jhimm','eberien'],text:'Dans les cavernes humides, chaque pas demande de la prudence. Des lianes vivantes se tendent sur leur passage ; des champignons libèrent des spores soporifiques.'},
+  {speaker:'Voix off',location:'Les cavernes humides',cast:['grimgors','bolduc','kala'],text:'Le groupe repère les pièges naturels à temps. Les aventuriers enjambent les lianes et contournent les nuages de spores sans se laisser surprendre.'},
+  {speaker:'Voix off',location:'Les cavernes humides',cast:['jhimm','eberien'],text:'Plus loin, des larves étranges se tortillent entre les rochers. Elles se précipitent soudain sur les aventuriers, accompagnées de deux vers géants !'},
+  {speaker:'Voix off',location:'Les cavernes humides',cast:['grimgors','kala','bolduc'],text:'Un duel s’engage contre les créatures. Les larves jouent trois cartes Larves capricieuses et deux cartes Ver géant.',finalLabel:'Affronter les larves'}
+ ].map(beat=>({mood:'neutral',...beat})),startLostCompanionsGame,resume);
+}
+function startLostCompanionsGame(){
+ if(story.chapter2Part5!=='complete')return;
+ if(activeDeck().cards.length===5&&!validDeck(activeDeck())){renderDeckBuilder();openPanel('#deckScreen');return}
+ cancelBattleResult();applyRulePreset('basic-open');currentMode='story-larvae';gameType='ai';
+ const chosen=validDeck(activeDeck())?deckCardsWithFoil(activeDeck()):['p27','p23','p04','p08','p13'].map(catalogById);
+ const opponent=['p65','p65','p65','p82','p82'].map(id=>cloneCard(catalogById(id)));
+ board=Array(9).fill(null);hands={p:chosen.map(playerCard),a:opponent};selected=null;turn=Math.random()<.5?'p':'a';locked=turn==='a';passing=false;matchRewarded=false;matchInProgress=true;resetMemories();
+ story.chapter2='started';story.chapter2Part6='started';story.stage='chapter2-part6-match';story.lostCompanionsWon=false;story.lostCompanionsStep=0;saveStory();
+ $('#storyScene').classList.add('hidden');$('#menuScreen').classList.add('hidden');document.querySelectorAll('.panel-screen').forEach(x=>x.classList.add('hidden'));$('#gameApp').classList.remove('hidden');$('#leftLabel').textContent='Votre main';$('#rightLabel').textContent='Les larves';$('#rulesBtn').style.display='none';
+ msg('Les larves — Clair','Remportez le duel pour repousser les créatures.');render();saveStoryMatch();if(turn==='a')setTimeout(aiMove,700);
+}
+function endLostCompanionsGame(counts){
+ try{localStorage.removeItem('hackenia-story-match')}catch{}
+ if(counts.p>counts.a){story.lostCompanionsWon=true;story.stage='chapter2-part6-victory';story.lostCompanionsStep=0;saveStory();setTimeout(showLostCompanionsVictory,1200)}
+ else{story.chapter2Part6='retry';story.stage='chapter2-part6-retry';story.lostCompanionsWon=false;saveStory();setTimeout(()=>runStorySequence([{speaker:'Voix off',location:'Les cavernes humides',cast:['grimgors','jhimm','kala'],text:'Les créatures empêchent encore le groupe de progresser. Les aventuriers doivent retenter le duel pour les repousser.',finalLabel:'Réessayer le duel'}],startLostCompanionsGame),1200)}
+}
+function showLostCompanionsVictory(){
+ if(!story.lostCompanionsWon)return;
+ const resume=story.stage==='chapter2-part6-victory'?story.lostCompanionsStep:0;story.stage='chapter2-part6-victory';saveStory();
+ runStorySequence([
+  {speaker:'Voix off',cast:['jhimm','bolduc','eberien'],text:'Certains aventuriers se font mordre. Les larves cherchent à prendre possession de leurs corps, mais le groupe parvient à les arracher et à se débarrasser des créatures.'},
+  {speaker:'Voix off',cast:['kala','bolduc','grimgors'],text:'En fouillant les environs, les aventuriers découvrent une précieuse relique : un sac sans fond !'},
+  {speaker:'Voix off',cast:['eberien','kala'],text:'Ce sac magique peut contenir de grandes quantités d’équipement, d’or et d’objets. Une découverte bien utile pour la suite de leur voyage.'},
+  {speaker:'Voix off',cast:['jhimm','grimgors','bolduc'],text:'Le groupe reprend son exploration. Mais des lianes magiques jaillissent du plafond de la grotte et s’abattent sur les aventuriers !'},
+  {speaker:'Voix off',cast:['jhimm','kala','eberien'],text:'Jhimm n’a pas le temps de les éviter. Les lianes s’enroulent autour de lui et le ligotent, le laissant immobilisé pendant que ses compagnons combattent.'},
+  {speaker:'Jhimm',cast:['jhimm','grimgors'],text:'Si quelqu’un pouvait me libérer… ce serait le moment !'},
+  {speaker:'Voix off',cast:['grimgors','jhimm'],text:'Grimgors se porte à son secours. Il tranche les lianes qui emprisonnent Jhimm et le libère, tandis que les autres repoussent les dernières plantes vivantes.'},
+  {speaker:'Voix off',cast:['jhimm','grimgors','kala'],text:'Jhimm retrouve enfin sa liberté. Le groupe se rassemble : leurs compagnons disparus restent à retrouver, et la source du mal demeure inconnue.'},
+  {speaker:'Voix off',cast:['kala','bolduc','grimgors'],text:'Fin de la partie 6 du chapitre 2 : Compagnons perdus.',finalLabel:'Terminer la partie 6'}
+ ].map(beat=>({mood:'neutral',location:'Les cavernes humides',...beat})),finishLostCompanionsPart,resume);
+}
+function finishLostCompanionsPart(){
+ if(!story.lostCompanionsWon||story.chapter2Part5!=='complete')return;
+ queueStoryBooster('chapter2Part6');story.chapter2Part6='complete';story.chapter2='started';story.stage='chapter2-part6-complete';story.lostCompanionsStep=0;
+ if(!economy.storyRewards.chapter2Part6){economy.storyRewards.chapter2Part6=true;awardGold(50)}
+ saveCollection();saveStory();showStoryMenu();
+}
