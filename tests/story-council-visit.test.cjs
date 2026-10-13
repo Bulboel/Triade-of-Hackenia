@@ -20,6 +20,12 @@ assert(c.sequence.some(b=>b.speaker==='Hilam'&&b.text.includes('ne partez pas'))
 assert(c.sequence.some(b=>b.speaker==='Kayla'&&b.text.includes('fuyards')));
 assert(c.sequence.at(-1).finalLabel.includes('Obscur · Éléments'));
 assert(c.sequence.every(b=>b.location==='La salle du conseil'));
+assert.equal(c.sequence.length,22);
+assert(c.sequence.every(b=>!b.cast.includes('twinsFree')),'The removed twin/soigneurs scene does not appear in part 2');
+for(const [oldStep,newStep] of [[4,4],[5,4],[12,11],[22,21]]){
+ c.story.councilVisitIntroRevision=undefined;c.story.stage='chapter2-part2-intro';c.story.councilVisitStep=oldStep;
+ c.startCouncilVisitPart();assert.equal(c.step,newStep);c.story.councilVisitStep=newStep;c.startCouncilVisitPart();assert.equal(c.step,newStep,'Resume migration applies only once');
+}
 c.story.councilVisitStep=12;c.startCouncilVisitPart();assert.equal(c.step,12);c.after();
 assert.equal(c.currentMode,'story-zackarie');assert.equal(run('currentRuleKey'),'elements-dark');
 assert.equal($('#openRule').checked,false);assert.equal($('#sameRule').checked,false);assert.equal($('#plusRule').checked,false);
@@ -38,3 +44,6 @@ assert(html.includes("currentMode==='story-zackarie'?'Zackarie':"));
 assert(html.includes("story.councilVisitStep=storyStep;saveStory()"));
 assert(html.includes('id="chapter2Part2Btn"'));
 console.log('PASS: council story, farmer revelation, chapter gate, exact Zackarie deck, dark elements, resume, retries, victory, one-time rewards and invalid deck guard.');
+
+
+assert(html.includes("['nahakin','sameron','zackarie'].includes(key))return {mood,file:key+'-chibi-v2'}"));

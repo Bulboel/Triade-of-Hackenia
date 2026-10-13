@@ -613,6 +613,10 @@ function startCouncilVisitPart(){
  if(story.stage==='chapter2-part2-match'&&saved?.mode==='story-zackarie'){restoreStoryMatch(saved);return}
  if(story.stage==='chapter2-part2-victory'&&story.councilVisitWon){showCouncilVisitVictory();return}
  if(['chapter2-part2-match','chapter2-part2-retry'].includes(story.stage)){startCouncilVisitGame();return}
+ if(story.councilVisitIntroRevision!==2){
+  if(story.stage==='chapter2-part2-intro'&&Number.isInteger(story.councilVisitStep)&&story.councilVisitStep>4)story.councilVisitStep--;
+  story.councilVisitIntroRevision=2;
+ }
  const resume=story.stage==='chapter2-part2-intro'?story.councilVisitStep:0;
  story.chapter2='started';story.chapter2Part2='started';story.stage='chapter2-part2-intro';story.councilVisitWon=false;saveStory();
  runStorySequence([
@@ -620,7 +624,6 @@ function startCouncilVisitPart(){
   {speaker:'Voix off',cast:['jhimm','soryan'],text:'À ce dernier mot, un murmure parcourt l’assemblée. La foule s’agite un instant, puis se calme rapidement.'},
   {speaker:'Soryan',cast:['soryan','jhimm','nahakin'],text:'Nous devons en discuter absolument. Il y a des choses étranges dans cette histoire, mais soit…'},
   {speaker:'Voix off',cast:['soryan','nahakin','jhimm'],text:'Soryan semble accepter silencieusement les dires des Nahakins. L’ambiance s’apaise peu à peu dans la salle.'},
-  {speaker:'Voix off',cast:['kayla','hilam','twinsFree'],text:'Kayla et Hilam se dirigent vers les nouveaux jumeaux pour les rejoindre auprès des soigneurs.'},
   {speaker:'Voix off',cast:['zackarie','sameron','bolduc'],text:'Deux autres personnes s’approchent des aventuriers : Zackarie et Sameron. Ils se trouvent encore à une dizaine de mètres du groupe.'},
   {speaker:'Voix off',cast:['bolduc','zackarie'],emotions:{bolduc:'surprised',zackarie:'neutral'},text:'Sans prévenir, Zackarie lance une aiguille. Elle frôle la tête de Bolduc et va se planter dans un pilier. Bolduc sursaute de surprise !'},
   {speaker:'Zackarie',cast:['zackarie','bolduc'],emotions:{zackarie:'neutral',bolduc:'surprised'},text:'Eh bien, tu n’as pas l’air bien courageux…',},
@@ -668,3 +671,4 @@ function finishCouncilVisitPart(){
  if(!economy.storyRewards.chapter2Part2){economy.storyRewards.chapter2Part2=true;awardGold(50)}
  saveCollection();saveStory();showStoryMenu();
 }
+

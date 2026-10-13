@@ -706,7 +706,7 @@ body #menuScreen .menu-actions :is(.learn-kayla,#bibleBtn) :is(.learn-icon,.bibl
 <script src="tutorial-duel.js?v=20261011-visible-button-6efcb768"></script>
 <script src="collection-updates.js?v=20261006-results1"></script>
 <script src="assets/story/twins-sprites.js?v=20261012-finale10"></script>
-<script src="story-mine.js?v=20261013-council2"></script>
+<script src="story-mine.js?v=20261013-chibi2"></script>
 <script>
 const art=n=>({src:`assets/cards/s${Math.floor((n-1)/9)+1}.webp`,x:(n-1)%3,y:Math.floor(((n-1)%9)/3)});
 const newArt=n=>({src:`assets/cards/new-set/n${Math.floor((n-1)/9)+1}.webp`,x:(n-1)%3,y:Math.floor(((n-1)%9)/3)});
@@ -1289,7 +1289,8 @@ function storySpriteAppearance(beat,key){
  const portraitMood=String(beat.portrait||'').startsWith(key+'-')?String(beat.portrait).slice(key.length+1):'';
  const mood=beat.emotions?.[key]||beat.mood||({content:'neutral',amused:'happy',surprise:'surprised',suspicious:'surprised',embarrassed:'embarrassed'}[portraitMood])||'neutral';
  if(['twinsBound','twinsFree','twinsBubble'].includes(key))return {mood,src:window.HACKENIA_TWINS_SPRITES?.[key]};
- if(['nahakin','soryan','myconides','sameron','zackarie'].includes(key))return {mood,file:key+'-chibi'};
+ if(['nahakin','sameron','zackarie'].includes(key))return {mood,file:key+'-chibi-v2'};
+ if(['soryan','myconides'].includes(key))return {mood,file:key+'-chibi'};
  if(key==='dede')return {mood,file:mood==='happy'?'dede-happy-chibi-v2':'dede-neutral-chibi-v2'};
  const slot=storyEmotionSlots[key];
  if(key==='caleizis')return {mood,file:mood==='crying'?'caleizis-crying-chibi':'caleizis-chibi'};
@@ -1920,6 +1921,7 @@ enhance();new MutationObserver(enhance).observe(holder,{childList:true,subtree:t
 </script>
 <script src="bible.js?v=20261012-bonus4"></script></body>
 </html>
+
 
 
 
