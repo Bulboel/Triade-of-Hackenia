@@ -593,7 +593,78 @@ function showTrialVictory(){
 }
 function finishTrialPart(){
  if(!story.trialWon||story.part10!=='complete')return;
- queueStoryBooster('chapter2Part1');story.chapter2Part1='complete';story.chapter2='started';story.stage='chapter2-part1-complete';story.trialStep=0;
+ queueStoryBooster('chapter2Part1');story.chapter2Part1='complete';story.chapter2Part2=story.chapter2Part2==='complete'?'complete':'new';story.chapter2='started';story.stage='chapter2-part1-complete';story.trialStep=0;
  if(!economy.storyRewards.chapter2Part1){economy.storyRewards.chapter2Part1=true;awardGold(50)}
+ saveCollection();saveStory();showStoryMenu();
+}
+
+// Chapter 2, part 2: two more sages meet the group; Zackarie challenges Bolduc.
+function renderCouncilVisitMenu(){
+ const unlocked=story.chapter2Part1==='complete',complete=story.chapter2Part2==='complete';
+ $('#storyChapter2Part2').classList.toggle('locked',!unlocked);
+ $('#storyChapter2Part2').classList.toggle('complete',complete);
+ $('#chapter2Part2Btn').disabled=!unlocked;
+ $('#chapter2Part2Btn').textContent=!unlocked?'Verrouillé':String(story.stage).startsWith('chapter2-part2-')&&story.stage!=='chapter2-part2-complete'?'Continuer':complete?'Rejouer':'Commencer';
+ $('#chapter2Part2Status').textContent=!unlocked?'Terminez Le procès.':complete?'Partie terminée — le duel contre Zackarie est remporté.':'Sameron et Zackarie viennent à votre rencontre.';
+}
+function startCouncilVisitPart(){
+ if(story.chapter2Part1!=='complete')return;
+ const saved=readSaved('hackenia-story-match',null);
+ if(story.stage==='chapter2-part2-match'&&saved?.mode==='story-zackarie'){restoreStoryMatch(saved);return}
+ if(story.stage==='chapter2-part2-victory'&&story.councilVisitWon){showCouncilVisitVictory();return}
+ if(['chapter2-part2-match','chapter2-part2-retry'].includes(story.stage)){startCouncilVisitGame();return}
+ const resume=story.stage==='chapter2-part2-intro'?story.councilVisitStep:0;
+ story.chapter2='started';story.chapter2Part2='started';story.stage='chapter2-part2-intro';story.councilVisitWon=false;saveStory();
+ runStorySequence([
+  {speaker:'Voix off',cast:['jhimm','soryan','nahakin'],text:'Après le jugement du Nahakin, Jhimm raconte au conseil tout ce que les aventuriers ont vécu : leur rencontre avec Caleïzis, les événements du lac rose… et les hydrelithes.'},
+  {speaker:'Voix off',cast:['jhimm','soryan'],text:'À ce dernier mot, un murmure parcourt l’assemblée. La foule s’agite un instant, puis se calme rapidement.'},
+  {speaker:'Soryan',cast:['soryan','jhimm','nahakin'],text:'Nous devons en discuter absolument. Il y a des choses étranges dans cette histoire, mais soit…'},
+  {speaker:'Voix off',cast:['soryan','nahakin','jhimm'],text:'Soryan semble accepter silencieusement les dires des Nahakins. L’ambiance s’apaise peu à peu dans la salle.'},
+  {speaker:'Voix off',cast:['kayla','hilam','twinsFree'],text:'Kayla et Hilam se dirigent vers les nouveaux jumeaux pour les rejoindre auprès des soigneurs.'},
+  {speaker:'Voix off',cast:['zackarie','sameron','bolduc'],text:'Deux autres personnes s’approchent des aventuriers : Zackarie et Sameron. Ils se trouvent encore à une dizaine de mètres du groupe.'},
+  {speaker:'Voix off',cast:['bolduc','zackarie'],emotions:{bolduc:'surprised',zackarie:'neutral'},text:'Sans prévenir, Zackarie lance une aiguille. Elle frôle la tête de Bolduc et va se planter dans un pilier. Bolduc sursaute de surprise !'},
+  {speaker:'Zackarie',cast:['zackarie','bolduc'],emotions:{zackarie:'neutral',bolduc:'surprised'},text:'Eh bien, tu n’as pas l’air bien courageux…',},
+  {speaker:'Voix off',cast:['zackarie','bolduc'],text:'Zackarie lui adresse un regard malicieux. Kayla se retourne aussitôt.'},
+  {speaker:'Kayla',cast:['kayla','zackarie','bolduc'],text:'Oh, t’abuses, Zack ! Tu viens tout juste de les rencontrer !'},
+  {speaker:'Sameron',cast:['sameron','kayla','grimgors'],text:'Et honnêtement, ils sont très courageux, de ce que j’ai vu…'},
+  {speaker:'Voix off',cast:['kayla','sameron','grimgors'],emotions:{kayla:'surprised',sameron:'neutral',grimgors:'neutral'},text:'Kayla comprend alors : Sameron est en fait le fameux vieux fermier que les aventuriers ont rencontré avec Jordan, le cheval nain !'},
+  {speaker:'Voix off',cast:['farmer','horse'],text:'Les aventuriers se souviennent de la cabane du vieux fermier et de son étrange petit cheval. Sameron les observait donc déjà pendant leur voyage…'},
+  {speaker:'Voix off',cast:['grimgors','sameron'],text:'Grimgors n’apprécie pas vraiment de découvrir qu’on les a espionnés à leur insu.'},
+  {speaker:'Kayla',cast:['kayla','soryan','grimgors'],text:'Ne jugez pas Soryan trop vite non plus. Il peut être un peu… dur, parfois.'},
+  {speaker:'Hilam',cast:['hilam','kayla','jhimm'],text:'Vos quartiers vous attendent afin que vous puissiez vous reposer. Vous pouvez vous rendre librement dans la ville si vous le souhaitez, mais ne partez pas pour le moment…'},
+  {speaker:'Jhimm',cast:['jhimm','kayla','hilam'],text:'Et pourquoi cela ?'},
+  {speaker:'Kayla',cast:['kayla','jhimm','hilam'],text:'Votre rencontre avec des hydrelithes est… mauvais signe. J’ai peur que le reste du conseil vous prenne pour des fuyards qui ont finalement des choses à se reprocher…'},
+  {speaker:'Kayla',cast:['kayla','hilam','jhimm'],text:'Promis, nous revenons vers vous dès que nous avons fait un point avec le conseil !'},
+  {speaker:'Zackarie',cast:['zackarie','bolduc'],text:'En attendant…'},
+  {speaker:'Voix off',cast:['zackarie','bolduc'],text:'Zackarie se rapproche de Bolduc, toujours avec ce regard malicieux.'},
+  {speaker:'Zackarie',cast:['zackarie','bolduc'],text:'Je ne suis pas fan de la Triade, mais avec toi, pourquoi pas ?'},
+  {speaker:'Voix off',cast:['zackarie','bolduc'],text:'Le duel contre Zackarie se joue en Obscur, avec la règle Éléments. Sa main reste cachée : choisissez les bons contacts élémentaires pour prendre l’avantage.',finalLabel:'Affronter Zackarie — Obscur · Éléments'}
+ ].map(beat=>({location:'La salle du conseil',mood:'neutral',...beat})),startCouncilVisitGame,resume);
+}
+function startCouncilVisitGame(){
+ if(story.chapter2Part1!=='complete')return;
+ if(activeDeck().cards.length===5&&!validDeck(activeDeck())){renderDeckBuilder();openPanel('#deckScreen');return}
+ cancelBattleResult();applyRulePreset('elements-dark');currentMode='story-zackarie';gameType='ai';
+ const chosen=validDeck(activeDeck())?deckCardsWithFoil(activeDeck()):['p27','p23','p04','p08','p13'].map(catalogById);
+ const opponent=['p85','p84','p04','p149','p03'].map(id=>cloneCard(catalogById(id)));
+ board=Array(9).fill(null);hands={p:chosen.map(playerCard),a:opponent};selected=null;turn=Math.random()<.5?'p':'a';locked=turn==='a';passing=false;matchRewarded=false;matchInProgress=true;resetMemories();
+ story.chapter2='started';story.chapter2Part2='started';story.stage='chapter2-part2-match';story.councilVisitWon=false;story.councilVisitStep=0;saveStory();
+ $('#storyScene').classList.add('hidden');$('#menuScreen').classList.add('hidden');document.querySelectorAll('.panel-screen').forEach(x=>x.classList.add('hidden'));$('#gameApp').classList.remove('hidden');$('#leftLabel').textContent='Bolduc • votre main';$('#rightLabel').textContent='Zackarie';$('#rulesBtn').style.display='none';
+ msg('Zackarie — Obscur · Éléments','La main adverse est cachée et les affinités élémentaires s’appliquent. Remportez ce duel pour terminer la partie 2.');render();saveStoryMatch();if(turn==='a')setTimeout(aiMove,700);
+}
+function endCouncilVisitGame(counts){
+ try{localStorage.removeItem('hackenia-story-match')}catch{}
+ if(counts.p>counts.a){story.councilVisitWon=true;story.stage='chapter2-part2-victory';story.councilVisitStep=0;saveStory();setTimeout(showCouncilVisitVictory,1200)}
+ else{story.chapter2Part2='retry';story.stage='chapter2-part2-retry';story.councilVisitWon=false;saveStory();setTimeout(()=>runStorySequence([{speaker:'Voix off',location:'La salle du conseil',cast:['zackarie','bolduc'],text:counts.p===counts.a?'La partie se termine à égalité. Bolduc peut retenter le duel contre Zackarie.':'Zackarie remporte cette manche. Bolduc peut retenter le duel.',finalLabel:'Réessayer le duel'}],startCouncilVisitGame),1200)}
+}
+function showCouncilVisitVictory(){
+ if(!story.councilVisitWon)return;
+ const resume=story.stage==='chapter2-part2-victory'?story.councilVisitStep:0;story.stage='chapter2-part2-victory';saveStory();
+ runStorySequence([{speaker:'Voix off',location:'La salle du conseil',cast:['bolduc','zackarie'],text:'Bolduc remporte le duel contre Zackarie. Fin de la partie 2 du chapitre 2 : Sameron, Soryan et Zackarie.',finalLabel:'Terminer la partie 2'}],finishCouncilVisitPart,resume);
+}
+function finishCouncilVisitPart(){
+ if(!story.councilVisitWon||story.chapter2Part1!=='complete')return;
+ queueStoryBooster('chapter2Part2');story.chapter2Part2='complete';story.chapter2='started';story.stage='chapter2-part2-complete';story.councilVisitStep=0;
+ if(!economy.storyRewards.chapter2Part2){economy.storyRewards.chapter2Part2=true;awardGold(50)}
  saveCollection();saveStory();showStoryMenu();
 }
