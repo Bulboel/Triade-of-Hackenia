@@ -1,3 +1,38 @@
+// Every failed story duel returns to the chapter menu and restarts its whole part.
+function returnToStoryAfterDefeat(counts){
+ if(counts.p>counts.a)return false;
+ const parts={
+  story:['part1'],
+  'story-forest':['part2'],
+  'story-mine':['part4','mineStep','mineChallengeWon'],
+  'story-mine-finale':['part5','finalMineStep','finalMineWon'],
+  'story-wolves':['part6','rescueStep','rescueWon'],
+  'story-ven':['part6bis','newFacesStep','newFacesWon'],
+  'story-ghosts':['part7','caveStep','caveWon'],
+  'story-caleizis':['part8','lakeStep','lakeWon'],
+  'story-lake-finale':['part9','finaleStep','finaleWon'],
+  'story-release':['part10','releaseStep','releaseWon'],
+  'story-nahakin':['chapter2Part1','trialStep','trialWon'],
+  'story-zackarie':['chapter2Part2','councilVisitStep','councilVisitWon'],
+  'story-dassom-golem':['chapter2Part4','visitStep','visitWon'],
+  'story-pixies':['chapter2Part5','fairyMistsStep','fairyMistsWon'],
+  'story-larvae':['chapter2Part6','lostCompanionsStep','lostCompanionsWon']
+ };
+ const entry=parts[currentMode];if(!entry)return false;
+ const [part,step,won]=entry;
+ if(story[part]!=='complete')story[part]='new';
+ if(step)story[step]=0;if(won)story[won]=false;
+ if(part==='part8'){story.lakeEncounterResolved=false;story.lakePath=null}
+ story.stage='story-menu';
+ try{localStorage.removeItem('hackenia-story-match')}catch{}
+ matchInProgress=false;passing=false;memoryPending=false;locked=false;selected=null;
+ cancelBattleResult();$('#storyScene').classList.add('hidden');
+ $('#turnCover').classList.add('hidden');$('#memoryReveal').classList.add('hidden');$('#memoryChoice').classList.add('hidden');
+ saveStory();showStoryMenu();
+ const accordion=$(part.startsWith('chapter2')?'#chapter2Accordion':'#chapter1Accordion');if(accordion)accordion.open=true;
+ return true;
+}
+
 // Chapter 1, part 4: the torch's challenge. Only a victory opens the epilogue.
 function renderMineMenu() {
   const unlocked = story.part3 === 'complete', complete = story.part4 === 'complete';
