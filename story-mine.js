@@ -386,7 +386,7 @@ function startJordanBonusPart(){
  runStorySequence([
   {speaker:'Voix off',location:'La cabane du vieux fermier',cast:['kala','bolduc','eberien'],text:'En repassant devant la cabane du vieux fermier, les aventuriers remarquent que celui-ci a disparu. Il ne reste que son petit cheval nain, qui broute tranquillement près de la barrière.'},
   {speaker:'Voix off',location:'La cabane du vieux fermier',cast:['jordanHorse','bolducHorse'],text:'Bolduc a une idée. Pour parler au cheval, il décide de se transformer lui-même en cheval. Même sous cette forme, impossible de ne pas reconnaître sa crinière rousse et ses longues tresses de barbe !'},
-  {speaker:'Bolduc-cheval',location:'La cabane du vieux fermier',cast:['bolducHorse','jordanHorse'],emotions:{bolduc:'happy'},text:'Salut Blacky !'},
+  {speaker:'Bolduc-cheval',location:'La cabane du vieux fermier',cast:['bolducHorse','jordanHorse'],emotions:{bolducHorse:'happy'},text:'Salut Blacky !'},
   {speaker:'Jordan',location:'La cabane du vieux fermier',cast:['jordanHorse','bolducHorse'],text:'Hein ? Moi, c’est Jordan. T’as des carottes ?'},
   {speaker:'Bolduc-cheval',location:'La cabane du vieux fermier',cast:['bolducHorse','jordanHorse'],text:'Non, mais je peux te donner des baies si tu veux. Je te trouverai des carottes plus tard.'},
   {speaker:'Voix off',location:'La cabane du vieux fermier',cast:['jordanHorse','berry','bolducHorse'],text:'Jordan accepte volontiers les baies et se met à les grignoter, ravi d’avoir enfin quelque chose à manger.'},
