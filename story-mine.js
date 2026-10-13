@@ -571,7 +571,7 @@ function startTrialGame(){
  if(activeDeck().cards.length===5&&!validDeck(activeDeck())){renderDeckBuilder();openPanel('#deckScreen');return}
  cancelBattleResult();applyRulePreset('same-plus-open');currentMode='story-nahakin';gameType='ai';
  const chosen=validDeck(activeDeck())?deckCardsWithFoil(activeDeck()):['p27','p23','p04','p08','p13'].map(catalogById);
- const opponent=['p58','p67','p29','p09','p147'].map(id=>cloneCard(catalogById(id)));
+ const opponent=['p58','p67','p29','p09','p149'].map(id=>cloneCard(catalogById(id)));
  board=Array(9).fill(null);hands={p:chosen.map(playerCard),a:opponent};selected=null;turn=Math.random()<.5?'p':'a';locked=turn==='a';passing=false;matchRewarded=false;matchInProgress=true;resetMemories();
  story.chapter2='started';story.chapter2Part1='started';story.stage='chapter2-part1-match';story.trialWon=false;story.trialStep=0;saveStory();
  $('#storyScene').classList.add('hidden');$('#menuScreen').classList.add('hidden');document.querySelectorAll('.panel-screen').forEach(x=>x.classList.add('hidden'));$('#gameApp').classList.remove('hidden');$('#leftLabel').textContent='Les aventuriers';$('#rightLabel').textContent='Le Nahakin';$('#rulesBtn').style.display='none';
