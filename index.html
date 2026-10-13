@@ -1329,7 +1329,7 @@ function renderStoryBeat(){
   sprite.style.backgroundImage="url('"+(appearance.src||'assets/story/'+appearance.file+'.webp')+"')";
   if(appearance.slot===undefined){sprite.style.backgroundSize='contain';sprite.style.backgroundPosition='center bottom'}
   else{sprite.style.backgroundSize='400% 300%';sprite.style.backgroundPosition=(appearance.slot%4*100/3)+'% '+(Math.floor(appearance.slot/4)*50)+'%'}
-  const speaking=spriteNames[key]===beat.speaker;sprite.classList.toggle('is-speaking',speaking);sprite.classList.toggle('is-listener',beat.speaker!=='Voix off'&&!speaking);sprite.classList.toggle('is-shaking',key==='farmer'&&!!beat.shake);$('#storyCast').append(sprite);
+  const speaking=spriteNames[key]===beat.speaker||(beat.speaker==='Jordan'&&key==='horse')||(beat.speaker==='Bolduc-cheval'&&key==='bolduc');sprite.classList.toggle('is-speaking',speaking);sprite.classList.toggle('is-listener',beat.speaker!=='Voix off'&&!speaking);sprite.classList.toggle('is-shaking',key==='farmer'&&!!beat.shake);$('#storyCast').append(sprite);
  }
  const choices=$('#storyBeatChoices');choices.replaceChildren();choices.classList.toggle('hidden',!beat.choices?.length);$('#storyNextBtn').classList.toggle('hidden',!!beat.choices?.length);
  for(const choice of beat.choices||[]){const button=document.createElement('button');button.className='menu-btn '+(choice.secondary?'secondary':'');button.textContent=choice.label;button.onclick=()=>choice.onChoose();choices.append(button)}
@@ -1337,6 +1337,7 @@ function renderStoryBeat(){
  if(part3&&story.stage==='part3-intro'){story.cabinStep=storyStep;saveStory()}
  if(['part5-intro','part5-victory'].includes(story.stage)){story.finalMineStep=storyStep;saveStory()}
  if(['part6bis-intro','part6bis-victory'].includes(story.stage)){story.newFacesStep=storyStep;saveStory()}
+ if(story.stage==='part6bonus-intro'){story.jordanBonusStep=storyStep;saveStory()}
  if(['chapter2-part6-intro','chapter2-part6-victory'].includes(story.stage)){story.lostCompanionsStep=storyStep;saveStory()}
  if(['chapter2-part5-intro','chapter2-part5-victory'].includes(story.stage)){story.fairyMistsStep=storyStep;saveStory()}
  if(['chapter2-part4-intro','chapter2-part4-victory'].includes(story.stage)){story.visitStep=storyStep;saveStory()}
