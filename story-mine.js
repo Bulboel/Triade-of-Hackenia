@@ -710,9 +710,72 @@ function startNightPart(){
 }
 function finishNightPart(){
  if(story.chapter2Part2!=='complete'||story.stage!=='chapter2-part3-intro'||story.nightStep!==nightNarrative.length-1)return;
- queueStoryBooster('chapter2Part3');story.chapter2Part3='complete';story.chapter2='started';story.stage='chapter2-part3-complete';story.nightStep=0;
+ queueStoryBooster('chapter2Part3');story.chapter2Part3='complete';story.chapter2Part4=story.chapter2Part4==='complete'?'complete':'new';story.chapter2='started';story.stage='chapter2-part3-complete';story.nightStep=0;
  if(!economy.storyRewards.chapter2Part3){economy.storyRewards.chapter2Part3=true;awardGold(50)}
  saveCollection();saveStory();showStoryMenu();
 }
+
+// Chapter 2, part 4: reunions in the market, then a runaway stone golem.
+function renderDassomVisitMenu(){
+ const unlocked=story.chapter2Part3==='complete',complete=story.chapter2Part4==='complete';
+ $('#storyChapter2Part4').classList.toggle('locked',!unlocked);$('#storyChapter2Part4').classList.toggle('complete',complete);$('#chapter2Part4Btn').disabled=!unlocked;
+ $('#chapter2Part4Btn').textContent=!unlocked?'Verrouillé':String(story.stage).startsWith('chapter2-part4-')&&story.stage!=='chapter2-part4-complete'?'Continuer':complete?'Rejouer':'Commencer';
+ $('#chapter2Part4Status').textContent=!unlocked?'Terminez Une nuit mouvementée.':complete?'Partie terminée — en route vers le Griffon Doré.':'Une visite au marché et des retrouvailles pour Kala.';
+}
+function startDassomVisitPart(){
+ if(story.chapter2Part3!=='complete')return;
+ const saved=readSaved('hackenia-story-match',null);
+ if(story.stage==='chapter2-part4-match'&&saved?.mode==='story-dassom-golem'){restoreStoryMatch(saved);return}
+ if(story.stage==='chapter2-part4-victory'&&story.visitWon){showDassomVisitVictory();return}
+ if(['chapter2-part4-match','chapter2-part4-retry'].includes(story.stage)){startDassomVisitGame();return}
+ const resume=story.stage==='chapter2-part4-intro'?story.visitStep:0;
+ story.chapter2='started';story.chapter2Part4='started';story.stage='chapter2-part4-intro';story.visitWon=false;saveStory();
+ runStorySequence([
+  {speaker:'Voix off',location:'Les quartiers des aventuriers',morningQuarters:true,cast:['bolduc','jhimm','grimgors'],text:'Au petit matin, les aventuriers se retrouvent et se confient sur ce qu’ils ont vu et ressenti durant la nuit.'},
+  {speaker:'Voix off',location:'Les quartiers des aventuriers',morningQuarters:true,cast:['kala','eberien','balai'],text:'La bénédiction de Bolduc, les paroles interrompues de Heaum, les visions de Grimgors et de Kala, le parchemin d’Ébérien… Chacun partage son expérience avec les autres.'},
+  {speaker:'Voix off',location:'Les quartiers des aventuriers',morningQuarters:true,cast:['kala','bolduc','jhimm'],text:'Ils décident de sortir visiter Dassom et de dépenser un peu de l’argent reçu pour le succès de leur mission. Kayla et Hilam leur ont confié de jolies bourses en récompense.'},
+  {speaker:'Voix off',location:'Le quartier marchand',cast:[],text:'Les aventuriers rejoignent le quartier marchand. Les étals débordent de produits plus intéressants les uns que les autres.'},
+  {speaker:'Voix off',location:'Le quartier marchand',cast:['bolduc','kala','eberien'],text:'Potions, étoffes, objets curieux et matériel de voyage attirent leurs regards. Le groupe prend le temps de zieuter toutes ces merveilles.'},
+  {speaker:'Voix off',location:'Le quartier marchand',cast:['kala','velmarys'],text:'Au milieu des étals, Kala retrouve Velmarys. Heureux de revoir une vieille camarade, il s’arrête auprès d’elle.'},
+  {speaker:'Velmarys',location:'Le quartier marchand',cast:['velmarys','kala'],text:'Kala ! Quel plaisir de te revoir. Nous pourrions discuter en soirée, quand tu seras un peu plus tranquille.'},
+  {speaker:'Voix off',location:'Le quartier marchand',cast:['velmarys','kala'],text:'Velmarys s’apprête à repartir lorsqu’un fracas interrompt la visite.'},
+  {speaker:'Voix off',location:'Le quartier marchand',cast:[],artwork:'dassom-golem-incident',artworkAlt:'Un magicien maladroit se fait écraser par son propre golem de pierre, en style chibi',text:'Un magicien, manifestement peu doué, vient de se faire écraser par sa propre création : un golem de pierre !'},
+  {speaker:'Voix off',location:'Le quartier marchand',cast:[],artwork:'dassom-golem-incident',text:'La lourde créature de pierre menace les passants et les étals. Les aventuriers interviennent pour l’arrêter.'},
+  {speaker:'Voix off',location:'Le quartier marchand',cast:['grimgors','jhimm','bolduc'],text:'Le duel contre le golem se joue en Obscur, avec la règle Addition. Deux sommes égales sur des contacts adjacents peuvent déclencher des captures.',finalLabel:'Affronter le golem — Obscur · Addition'}
+ ].map(beat=>({mood:'neutral',...beat})),startDassomVisitGame,resume);
+}
+function startDassomVisitGame(){
+ if(story.chapter2Part3!=='complete')return;
+ if(activeDeck().cards.length===5&&!validDeck(activeDeck())){renderDeckBuilder();openPanel('#deckScreen');return}
+ cancelBattleResult();applyRulePreset('plus-dark');currentMode='story-dassom-golem';gameType='ai';
+ const chosen=validDeck(activeDeck())?deckCardsWithFoil(activeDeck()):['p27','p23','p04','p08','p13'].map(catalogById);
+ const opponent=['p89','p89','p89','p58','p81'].map(id=>cloneCard(catalogById(id)));
+ board=Array(9).fill(null);hands={p:chosen.map(playerCard),a:opponent};selected=null;turn=Math.random()<.5?'p':'a';locked=turn==='a';passing=false;matchRewarded=false;matchInProgress=true;resetMemories();
+ story.chapter2='started';story.chapter2Part4='started';story.stage='chapter2-part4-match';story.visitWon=false;story.visitStep=0;saveStory();
+ $('#storyScene').classList.add('hidden');$('#menuScreen').classList.add('hidden');document.querySelectorAll('.panel-screen').forEach(x=>x.classList.add('hidden'));$('#gameApp').classList.remove('hidden');$('#leftLabel').textContent='Les aventuriers';$('#rightLabel').textContent='Le golem de pierre';$('#rulesBtn').style.display='none';
+ msg('Le golem — Obscur · Addition','La main adverse est cachée. Utilisez les sommes égales pour arrêter la création du magicien.');render();saveStoryMatch();if(turn==='a')setTimeout(aiMove,700);
+}
+function endDassomVisitGame(counts){
+ try{localStorage.removeItem('hackenia-story-match')}catch{}
+ if(counts.p>counts.a){story.visitWon=true;story.stage='chapter2-part4-victory';story.visitStep=0;saveStory();setTimeout(showDassomVisitVictory,1200)}
+ else{story.chapter2Part4='retry';story.stage='chapter2-part4-retry';story.visitWon=false;saveStory();setTimeout(()=>runStorySequence([{speaker:'Voix off',location:'Le quartier marchand',cast:[],artwork:'dassom-golem-incident',text:'Le golem menace encore le quartier marchand. Les aventuriers doivent retenter le duel pour l’arrêter.',finalLabel:'Réessayer le duel'}],startDassomVisitGame),1200)}
+}
+function showDassomVisitVictory(){
+ if(!story.visitWon)return;
+ const resume=story.stage==='chapter2-part4-victory'?story.visitStep:0;story.stage='chapter2-part4-victory';saveStory();
+ runStorySequence([
+  {speaker:'Voix off',location:'Le quartier marchand',cast:[],artwork:'dassom-market-help',artworkAlt:'Le golem est détruit ; des gardes chibi dégagent le marché et soignent les passants',text:'Le golem est détruit. Des gardes arrivent en renfort pour aider à ranger les étals, dégager les débris et prodiguer des soins aux passants.'},
+  {speaker:'Voix off',location:'Le quartier marchand',cast:['kala','jhimm','grimgors'],text:'Le quartier marchand retrouve peu à peu son calme. Les aventuriers peuvent reprendre leur visite de Dassom.'},
+  {speaker:'Voix off',location:'Le quartier des chasseurs',cast:['bolduc','eberien','balai'],text:'Ils continuent leur route vers le quartier des chasseurs pour trouver la taverne du Griffon Doré.'},
+  {speaker:'Voix off',location:'Le quartier des chasseurs',cast:['kala','jhimm','grimgors'],text:'Fin de la partie 4 du chapitre 2 : Visite de Dassom.',finalLabel:'Terminer la partie 4'}
+ ].map(beat=>({mood:'neutral',...beat})),finishDassomVisitPart,resume);
+}
+function finishDassomVisitPart(){
+ if(!story.visitWon||story.chapter2Part3!=='complete')return;
+ queueStoryBooster('chapter2Part4');story.chapter2Part4='complete';story.chapter2='started';story.stage='chapter2-part4-complete';story.visitStep=0;
+ if(!economy.storyRewards.chapter2Part4){economy.storyRewards.chapter2Part4=true;awardGold(50)}
+ saveCollection();saveStory();showStoryMenu();
+}
+
 
 
