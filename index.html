@@ -436,8 +436,10 @@ body button.elegant-return.hidden{display:none!important}
 .challenge-accordion{padding:0!important;overflow:hidden}
 .challenge-accordion>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px;cursor:pointer;font-weight:700;list-style:none;line-height:1.4}
 .challenge-accordion>summary::-webkit-details-marker{display:none}
-.challenge-accordion>summary::after{content:'⌄';font-size:1.3rem;color:#d5b16b;flex:none;transition:transform .2s}
-.challenge-accordion[open]>summary::after{transform:rotate(180deg)}
+.challenge-accordion>summary::after{content:'⌄';display:grid;place-items:center;box-sizing:border-box;width:30px;height:30px;flex:0 0 30px;border:1px solid #c9aa70;border-radius:50%;background:linear-gradient(145deg,#31564d,#173b37);box-shadow:inset 0 1px 3px #fff2,0 2px 5px #071a2044;color:#f3d895;font-size:1.08rem;font-weight:500;line-height:1;transform:rotate(0);transition:transform .22s ease,background .22s ease,border-color .22s ease}
+.challenge-accordion[open]>summary::after{transform:rotate(180deg);background:linear-gradient(145deg,#456b5d,#204941);border-color:#f0d08b}
+.challenge-accordion>summary:hover::after{border-color:#f0d08b;box-shadow:0 0 0 3px #d8b46a18,inset 0 1px 3px #fff2,0 2px 6px #071a2055}
+@media(prefers-reduced-motion:reduce){.challenge-accordion>summary::after{transition:none}}
 .challenge-accordion>summary:hover{background:rgba(208,169,92,.09)}
 .challenge-accordion>summary:focus-visible{outline:2px solid #e4c27c;outline-offset:-3px}
 .challenge-accordion>p,.challenge-accordion>small,.challenge-accordion>progress,.challenge-accordion>ul{margin-left:18px!important;margin-right:18px!important}
