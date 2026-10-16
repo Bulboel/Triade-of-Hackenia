@@ -1386,6 +1386,7 @@ function showStoryEpilogue(){runStorySequence([
  ],finishStoryPart1)}
 function finishStoryPart1(){queueStoryBooster('part1');story.part1='complete';story.part2=story.part2==='locked'?'new':story.part2;story.stage='part1-complete';if(!economy.storyRewards.part1){economy.storyRewards.part1=true;awardGold(50)}saveStory();try{localStorage.removeItem('hackenia-story-match')}catch{}showStoryMenu()}
 function startForestPart(){if(story.part1!=='complete'&&story.chapter1!=='complete')return;const saved=readSaved('hackenia-story-match',null);if(story.stage==='part2-match'&&saved){restoreStoryMatch(saved);return}story.stage='part2-intro';story.part2='started';saveStory();runStorySequence([
+ {speaker:'Voix off',cast:[],text:'Bonne nouvelle ! À partir de cette partie, vous pouvez jouer avec votre propre deck. Vous pouvez le composer dans votre collection avant le duel ; si vous n’en avez pas encore de valide, le jeu vous proposera de le compléter.'},
  {speaker:'Voix off',portrait:'berry-bush',wide:true,text:'Les aventuriers pénètrent dans le Bois Tendre et décident de faire une courte halte sous les arbres.'},
  {speaker:'Ébérien',portrait:'eberien-content',text:'Kala, regarde ce buisson. Ces baies semblent nourricières. Prenons-en quelques-unes pour les examiner plus tard.'},
  {speaker:'Kala',portrait:'kala-content',text:'Bonne idée. Gardons-les soigneusement, sans les goûter pour le moment.'},
