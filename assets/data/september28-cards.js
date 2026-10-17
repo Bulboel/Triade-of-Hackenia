@@ -914,7 +914,7 @@ window.HACKENIA_NEW_CARDS = [
     "rarity": "uncommon",
     "kind": "playable",
     "image": {
-      "src": "assets/cards/set-finale/p147.webp",
+      "src": "assets/file_000000007eac81f48e7ade06cbfabeee.png",
       "full": true
     }
   },
